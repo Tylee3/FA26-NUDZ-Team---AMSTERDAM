@@ -22,3 +22,5 @@ auto_seg_out/*.nrrd
 __pycache__/
 *.pyc
 ~$*.docx
+.venv/
+roboflow_slices/

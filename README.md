@@ -24,6 +24,26 @@ assessed for mobile deployment.
 - `PROJECT_SUMMARY.md` — working notes on data completeness and where the team stands.
 - `deadline_calendar.html` / `Hypothalamus_Segmentation_Deadline_Calendar.docx` — team
   deadline calendar and proposal task breakdown (rubric due Sun Oct 11, 23:59).
+- `extract_slices_for_roboflow.py` — converts the T2w `.nii` volumes into 2D PNG slices
+  for Roboflow upload (Roboflow doesn't take NIfTI directly). Writes `roboflow_slices/`
+  (gitignored — regenerate locally, don't commit it) plus a `manifest.csv` mapping each
+  PNG back to its source subject/slice.
+
+### Heads up: the 132-subject set is two different scan protocols
+
+63 subjects (all of the pilot 10 among them) are thick-slice: 256x256x12, 1mm z-spacing.
+The other 69 are a finer isotropic protocol: 144x144x64, 0.2mm spacing. They're
+interleaved by subject number, not a clean split (e.g. 1-43 and 97-132 are thick-slice;
+44-96 and 105-120 are isotropic) — check `roboflow_slices/manifest.csv`'s `protocol`
+column for any given subject rather than assuming from the number.
+
+Both cover almost the same physical field of view (~26x26x12mm), so `extract_slices_for_roboflow.py`
+subsamples the isotropic subjects by default (every 5th slice) to match the thick-slice
+protocol's ~1mm spacing — otherwise the isotropic subjects alone would contribute ~4,400
+near-duplicate images. The isotropic protocol's slices also render in a different in-plane
+orientation than the thick-slice ones (rotated, not mirrored — verified as a genuine
+anterior-to-posterior coronal-style sequence in both, just stored with different axis
+conventions). Worth a heads-up to whoever's annotating so it doesn't read as a data error.
 
 ## What's NOT in this repo
 
