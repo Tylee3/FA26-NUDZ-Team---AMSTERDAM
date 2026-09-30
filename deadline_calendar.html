@@ -1,0 +1,520 @@
+<title>Hypothalamus Segmentation Calendar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f7f9fa;
+    --surface: #ffffff;
+    --surface-2: #eef2f4;
+    --ink: #101820;
+    --ink-secondary: #4c5a66;
+    --ink-muted: #8394a0;
+    --line: #e3e8ec;
+    --border: rgba(16,24,32,0.10);
+    --accent: #2a78d6;
+    --accent-soft: #dceaf3;
+    --accent-ink: #124a82;
+    --critical: #d03b3b;
+    --critical-soft: #fbe4e2;
+    --good: #0ca30c;
+
+    --phase-1: #2a78d6;
+    --phase-2: #eb6834;
+    --phase-3: #1baf7a;
+    --phase-4: #eda100;
+    --phase-5: #e87ba4;
+
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0d1114;
+      --surface: #161b1f;
+      --surface-2: #1d2329;
+      --ink: #f2f5f7;
+      --ink-secondary: #b9c4cc;
+      --ink-muted: #7c8a94;
+      --line: #2a3238;
+      --border: rgba(255,255,255,0.10);
+      --accent: #3987e5;
+      --accent-soft: #1c2a36;
+      --accent-ink: #a9cdf2;
+      --critical: #e66767;
+      --critical-soft: #3a2020;
+      --good: #0ca30c;
+
+      --phase-1: #3987e5;
+      --phase-2: #d95926;
+      --phase-3: #199e70;
+      --phase-4: #c98500;
+      --phase-5: #d55181;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0d1114;
+    --surface: #161b1f;
+    --surface-2: #1d2329;
+    --ink: #f2f5f7;
+    --ink-secondary: #b9c4cc;
+    --ink-muted: #7c8a94;
+    --line: #2a3238;
+    --border: rgba(255,255,255,0.10);
+    --accent: #3987e5;
+    --accent-soft: #1c2a36;
+    --accent-ink: #a9cdf2;
+    --critical: #e66767;
+    --critical-soft: #3a2020;
+    --good: #0ca30c;
+
+    --phase-1: #3987e5;
+    --phase-2: #d95926;
+    --phase-3: #199e70;
+    --phase-4: #c98500;
+    --phase-5: #d55181;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    margin: 0;
+    padding-inline: 16px;
+    padding-block: 32px;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  a { color: var(--accent); }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* Masthead */
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead h1 {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .masthead .sub {
+    color: var(--ink-secondary);
+    font-size: 15px;
+    max-width: 62ch;
+  }
+  .masthead .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+  }
+
+  section { display: flex; flex-direction: column; gap: 16px; }
+  .section-head { display: flex; flex-direction: column; gap: 4px; }
+  .section-head h2 { font-size: 19px; font-weight: 600; }
+  .section-head p { margin: 0; color: var(--ink-secondary); font-size: 14px; max-width: 68ch; }
+
+  /* Checklist cards */
+  .checklist {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 720px) { .checklist { grid-template-columns: 1fr; } }
+  .check-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .check-card input[type="checkbox"] {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+  }
+  .check-card label { display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
+  .check-card .title { font-weight: 600; font-size: 14px; }
+  .check-card .desc { font-size: 13px; color: var(--ink-secondary); line-height: 1.45; }
+  .check-card.checked .title, .check-card.checked .desc { color: var(--ink-muted); text-decoration: line-through; text-decoration-color: var(--line); }
+
+  .ankit-note {
+    font-size: 13px;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .rcnn-list {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+    color: var(--ink-secondary);
+  }
+  .rcnn-list .title { font-weight: 600; color: var(--ink); font-size: 13.5px; margin-bottom: 8px; }
+  .rcnn-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rcnn-chips span {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 3px 8px;
+    color: var(--ink);
+  }
+
+  /* Sprint strip */
+  .strip-scroll { overflow-x: auto; padding-bottom: 4px; }
+  .strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 92px;
+    gap: 6px;
+    min-width: max-content;
+  }
+  .day {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 96px;
+  }
+  .day .dow { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .day .date { font-weight: 600; font-size: 15px; }
+  .day .tag { font-size: 10.5px; line-height: 1.3; padding: 2px 5px; border-radius: 4px; font-weight: 600; width: fit-content; }
+  .day.today { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .day.meeting .tag { background: var(--accent-soft); color: var(--accent-ink); }
+  .day.deadline { border-color: var(--critical); }
+  .day.deadline .tag { background: var(--critical-soft); color: var(--critical); }
+  .day .note { font-size: 11px; color: var(--ink-secondary); line-height: 1.35; }
+
+  /* Table */
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted); font-weight: 500; }
+  td.pts, th.pts { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.due { font-family: var(--font-mono); font-size: 13px; white-space: nowrap; color: var(--ink-secondary); }
+  td.owner { color: var(--ink-muted); font-style: italic; }
+  tr.submit-row td { font-weight: 600; color: var(--critical); }
+  tfoot td { border-bottom: none; border-top: 1px solid var(--line); font-weight: 600; }
+
+  /* Gantt */
+  .gantt-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px 20px 16px; }
+  .gantt-scroll { overflow-x: auto; }
+  svg text { font-family: var(--font-sans); fill: var(--ink); }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
+  .legend .item { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-secondary); }
+  .legend .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+  }
+  footer strong { color: var(--ink-secondary); }
+</style>
+
+<div class="page">
+
+  <div class="masthead">
+    <span class="eyebrow">Deadline calendar &middot; for Thursday's team meeting</span>
+    <h1>Hypothalamus MRI Segmentation</h1>
+    <p class="sub">NUDZ (Czech National Institute of Mental Health) &times; IFSA Prague Challenge Project, Spring 2026. Planning reference for team role and task assignment.</p>
+    <div class="meta">
+      <span>Generated Sep 29, 2026</span>
+      <span>Team: 3 members</span>
+      <span>Proposal due Sun Oct 11, 23:59</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Before Thursday</h2>
+      <p>From Jaison's kickoff email. All three items are per-person, not team-wide.</p>
+    </div>
+    <div class="checklist" id="checklist">
+      <div class="check-card" data-key="c1">
+        <input type="checkbox" id="c1" />
+        <label for="c1">
+          <span class="title">Review shared materials</span>
+          <span class="desc">Google Drive folder + Charley's <code>autoseg</code> GitHub repo. Flag anything unclear to raise Thursday.</span>
+        </label>
+      </div>
+      <div class="check-card" data-key="c2">
+        <input type="checkbox" id="c2" />
+        <label for="c2">
+          <span class="title">Stand up your own GitHub repo</span>
+          <span class="desc">Create it, then post the link in the group chat before the meeting.</span>
+        </label>
+      </div>
+      <div class="check-card" data-key="c3">
+        <input type="checkbox" id="c3" />
+        <label for="c3">
+          <span class="title">Shortlist 3 R-CNN implementations</span>
+          <span class="desc">No pressure &mdash; picks can shuffle or merge once the team talks it through.</span>
+        </label>
+      </div>
+    </div>
+    <div class="ankit-note">
+      <span>&#9679;</span>
+      <span>Dr. Ankit (image processing) joins Thursday's call &mdash; come with questions worth brainstorming live.</span>
+    </div>
+    <div class="rcnn-list">
+      <div class="title">R-CNN family &mdash; a starting menu, not a chosen set</div>
+      <div class="rcnn-chips">
+        <span>Faster R-CNN</span>
+        <span>Mask R-CNN</span>
+        <span>Cascade R-CNN</span>
+        <span>Cascade Mask R-CNN</span>
+        <span>Hybrid Task Cascade (HTC)</span>
+        <span>PointRend</span>
+        <span>Sparse R-CNN</span>
+        <span>Grid R-CNN</span>
+        <span>Libra R-CNN</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>This sprint: today &rarr; proposal due</h2>
+      <p>Two weeks, two Thursday calls with Dr. Ankit, one hard deadline.</p>
+    </div>
+    <div class="strip-scroll">
+      <div class="strip" id="strip"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Proposal task breakdown</h2>
+      <p>Mapped to the rubric's 10 points. Owner column is intentionally blank &mdash; fill it in live on Thursday.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Rubric section</th><th class="pts">Points</th><th>Suggested internal due</th><th>Owner</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cover page &amp; table of contents</td><td class="pts">0.5</td><td class="due">Fri Oct 2</td><td class="owner">TBD Thursday</td></tr>
+          <tr><td>Project details &mdash; background, objective, industry focus, value proposition</td><td class="pts">1.5</td><td class="due">Sun Oct 4</td><td class="owner">TBD Thursday</td></tr>
+          <tr><td>Product development plan &mdash; tech stack, MVP, logistics, timeline, scalability</td><td class="pts">2.0</td><td class="due">Wed Oct 7</td><td class="owner">TBD Thursday</td></tr>
+          <tr><td>Team collaboration log &mdash; role justifications, job descriptions, PM screenshot, action items, Team Diagnostic Worksheet</td><td class="pts">2.0</td><td class="due">Wed Oct 7</td><td class="owner">TBD Thursday</td></tr>
+          <tr><td>Risks &amp; challenges &mdash; technical, market, regulatory, mitigations</td><td class="pts">2.0</td><td class="due">Wed Oct 7</td><td class="owner">TBD Thursday</td></tr>
+          <tr><td>Concluding remarks</td><td class="pts">1.0</td><td class="due">Fri Oct 9</td><td class="owner">TBD Thursday</td></tr>
+          <tr><td>AI-use disclosure (prompts + full output, Level 3) &mdash; gating, not separately scored</td><td class="pts">&mdash;</td><td class="due">Fri Oct 9</td><td class="owner">whoever used AI</td></tr>
+          <tr><td>Full draft assembled + team review pass</td><td class="pts">&mdash;</td><td class="due">Fri Oct 9</td><td class="owner">all 3</td></tr>
+          <tr><td>Final formatting, page numbers, proofread</td><td class="pts">&mdash;</td><td class="due">Sat Oct 10</td><td class="owner">TBD Thursday</td></tr>
+          <tr class="submit-row"><td>Submit</td><td class="pts"></td><td class="due">Sun Oct 11, 23:59</td><td></td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Rubric total</td><td class="pts">10.0</td><td colspan="2"></td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Full program timeline</h2>
+      <p>Weeks 3&ndash;15 per the IFSA phase structure, mapped to real dates. Today is marked with the dashed line.</p>
+    </div>
+    <div class="gantt-wrap">
+      <div class="gantt-scroll">
+        <svg id="gantt" viewBox="0 0 860 260" style="width:100%; min-width:640px; height:auto;"></svg>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div><strong>Assumption:</strong> week numbering is inferred by anchoring "Week 5 ends Sun Oct 11" (stated in the rubric) and counting Week 1 as starting Mon Sep 7. Confirm the real Week 1 start with Jaison or the IFSA calendar if this is off &mdash; everything above shifts by the same amount.</div>
+    <div><strong>Heads up:</strong> the Week 12 Thursday call (Nov 26) lands on US Thanksgiving &mdash; worth confirming that one still happens.</div>
+    <div>Checkbox state and any owner notes you type live only in this browser &mdash; they won't sync to your teammates. Use this page as the shared reference, not the shared record.</div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var DAY = 24 * 60 * 60 * 1000;
+  function d(y, m, day) { return new Date(Date.UTC(y, m - 1, day)); }
+  function fmtDow(date) { return date.toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" }); }
+  function fmtDate(date) { return date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }); }
+
+  // ---- Sprint strip: Sep 29 - Oct 11 ----
+  var stripStart = d(2026, 9, 29);
+  var stripEnd = d(2026, 10, 11);
+  var stripDays = Math.round((stripEnd - stripStart) / DAY) + 1;
+  var strip = document.getElementById("strip");
+  var events = {
+    "2026-09-29": { today: true },
+    "2026-10-01": { meeting: true, note: "Meeting 1: kickoff, roles + R-CNN share-out" },
+    "2026-10-08": { meeting: true, note: "Meeting 2: proposal review w/ Dr. Ankit" },
+    "2026-10-11": { deadline: true, note: "Proposal due, 23:59" }
+  };
+  for (var i = 0; i < stripDays; i++) {
+    var date = new Date(stripStart.getTime() + i * DAY);
+    var key = date.toISOString().slice(0, 10);
+    var ev = events[key] || {};
+    var cell = document.createElement("div");
+    cell.className = "day" + (ev.today ? " today" : "") + (ev.meeting ? " meeting" : "") + (ev.deadline ? " deadline" : "");
+    var html = '<span class="dow">' + fmtDow(date) + '</span><span class="date">' + fmtDate(date) + '</span>';
+    if (ev.today) html += '<span class="tag" style="background:var(--surface-2);color:var(--ink-secondary);">Today</span>';
+    if (ev.meeting) html += '<span class="tag">Team call</span>';
+    if (ev.deadline) html += '<span class="tag">Deadline</span>';
+    if (ev.note) html += '<span class="note">' + ev.note + '</span>';
+    cell.innerHTML = html;
+    strip.appendChild(cell);
+  }
+
+  // ---- Checklist persistence (per-viewer convenience only) ----
+  try {
+    document.querySelectorAll("#checklist input[type=checkbox]").forEach(function (box) {
+      var key = "hypo-checklist-" + box.id;
+      var saved = localStorage.getItem(key);
+      if (saved === "1") { box.checked = true; box.closest(".check-card").classList.add("checked"); }
+      box.addEventListener("change", function () {
+        try { localStorage.setItem(key, box.checked ? "1" : "0"); } catch (e) {}
+        box.closest(".check-card").classList.toggle("checked", box.checked);
+      });
+    });
+  } catch (e) {}
+
+  // ---- Gantt chart: Weeks 3-15 ----
+  var phases = [
+    { label: "Phase 1: project setup", start: d(2026, 9, 21), end: d(2026, 10, 4), color: "var(--phase-1)", weeks: "Wk 3-4" },
+    { label: "Phase 2: iterative dev + company feedback", start: d(2026, 10, 5), end: d(2026, 11, 1), color: "var(--phase-2)", weeks: "Wk 5-8" },
+    { label: "Update presentation to IFSA + company", start: d(2026, 11, 2), end: d(2026, 11, 8), color: "var(--phase-3)", weeks: "Wk 9" },
+    { label: "Phase 3: rework + documentation", start: d(2026, 11, 9), end: d(2026, 12, 6), color: "var(--phase-4)", weeks: "Wk 10-13" },
+    { label: "Phase 4: final delivery + handover", start: d(2026, 12, 7), end: d(2026, 12, 20), color: "var(--phase-5)", weeks: "Wk 14-15" }
+  ];
+  var milestones = [
+    { date: d(2026, 10, 11), label: "Proposal due" },
+    { date: d(2026, 11, 5), label: "Update presentation" },
+    { date: d(2026, 12, 17), label: "Final presentation" }
+  ];
+  var today = d(2026, 9, 29);
+
+  var rangeStart = d(2026, 9, 21);
+  var rangeEnd = d(2026, 12, 20);
+  var totalDays = (rangeEnd - rangeStart) / DAY;
+
+  var svgNS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("gantt");
+  var marginLeft = 8, marginRight = 8, marginTop = 10;
+  var plotW = 844, rowH = 34, rowGap = 12;
+  var plotStartX = marginLeft, plotWidth = plotW - marginLeft - marginRight;
+
+  function xForDate(date) { return plotStartX + ((date - rangeStart) / DAY) / totalDays * plotWidth; }
+
+  var rowsBottom = marginTop + 8 + (phases.length - 1) * (rowH + rowGap) + rowH;
+  var chartBottom = rowsBottom + 20;
+  var svgHeight = chartBottom + 40;
+  svg.setAttribute("viewBox", "0 0 860 " + svgHeight);
+
+  function el(tag, attrs) {
+    var e = document.createElementNS(svgNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // month gridlines
+  var months = [d(2026,9,1), d(2026,10,1), d(2026,11,1), d(2026,12,1), d(2027,1,1)];
+  months.forEach(function (m) {
+    if (m < rangeStart || m > rangeEnd) return;
+    var x = xForDate(m);
+    svg.appendChild(el("line", { x1: x, x2: x, y1: marginTop, y2: marginTop + phases.length * (rowH + rowGap) - rowGap + 4, stroke: "var(--line)", "stroke-width": 1 }));
+    var lbl = el("text", { x: x + 4, y: marginTop - 2, "font-size": 10.5, fill: "var(--ink-muted)" });
+    lbl.textContent = m.toLocaleDateString("en-US", { month: "short", timeZone: "UTC" });
+    svg.appendChild(lbl);
+  });
+
+  phases.forEach(function (p, i) {
+    var y = marginTop + 8 + i * (rowH + rowGap);
+    var x1 = xForDate(p.start), x2 = xForDate(p.end);
+    svg.appendChild(el("rect", { x: x1, y: y, width: Math.max(2, x2 - x1), height: rowH, rx: 6, fill: p.color }));
+    var labelInside = (x2 - x1) > 170;
+    var text = el("text", {
+      x: labelInside ? x1 + 10 : x1,
+      y: labelInside ? y + rowH / 2 + 4 : y - 6,
+      "font-size": 12.5,
+      "font-weight": 600,
+      fill: labelInside ? "#ffffff" : "var(--ink)"
+    });
+    text.textContent = p.label;
+    svg.appendChild(text);
+    var weeks = el("text", { x: x1, y: y + rowH + 13, "font-size": 10.5, fill: "var(--ink-muted)", "font-family": "var(--font-mono)" });
+    weeks.textContent = p.weeks + "  ·  " + p.start.toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"}) + "–" + p.end.toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
+    svg.appendChild(weeks);
+  });
+
+  // today marker
+  var tx = xForDate(today);
+  svg.appendChild(el("line", { x1: tx, x2: tx, y1: marginTop - 6, y2: chartBottom, stroke: "var(--accent)", "stroke-width": 1.5, "stroke-dasharray": "4,3" }));
+  var todayLbl = el("text", { x: tx + 4, y: chartBottom + 14, "font-size": 10.5, fill: "var(--accent)", "font-family": "var(--font-mono)" });
+  todayLbl.textContent = "today";
+  svg.appendChild(todayLbl);
+
+  // milestones
+  milestones.forEach(function (m) {
+    var mx = xForDate(m.date);
+    svg.appendChild(el("circle", { cx: mx, cy: marginTop - 6, r: 3.2, fill: "var(--critical)" }));
+    svg.appendChild(el("line", { x1: mx, x2: mx, y1: marginTop - 6, y2: chartBottom, stroke: "var(--critical)", "stroke-width": 1, "stroke-dasharray": "2,3", opacity: 0.5 }));
+    var mlbl = el("text", { x: mx, y: chartBottom + 28, "font-size": 10.5, fill: "var(--critical)", "text-anchor": "middle" });
+    mlbl.textContent = m.label;
+    svg.appendChild(mlbl);
+  });
+
+  // legend for phases whose label didn't fit inside the bar
+  var legend = document.getElementById("legend");
+  phases.forEach(function (p) {
+    var item = document.createElement("div");
+    item.className = "item";
+    item.innerHTML = '<span class="swatch" style="background:' + p.color + '"></span>' + p.label;
+    legend.appendChild(item);
+  });
+})();
+</script>

@@ -1,0 +1,24 @@
+# Raw + manual-trace imaging data stays local / on the shared Drive.
+# It's NUDZ's research data and far too large for git (T2 scans alone are ~330MB).
+T2 for segmentation/
+Manual Segments/
+*.nii
+*.nrrd
+
+# ...except the public Waxholm atlas volumes, which the pipeline script needs to run.
+!WAXHOLM_SPACE_OF_THE_SPRAGUE_DAWLEY_V1_01.nii
+!WAXHOLM_SPACE_ATLAS_OF_THE_SPRAGUE_DAWLEY_RAT_BRAIN_V4.label.nii
+!WAXHOLM_SPACE_ATLAS_OF_THE_SPRAGUE_DAWLEY_RAT_S621.nii
+
+# Generated per-run outputs (rerun atlas_registration_pipeline.py to regenerate).
+# results.csv and the summary PNGs are tracked below as an exception.
+auto_seg_out/*.nrrd
+
+# Reference PDFs (copyrighted article, slide deck) — keep on the Drive, not in git history.
+*.pdf
+
+# macOS / editor / Python noise
+.DS_Store
+__pycache__/
+*.pyc
+~$*.docx
