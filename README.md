@@ -9,15 +9,20 @@ assessed for mobile deployment.
 
 - `atlas_registration_pipeline.py` — scriptable SimpleITK reimplementation of Charley
   Batte's `autoseg` 3D Slicer module (registers the Waxholm atlas to a subject T2w MRI,
-  extracts the hypothalamus label). See the docstring for why plain global registration
-  doesn't work here and what the ROI-restricted, ensembled version does instead.
+  extracts the hypothalamus label). Matches the real module's recipe: rigid registration
+  (Euler3D, GEOMETRY-based init, Mattes MI), single deterministic run, no GUI needed.
 - `IoU_charley.py`, `nrrd_to_minc_andI0U.py`, `visualise_nrrd.py` — Charley's original
   IoU/Dice + visualization scripts.
 - `auto_seg_out/results.csv`, `batch_bars.png`, `batch_overlay.png` — results from running
-  the pipeline across all 10 pilot subjects: median IoU ~0.10 vs. manual traces, well
-  below the human-supervised Slicer baseline (rat 3, IoU 0.49). Automated atlas
-  registration isn't reliable without a human confirming it — worth factoring into how
-  much weight the team puts on the registration approach vs. a learned model.
+  the pipeline across all 10 pilot subjects: median IoU 0.60 vs. manual traces (range
+  0.46-0.67, excluding rat 2 whose "manual" mask is itself atlas-derived), 8 of 9 at or
+  above Charley's own reported Slicer result for rat 3 (IoU 0.49). Atlas registration is
+  a solid baseline here — as long as it's run as RIGID registration, not affine. (An
+  earlier version of this script used affine and found it unreliable, median IoU ~0.10 —
+  affine's extra degrees of freedom let the optimizer wander on this small, thick-sliced
+  data. See the script's docstring for the full story, including a real bug found in
+  waxholm.py: its "Use Affine Registration" checkbox computes an affine refinement but
+  never actually uses it when producing the output mask.)
 - `WAXHOLM_SPACE_*.nii`, `WHS_SD_rat_atlas_v4.label` — the public Waxholm rat brain atlas
   (label 48 = hypothalamus), needed to run the pipeline script.
 - `instructions.docx` — Charley's step-by-step for the 3D Slicer module.
