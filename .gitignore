@@ -25,3 +25,5 @@ __pycache__/
 .venv/
 roboflow_slices/
 coco_annotations/
+roboflow_upload_bundle/
+roboflow_upload_bundle.zip
