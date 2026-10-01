@@ -24,3 +24,4 @@ __pycache__/
 ~$*.docx
 .venv/
 roboflow_slices/
+coco_annotations/

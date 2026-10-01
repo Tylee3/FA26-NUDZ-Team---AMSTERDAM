@@ -33,6 +33,14 @@ assessed for mobile deployment.
   for Roboflow upload (Roboflow doesn't take NIfTI directly). Writes `roboflow_slices/`
   (gitignored — regenerate locally, don't commit it) plus a `manifest.csv` mapping each
   PNG back to its source subject/slice.
+- `generate_coco_annotations.py` — per the 2026-10-01 company meeting ("don't need to
+  manually annotate, just automate the process"), this traces the existing masks (manual
+  traces + the atlas pipeline's output) into COCO polygon annotations instead of
+  hand-drawing in Roboflow. Traces every contour pixel exactly (no simplification), so
+  the full boundary precision of the source mask survives the format conversion. Writes
+  `coco_annotations/coco_manual_me.json`, `coco_manual_other.json`, `coco_atlas_auto.json`
+  (gitignored — see below for why — regenerate locally once you have the Drive data).
+  Covers only the 10 pilot subjects, since that's all we have real masks for.
 
 ### Heads up: the 132-subject set is two different scan protocols
 
@@ -57,6 +65,15 @@ segmentations (`Manual Segments/`, two independent labelers across the 10 pilot 
 are NUDZ's research data — too large for git and not ours to redistribute casually.
 They live on the shared Google Drive. Pull them from there if you need to run the
 pipeline locally; `.gitignore` keeps them out of commits.
+
+**Also gitignored on purpose:** `coco_manual_me.json` / `coco_manual_other.json` are a
+lossless re-encoding of the proprietary manual traces (same mask shapes, different file
+format) — per the 2026-10-01 meeting notes ("manual segment folder is proprietary"),
+converting the format doesn't change that, so they stay local-only like the NRRDs they're
+derived from. `coco_atlas_auto.json` is derived from our own registration output against
+the public Waxholm atlas, not from proprietary data, but it's gitignored too for now,
+consistent with "git file kept secret" — **this repo should be set to Private on GitHub**
+if it isn't already.
 
 ## Setup
 
