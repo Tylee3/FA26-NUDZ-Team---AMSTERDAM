@@ -42,6 +42,57 @@ assessed for mobile deployment.
   (gitignored — see below for why — regenerate locally once you have the Drive data).
   Covers only the 10 pilot subjects, since that's all we have real masks for.
 
+## R-CNN baseline (`rcnn/`)
+
+The first two-week task: run NUDZ's six R-CNN-family models on the data as it is (no
+augmentation yet), score them the same way as the atlas baseline, and look at the results.
+
+**Where the labels come from.** `WHS_SD_rat_atlas_v4.label` is the atlas's lookup table
+(48 = "Hypothalamic region, unspecified"); the outline itself is in the atlas label
+volume. Neither is drawn on our rats, so the training labels are the atlas outline carried
+onto each rat by `atlas_registration_pipeline.py`. That's 53 thick-slice rats outside the
+pilot 10, written to `atlas_labels/` (spot-checked visually: all in the right place, a
+few sitting slightly high). The models never see the 9 hand-traced rats (1, 3-10) during
+training; those are the test set, scored against the manual traces.
+
+**The six models** (torchvision, all from the same COCO-pretrained ResNet-50, same
+training settings — see `rcnn/train.py`):
+
+| Model | What it changed | Output | Implementation |
+|---|---|---|---|
+| R-CNN (2014) | CNN run separately on each Selective Search region, then an SVM | box | ours (`rcnn_classic.py`) |
+| Fast R-CNN (2015) | CNN once per image, regions cropped from its features | box | ours |
+| Faster R-CNN (2015) | learned Region Proposal Network replaces Selective Search | box | torchvision |
+| R-FCN (2016) | position-sensitive score maps make the per-region step nearly free | box | ours |
+| Cascade R-CNN (2018) | three box heads, each stricter (IoU 0.5/0.6/0.7), refining the last | box | ours |
+| Mask R-CNN (2017) | adds a pixel-mask branch | **mask** | torchvision |
+
+Only Mask R-CNN outlines the structure; the other five draw a box. Every model gets a box
+score; 3D Dice/IoU treats a box as a filled rectangle, so box models should be compared
+with the "Atlas, as a box" row, not the atlas mask row.
+
+**Known limit for R-CNN and Fast R-CNN:** Selective Search almost never proposes a box
+around the hypothalamus here — only 16% of test slices have any candidate overlapping
+the true box by >= 0.5 IoU, none by >= 0.7 (quality mode: 18%). It groups regions by
+color/texture, and the hypothalamus has no strong boundary on grayscale MRI. These two
+models can only choose among those candidates, so they start capped. That's the problem
+Faster R-CNN's learned proposals were invented to solve.
+
+**Run it** (on whichever machine; ~4-6 hours on an M1, mostly unattended):
+
+```
+cd ~/Downloads/hypo_segments
+python3 -m rcnn.build_dataset
+python3 -m rcnn.selective_search
+caffeinate -i ./rcnn/run_all.sh
+```
+
+**Look at it:** `rcnn_out/comparison.md` (the table), `rcnn_out/comparison_grid.png`
+(every model on every test rat, yellow = agreement, red = model only, green = missed),
+`rcnn_out/<model>/overlay.png` (best/median/worst rat for one model), and in 3D Slicer:
+View > Python Console, then `exec(open("<path>/rcnn/slicer_compare.py").read())` — edit
+`RAT` and `SHOW` at the top of that file for a different rat or just your two models.
+
 ### Heads up: the 132-subject set is two different scan protocols
 
 63 subjects (all of the pilot 10 among them) are thick-slice: 256x256x12, 1mm z-spacing.
@@ -80,6 +131,6 @@ if it isn't already.
 ```
 python3 -m venv .venv
 source .venv/bin/activate
-pip install SimpleITK pynrrd numpy
+pip install SimpleITK pynrrd numpy pillow matplotlib torch torchvision opencv-contrib-python-headless scikit-learn
 python3 atlas_registration_pipeline.py <rat-number> [<rat-number> ...]
 ```

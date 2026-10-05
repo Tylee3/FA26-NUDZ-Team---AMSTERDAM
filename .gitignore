@@ -27,3 +27,12 @@ roboflow_slices/
 coco_annotations/
 roboflow_upload_bundle/
 roboflow_upload_bundle.zip
+
+# R-CNN baseline: images/masks and large model files stay local
+rcnn_data/
+rcnn_out_smoke/
+rcnn_out/*/model.pt
+rcnn_out/*/predictions.pkl
+rcnn_out/*/rcnn_classic.pkl
+rcnn_out/*/pred_*.nrrd
+atlas_labels/*.nrrd
