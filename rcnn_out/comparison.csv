@@ -1,0 +1,9 @@
+model,output,rats,slices_found,false_alarms,mean_box_iou,median_3d_iou_vs_me,median_3d_dice_vs_me,median_3d_iou_vs_other
+Atlas (Charley's method),mask,9,41/45,0/63,0.556,0.599,0.749,0.647
+"Atlas, as a box",box,9,41/45,0/63,0.556,0.475,0.644,0.529
+R-CNN,box,9,11/45,8/63,0.096,0.142,0.249,0.119
+Fast R-CNN,box,9,5/45,0/63,0.058,0.0,0.0,0.0
+Faster R-CNN,box,9,39/45,0/63,0.53,0.476,0.645,0.521
+R-FCN,box,9,37/45,1/63,0.493,0.446,0.617,0.48
+Cascade R-CNN,box,9,35/45,0/63,0.491,0.482,0.651,0.56
+Mask R-CNN,mask,9,38/45,0/63,0.527,0.586,0.739,0.572

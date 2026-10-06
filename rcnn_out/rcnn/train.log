@@ -1,0 +1,4 @@
+[22:35:23]   features: 100/636 slices
+[22:37:28]   features: 400/636 slices
+[22:39:35]   SVM: 249 positives, 12720 negatives; box regressor: 10 examples
+[22:46:17] done: 108 test slices predicted, 11.6 min total
