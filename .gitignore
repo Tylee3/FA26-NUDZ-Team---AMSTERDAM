@@ -37,3 +37,7 @@ rcnn_out/*/rcnn_classic.pkl
 rcnn_out/*/pred_*.nrrd
 atlas_labels/*.nrrd
 atlas_deformable_out/*/*.nrrd
+
+# SIGMA atlas files are downloaded from Zenodo (record 10635831, CC-BY 4.0), not committed
+sigma/
+sigma_out/*.nrrd
