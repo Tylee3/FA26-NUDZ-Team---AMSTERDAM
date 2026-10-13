@@ -40,4 +40,4 @@ atlas_deformable_out/*/*.nrrd
 
 # SIGMA atlas files are downloaded from Zenodo (record 10635831, CC-BY 4.0), not committed
 sigma/
-sigma_out/*.nrrd
+sigma_out/**/*.nrrd
