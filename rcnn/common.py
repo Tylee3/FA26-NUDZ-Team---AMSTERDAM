@@ -70,19 +70,68 @@ def image_tensor(gray_uint8: np.ndarray) -> torch.Tensor:
     return t.unsqueeze(0).repeat(3, 1, 1)
 
 
+def neighbor_tensor(images, index, i) -> torch.Tensor:
+    """The slice below, the slice itself and the slice above as the 3 channels, so the
+    network sees where the structure is tapering off. At the ends of a stack, the slice
+    itself fills in for the missing neighbor."""
+    n, z = index["subject"][i], index["z"][i]
+    below = index["lookup"].get((n, z - 1), i)
+    above = index["lookup"].get((n, z + 1), i)
+    stack = np.stack([images[below], images[i], images[above]])
+    return torch.from_numpy(stack).float().div(255.0)
+
+
+def augment(img: torch.Tensor, mask: np.ndarray):
+    """Training-time "alterations": left-right flip (the brain is left-right symmetric),
+    a small rotation, shift and zoom, and a brightness/contrast change. The mask moves with
+    the image, and the box is recomputed from the moved mask afterwards."""
+    from torchvision.transforms import InterpolationMode
+    from torchvision.transforms.v2 import functional as TF
+
+    m = torch.from_numpy(mask[None].astype(np.uint8))
+    if torch.rand(()) < 0.5:
+        img, m = TF.horizontal_flip(img), TF.horizontal_flip(m)
+    angle = float(torch.empty(()).uniform_(-10, 10))
+    shift = [int(torch.randint(-10, 11, ())), int(torch.randint(-10, 11, ()))]
+    scale = float(torch.empty(()).uniform_(0.9, 1.1))
+    img = TF.affine(img, angle=angle, translate=shift, scale=scale, shear=[0.0],
+                    interpolation=InterpolationMode.BILINEAR)
+    m = TF.affine(m, angle=angle, translate=shift, scale=scale, shear=[0.0],
+                  interpolation=InterpolationMode.NEAREST)
+    contrast = float(torch.empty(()).uniform_(0.85, 1.15))
+    brightness = float(torch.empty(()).uniform_(-0.08, 0.08))
+    img = (img * contrast + brightness).clamp(0, 1)
+    return img, m[0].numpy().astype(bool)
+
+
 class SliceDataset(torch.utils.data.Dataset):
-    def __init__(self, split: str, with_masks: bool = False, with_proposals: bool = False, limit=None):
+    def __init__(self, split: str, with_masks: bool = False, with_proposals: bool = False,
+                 limit=None, neighbors: bool = False, augment: bool = False):
         self.data = load_split(split)
         self.with_masks = with_masks
         self.with_proposals = with_proposals
+        self.neighbors = neighbors
+        self.augment = augment
         self.n = len(self.data["files"]) if limit is None else min(limit, len(self.data["files"]))
+        self.index = {
+            "subject": self.data["subjects"], "z": self.data["zs"],
+            "lookup": {(int(s), int(z)): k for k, (s, z) in enumerate(zip(self.data["subjects"], self.data["zs"]))},
+        }
 
     def __len__(self):
         return self.n
 
+    def image(self, i) -> torch.Tensor:
+        if self.neighbors:
+            return neighbor_tensor(self.data["images"], self.index, i)
+        return image_tensor(self.data["images"][i])
+
     def __getitem__(self, i):
         gray = self.data["images"][i]
         mask = self.data["masks"][i]
+        img = self.image(i)
+        if self.augment:
+            img, mask = augment(img, mask)
         box = mask_to_box(mask)
         target = {"image_id": torch.tensor(i)}
         if box is None:
@@ -98,8 +147,8 @@ class SliceDataset(torch.utils.data.Dataset):
         if self.with_proposals:
             from .selective_search import proposals_for
             props = torch.from_numpy(proposals_for(str(self.data["files"][i]), gray))
-            return image_tensor(gray), target, props
-        return image_tensor(gray), target
+            return img, target, props
+        return img, target
 
 
 def collate(batch):

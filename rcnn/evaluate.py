@@ -19,6 +19,7 @@ results.csv, overlay.png, pred_XXX.nrrd (open in 3D Slicer with rcnn/slicer_comp
 
 import argparse
 import csv
+import json
 import pickle
 
 import numpy as np
@@ -153,17 +154,29 @@ def main():
     data = load_split("test")
 
     results, all_volumes = {}, {}
+    base_of = {"atlas": "atlas", "atlas_box": "atlas_box"}
+    short_of = {"atlas": "Atlas", "atlas_box": "Atlas box"}
+    label_of = {"atlas": LABELS["atlas"], "atlas_box": LABELS["atlas_box"]}
     for name, per_slice, out_dir in [("atlas", atlas_predictions(data, False), None),
                                      ("atlas_box", atlas_predictions(data, True), None)]:
         results[name], all_volumes[name] = score(name, per_slice, data, out_dir, False)
-    for name in MODELS:
-        pred_file = out_root / name / "predictions.pkl"
-        if not pred_file.exists():
-            continue
-        with open(pred_file, "rb") as f:
+
+    runs = [m for m in MODELS if (out_root / m / "predictions.pkl").exists()]
+    experiments = sorted(d.name for d in out_root.iterdir()
+                         if d.is_dir() and d.name not in MODELS and (d / "predictions.pkl").exists())
+    for name in runs + experiments:
+        config_file = out_root / name / "config.json"
+        config = json.loads(config_file.read_text()) if config_file.exists() else {"model": name}
+        base = config["model"]
+        extras = [t for t, on in (("neighbor slices", config.get("neighbors")),
+                                  ("augmentation", config.get("augment"))) if on]
+        base_of[name] = base
+        label_of[name] = LABELS[base] + (" + " + " + ".join(extras) if extras else "")
+        short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug"}[e] for e in extras)
+        with open(out_root / name / "predictions.pkl", "rb") as f:
             preds = pickle.load(f)
-        per_slice = slice_predictions(name, preds, data)
-        results[name], all_volumes[name] = score(name, per_slice, data, out_root / name, True)
+        per_slice = slice_predictions(base, preds, data)
+        results[name], all_volumes[name] = score(base, per_slice, data, out_root / name, True)
 
     summary = []
     for name, rows in results.items():
@@ -172,7 +185,7 @@ def main():
         structure = sum(r["structure_slices"] for r in rows)
         empty = sum(r["slices"] - r["structure_slices"] for r in rows)
         summary.append({
-            "model": LABELS[name], "output": "mask" if name in MASK_MODELS | {"atlas"} else "box",
+            "model": label_of[name], "output": "mask" if base_of[name] in MASK_MODELS | {"atlas"} else "box",
             "rats": len(rows),
             "slices_found": f"{sum(r['slices_found'] for r in rows)}/{structure}",
             "false_alarms": f"{sum(r['false_alarms'] for r in rows)}/{empty}",
@@ -202,16 +215,22 @@ def main():
         labels = [f"rat {r['rat']}  3D IoU {r['iou_vs_me']:.2f}  box IoU {r['box_iou']:.2f}" for r in picks]
         grid(tiles, labels, out_root / name / "overlay.png", cols=len(tiles))
 
-    rats = sorted(r["rat"] for r in results["atlas"] if all(r["rat"] in all_volumes[n] for n in names))
-    tiles, labels = [], []
-    for rat in rats:
-        for name in names:
-            pred, gt, idx = all_volumes[name][rat]
-            tiles.append(overlay_tile(data, idx, pred, gt))
-            labels.append(f"{LABELS[name]} - rat {rat}")
-    if tiles:
-        grid(tiles, labels, out_root / "comparison_grid.png", cols=len(names))
-    print(f"\nwrote {out_root / 'comparison.csv'}, comparison.md, comparison_grid.png")
+    baseline_cols = ["atlas"] + [n for n in runs]
+    experiment_cols = ["atlas"] + [n for n in ["mask_rcnn"] if n in runs] + experiments
+    for cols_, path in [(baseline_cols, "comparison_grid.png"), (experiment_cols, "experiments_grid.png")]:
+        if len(cols_) < 2 or (path == "experiments_grid.png" and not experiments):
+            continue
+        rats = sorted(r["rat"] for r in results["atlas"] if all(r["rat"] in all_volumes[n] for n in cols_))
+        tiles, labels = [], []
+        for rat in rats:
+            for name in cols_:
+                pred, gt, idx = all_volumes[name][rat]
+                tiles.append(overlay_tile(data, idx, pred, gt))
+                labels.append(f"{short_of[name]}  rat {rat}")
+        if tiles:
+            grid(tiles, labels, out_root / path, cols=len(cols_))
+    print(f"\nwrote {out_root / 'comparison.csv'}, comparison.md, comparison_grid.png"
+          + (", experiments_grid.png" if experiments else ""))
 
 
 if __name__ == "__main__":

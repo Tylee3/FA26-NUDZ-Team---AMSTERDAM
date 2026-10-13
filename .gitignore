@@ -36,3 +36,4 @@ rcnn_out/*/predictions.pkl
 rcnn_out/*/rcnn_classic.pkl
 rcnn_out/*/pred_*.nrrd
 atlas_labels/*.nrrd
+atlas_deformable_out/*/*.nrrd

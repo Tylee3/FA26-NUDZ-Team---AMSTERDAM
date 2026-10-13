@@ -7,10 +7,16 @@ Same plain settings for every model, adapted from torchvision's detection fine-t
 tutorial: SGD, lr 0.005, momentum 0.9, weight decay 5e-4, batch 2, 10 epochs, lr x0.1 for
 the last 3 epochs, 100-iteration warmup. No augmentation: that's the "alterations" step.
 
-Writes rcnn_out/<model>/model.pt, predictions.pkl and train.log.
+Improvement experiments add --neighbors (slices above and below as input channels) and/or
+--augment (flips, small rotations/shifts/zoom, brightness/contrast while training). Each
+combination writes to its own folder, e.g. rcnn_out/mask_rcnn_neighbors_augment, so the
+baseline in rcnn_out/<model> is never overwritten.
+
+Writes rcnn_out/<run>/model.pt, predictions.pkl, config.json and train.log.
 """
 
 import argparse
+import json
 import pickle
 import time
 
@@ -44,9 +50,9 @@ def to_device(images, targets, device):
     return images, targets
 
 
-def train_network(name, model, device, out_dir, log, epochs, max_iters, limit):
-    ds = SliceDataset("train", with_masks=name in MASK_MODELS,
-                      with_proposals=name == "fast_rcnn", limit=limit)
+def train_network(name, model, device, out_dir, log, epochs, max_iters, limit, neighbors, augment):
+    ds = SliceDataset("train", with_masks=name in MASK_MODELS, with_proposals=name == "fast_rcnn",
+                      limit=limit, neighbors=neighbors, augment=augment)
     loader = torch.utils.data.DataLoader(ds, batch_size=BATCH, shuffle=True, collate_fn=collate)
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.SGD(params, lr=LR, momentum=0.9, weight_decay=5e-4)
@@ -89,9 +95,9 @@ def train_network(name, model, device, out_dir, log, epochs, max_iters, limit):
 
 
 @torch.no_grad()
-def predict_network(name, model, device, limit):
+def predict_network(name, model, device, limit, neighbors):
     data = load_split("test")
-    ds = SliceDataset("test", with_proposals=name == "fast_rcnn", limit=limit)
+    ds = SliceDataset("test", with_proposals=name == "fast_rcnn", limit=limit, neighbors=neighbors)
     model.eval()
     preds = []
     for i in range(len(ds)):
@@ -112,12 +118,19 @@ def main():
     ap.add_argument("--model", required=True, choices=["rcnn", *models.BUILDERS])
     ap.add_argument("--device", default=None)
     ap.add_argument("--epochs", type=int, default=EPOCHS)
+    ap.add_argument("--neighbors", action="store_true", help="feed the slices above and below as input channels")
+    ap.add_argument("--augment", action="store_true", help="flip/rotate/shift/zoom/brightness while training")
     ap.add_argument("--smoke", action="store_true", help="tiny run to check the model works end to end")
     args = ap.parse_args()
+    if args.model in ("rcnn", "fast_rcnn") and (args.neighbors or args.augment):
+        ap.error("--neighbors/--augment are only wired for models with learned proposals")
 
+    run = args.model + ("_neighbors" if args.neighbors else "") + ("_augment" if args.augment else "")
     out_root = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out")
-    out_dir = out_root / args.model
+    out_dir = out_root / run
     out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "config.json").write_text(json.dumps(
+        {"model": args.model, "neighbors": args.neighbors, "augment": args.augment, "epochs": args.epochs}, indent=2))
     log = Log(out_dir / "train.log")
     device = pick_device(args.device)
     torch.manual_seed(0)
@@ -129,8 +142,9 @@ def main():
         preds = rcnn_classic.predict(extractor, scaler, svm, reg, limit=limit_test)
     else:
         model = models.build(args.model).to(device)
-        train_network(args.model, model, device, out_dir, log, args.epochs, max_iters, limit_train)
-        preds = predict_network(args.model, model, device, limit_test)
+        train_network(args.model, model, device, out_dir, log, args.epochs, max_iters, limit_train,
+                      args.neighbors, args.augment)
+        preds = predict_network(args.model, model, device, limit_test, args.neighbors)
 
     with open(out_dir / "predictions.pkl", "wb") as f:
         pickle.dump(preds, f)
