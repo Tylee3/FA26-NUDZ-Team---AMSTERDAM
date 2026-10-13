@@ -11,6 +11,12 @@ Usage:  python3 atlas_deformable.py            (all three preset settings, 9 tes
         python3 atlas_deformable.py --config b 11 12 13   (one setting, any rats)
 
 Writes atlas_deformable_out/<config>/auto_seg_XXX.nrrd and results.csv.
+
+Result (2026-10-13, 9 test rats, median 3D IoU vs Tyler's traces): rigid 0.599; a 0.526,
+b 0.593, c 0.598. No setting beat rigid. Without a margin the fit is pulled off by distant
+tissue (as with affine); with a margin the outline barely moves, likely because the Waxholm
+template (ex vivo) and NUDZ's in vivo T2 scans differ too much in contrast for a local fit.
+Rigid stays the baseline; an in vivo T2 template (SIGMA) is the next thing to try.
 """
 
 import argparse
