@@ -1,0 +1,6 @@
+{
+  "model": "mask_rcnn",
+  "neighbors": true,
+  "augment": false,
+  "epochs": 10
+}
