@@ -1,0 +1,13 @@
+brain,reference_rat,model,dice,iou,slices_with_structure,slices_detected
+Waxholm (ex vivo),3,Mask R-CNN,0.604,0.433,5,4
+Waxholm (ex vivo),3,Mask R-CNN + augmentation,0.591,0.419,5,5
+Waxholm (ex vivo),6,Mask R-CNN,0.658,0.491,5,4
+Waxholm (ex vivo),6,Mask R-CNN + augmentation,0.608,0.436,5,4
+Waxholm (ex vivo),9,Mask R-CNN,0.663,0.496,4,4
+Waxholm (ex vivo),9,Mask R-CNN + augmentation,0.609,0.438,4,4
+SIGMA (in vivo T2),3,Mask R-CNN,0.206,0.115,4,1
+SIGMA (in vivo T2),3,Mask R-CNN + augmentation,0.321,0.191,4,3
+SIGMA (in vivo T2),6,Mask R-CNN,0.176,0.097,5,1
+SIGMA (in vivo T2),6,Mask R-CNN + augmentation,0.366,0.224,5,4
+SIGMA (in vivo T2),9,Mask R-CNN,0.205,0.114,4,1
+SIGMA (in vivo T2),9,Mask R-CNN + augmentation,0.406,0.254,4,4
