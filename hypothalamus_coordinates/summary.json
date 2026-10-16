@@ -1,0 +1,1025 @@
+{
+ "frame": "Waxholm space, mm (SimpleITK physical coordinates)",
+ "sources": {
+  "waxholm_atlas": {
+   "source": "Waxholm atlas label 48",
+   "voxels": 877,
+   "volume_mm3": 26.76,
+   "centroid_mm": [
+    0.2,
+    2.696,
+    -1.91
+   ],
+   "bbox_min_mm": [
+    -1.699,
+    0.605,
+    -3.145
+   ],
+   "bbox_max_mm": [
+    2.363,
+    4.98,
+    0.293
+   ],
+   "extent_mm": [
+    4.062,
+    4.375,
+    3.438
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "distance_from_waxholm_atlas_mm": 0.0
+  },
+  "sigma_atlas": {
+   "source": "SIGMA in vivo atlas label 48, mapped into Waxholm space",
+   "note": "volume is SIGMA's own; the atlas-to-atlas fit enlarges it ~10% when mapped, since SIGMA's brain is smaller",
+   "voxels": 5570,
+   "volume_mm3": 18.8,
+   "centroid_mm": [
+    0.118,
+    2.337,
+    -1.735
+   ],
+   "bbox_min_mm": [
+    -1.963,
+    0.159,
+    -3.128
+   ],
+   "bbox_max_mm": [
+    2.11,
+    4.763,
+    0.647
+   ],
+   "extent_mm": [
+    4.073,
+    4.603,
+    3.775
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.082,
+    -0.359,
+    0.175
+   ],
+   "distance_from_waxholm_atlas_mm": 0.408
+  },
+  "rat01_manual_me": {
+   "rat": 1,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 1846,
+   "volume_mm3": 18.46,
+   "centroid_mm": [
+    0.133,
+    2.552,
+    -2.062
+   ],
+   "bbox_min_mm": [
+    -1.369,
+    0.945,
+    -3.356
+   ],
+   "bbox_max_mm": [
+    1.659,
+    5.09,
+    -0.575
+   ],
+   "extent_mm": [
+    3.027,
+    4.145,
+    2.781
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.067,
+    -0.144,
+    -0.152
+   ],
+   "distance_from_waxholm_atlas_mm": 0.22
+  },
+  "rat01_manual_other": {
+   "rat": 1,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2437,
+   "volume_mm3": 24.37,
+   "centroid_mm": [
+    0.204,
+    2.692,
+    -1.876
+   ],
+   "bbox_min_mm": [
+    -1.666,
+    0.944,
+    -3.167
+   ],
+   "bbox_max_mm": [
+    1.945,
+    5.084,
+    -0.573
+   ],
+   "extent_mm": [
+    3.61,
+    4.14,
+    2.594
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.004,
+    -0.004,
+    0.034
+   ],
+   "distance_from_waxholm_atlas_mm": 0.034
+  },
+  "rat01_sigma_on_rat": {
+   "rat": 1,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1841,
+   "volume_mm3": 18.41,
+   "centroid_mm": [
+    0.105,
+    2.037,
+    -1.711
+   ],
+   "bbox_min_mm": [
+    -1.773,
+    -0.076,
+    -2.92
+   ],
+   "bbox_max_mm": [
+    1.923,
+    4.081,
+    0.377
+   ],
+   "extent_mm": [
+    3.696,
+    4.157,
+    3.296
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.095,
+    -0.659,
+    0.199
+   ],
+   "distance_from_waxholm_atlas_mm": 0.695
+  },
+  "rat02_manual_me": {
+   "rat": 2,
+   "atlas_derived_file": true,
+   "source": "hand trace (Me)",
+   "voxels": 2149,
+   "volume_mm3": 21.49,
+   "centroid_mm": [
+    -0.257,
+    2.581,
+    -1.118
+   ],
+   "bbox_min_mm": [
+    -1.956,
+    0.759,
+    -2.345
+   ],
+   "bbox_max_mm": [
+    1.624,
+    4.98,
+    0.268
+   ],
+   "extent_mm": [
+    3.58,
+    4.221,
+    2.612
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.457,
+    -0.115,
+    0.792
+   ],
+   "distance_from_waxholm_atlas_mm": 0.922
+  },
+  "rat02_manual_other": {
+   "rat": 2,
+   "atlas_derived_file": true,
+   "source": "hand trace (Other)",
+   "voxels": 2935,
+   "volume_mm3": 29.35,
+   "centroid_mm": [
+    0.164,
+    2.568,
+    -1.416
+   ],
+   "bbox_min_mm": [
+    -2.092,
+    0.79,
+    -2.839
+   ],
+   "bbox_max_mm": [
+    2.313,
+    5.035,
+    0.065
+   ],
+   "extent_mm": [
+    4.405,
+    4.245,
+    2.904
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.036,
+    -0.128,
+    0.494
+   ],
+   "distance_from_waxholm_atlas_mm": 0.512
+  },
+  "rat03_manual_me": {
+   "rat": 3,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 2312,
+   "volume_mm3": 23.12,
+   "centroid_mm": [
+    0.035,
+    2.435,
+    -2.067
+   ],
+   "bbox_min_mm": [
+    -1.584,
+    0.522,
+    -3.441
+   ],
+   "bbox_max_mm": [
+    1.818,
+    4.757,
+    -0.627
+   ],
+   "extent_mm": [
+    3.402,
+    4.235,
+    2.814
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.165,
+    -0.261,
+    -0.157
+   ],
+   "distance_from_waxholm_atlas_mm": 0.346
+  },
+  "rat03_manual_other": {
+   "rat": 3,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2592,
+   "volume_mm3": 25.92,
+   "centroid_mm": [
+    0.017,
+    2.415,
+    -1.909
+   ],
+   "bbox_min_mm": [
+    -1.843,
+    0.505,
+    -3.446
+   ],
+   "bbox_max_mm": [
+    1.919,
+    4.689,
+    -0.132
+   ],
+   "extent_mm": [
+    3.762,
+    4.185,
+    3.314
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.183,
+    -0.281,
+    0.001
+   ],
+   "distance_from_waxholm_atlas_mm": 0.335
+  },
+  "rat03_sigma_on_rat": {
+   "rat": 3,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1841,
+   "volume_mm3": 18.41,
+   "centroid_mm": [
+    -0.031,
+    2.025,
+    -1.476
+   ],
+   "bbox_min_mm": [
+    -1.791,
+    0.507,
+    -2.895
+   ],
+   "bbox_max_mm": [
+    1.713,
+    3.688,
+    0.792
+   ],
+   "extent_mm": [
+    3.503,
+    3.181,
+    3.686
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.231,
+    -0.671,
+    0.434
+   ],
+   "distance_from_waxholm_atlas_mm": 0.832
+  },
+  "rat04_manual_me": {
+   "rat": 4,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 1849,
+   "volume_mm3": 18.49,
+   "centroid_mm": [
+    -0.021,
+    2.537,
+    -1.962
+   ],
+   "bbox_min_mm": [
+    -1.654,
+    0.347,
+    -3.243
+   ],
+   "bbox_max_mm": [
+    1.645,
+    4.442,
+    -0.523
+   ],
+   "extent_mm": [
+    3.298,
+    4.095,
+    2.72
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.221,
+    -0.159,
+    -0.052
+   ],
+   "distance_from_waxholm_atlas_mm": 0.277
+  },
+  "rat04_manual_other": {
+   "rat": 4,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2592,
+   "volume_mm3": 25.92,
+   "centroid_mm": [
+    0.008,
+    3.136,
+    -1.664
+   ],
+   "bbox_min_mm": [
+    -1.859,
+    1.207,
+    -3.17
+   ],
+   "bbox_max_mm": [
+    1.856,
+    5.399,
+    0.079
+   ],
+   "extent_mm": [
+    3.714,
+    4.192,
+    3.249
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.192,
+    0.44,
+    0.246
+   ],
+   "distance_from_waxholm_atlas_mm": 0.539
+  },
+  "rat04_sigma_on_rat": {
+   "rat": 4,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1977,
+   "volume_mm3": 19.77,
+   "centroid_mm": [
+    -0.058,
+    1.854,
+    -1.493
+   ],
+   "bbox_min_mm": [
+    -1.963,
+    0.214,
+    -2.81
+   ],
+   "bbox_max_mm": [
+    1.739,
+    4.385,
+    0.456
+   ],
+   "extent_mm": [
+    3.702,
+    4.171,
+    3.267
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.258,
+    -0.842,
+    0.417
+   ],
+   "distance_from_waxholm_atlas_mm": 0.974
+  },
+  "rat05_manual_me": {
+   "rat": 5,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 2826,
+   "volume_mm3": 28.26,
+   "centroid_mm": [
+    0.165,
+    2.559,
+    -1.936
+   ],
+   "bbox_min_mm": [
+    -1.796,
+    0.753,
+    -3.638
+   ],
+   "bbox_max_mm": [
+    2.015,
+    4.943,
+    -0.25
+   ],
+   "extent_mm": [
+    3.811,
+    4.19,
+    3.388
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.035,
+    -0.137,
+    -0.026
+   ],
+   "distance_from_waxholm_atlas_mm": 0.144
+  },
+  "rat05_manual_other": {
+   "rat": 5,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2360,
+   "volume_mm3": 23.6,
+   "centroid_mm": [
+    0.135,
+    2.583,
+    -1.87
+   ],
+   "bbox_min_mm": [
+    -1.594,
+    0.75,
+    -3.446
+   ],
+   "bbox_max_mm": [
+    1.74,
+    4.936,
+    -0.246
+   ],
+   "extent_mm": [
+    3.334,
+    4.186,
+    3.2
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.065,
+    -0.113,
+    0.04
+   ],
+   "distance_from_waxholm_atlas_mm": 0.136
+  },
+  "rat05_sigma_on_rat": {
+   "rat": 5,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1836,
+   "volume_mm3": 18.36,
+   "centroid_mm": [
+    0.002,
+    2.29,
+    -1.669
+   ],
+   "bbox_min_mm": [
+    -1.719,
+    0.78,
+    -3.106
+   ],
+   "bbox_max_mm": [
+    1.786,
+    3.918,
+    0.585
+   ],
+   "extent_mm": [
+    3.505,
+    3.139,
+    3.691
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.198,
+    -0.406,
+    0.241
+   ],
+   "distance_from_waxholm_atlas_mm": 0.512
+  },
+  "rat06_manual_me": {
+   "rat": 6,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 2314,
+   "volume_mm3": 23.14,
+   "centroid_mm": [
+    0.299,
+    2.495,
+    -1.963
+   ],
+   "bbox_min_mm": [
+    -1.501,
+    0.748,
+    -3.275
+   ],
+   "bbox_max_mm": [
+    2.12,
+    4.986,
+    -0.116
+   ],
+   "extent_mm": [
+    3.621,
+    4.238,
+    3.159
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.099,
+    -0.201,
+    -0.053
+   ],
+   "distance_from_waxholm_atlas_mm": 0.23
+  },
+  "rat06_manual_other": {
+   "rat": 6,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2525,
+   "volume_mm3": 25.25,
+   "centroid_mm": [
+    0.257,
+    2.466,
+    -1.877
+   ],
+   "bbox_min_mm": [
+    -1.547,
+    0.743,
+    -3.383
+   ],
+   "bbox_max_mm": [
+    1.961,
+    4.978,
+    -0.02
+   ],
+   "extent_mm": [
+    3.508,
+    4.235,
+    3.363
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.057,
+    -0.23,
+    0.033
+   ],
+   "distance_from_waxholm_atlas_mm": 0.239
+  },
+  "rat06_sigma_on_rat": {
+   "rat": 6,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1893,
+   "volume_mm3": 18.93,
+   "centroid_mm": [
+    0.175,
+    2.168,
+    -1.625
+   ],
+   "bbox_min_mm": [
+    -1.59,
+    -0.218,
+    -3.049
+   ],
+   "bbox_max_mm": [
+    1.909,
+    3.989,
+    0.638
+   ],
+   "extent_mm": [
+    3.5,
+    4.207,
+    3.687
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.025,
+    -0.528,
+    0.285
+   ],
+   "distance_from_waxholm_atlas_mm": 0.601
+  },
+  "rat07_manual_me": {
+   "rat": 7,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 2674,
+   "volume_mm3": 26.74,
+   "centroid_mm": [
+    0.223,
+    2.626,
+    -2.196
+   ],
+   "bbox_min_mm": [
+    -1.712,
+    1.071,
+    -3.523
+   ],
+   "bbox_max_mm": [
+    2.198,
+    5.182,
+    -0.463
+   ],
+   "extent_mm": [
+    3.909,
+    4.111,
+    3.06
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.023,
+    -0.07,
+    -0.286
+   ],
+   "distance_from_waxholm_atlas_mm": 0.295
+  },
+  "rat07_manual_other": {
+   "rat": 7,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 3278,
+   "volume_mm3": 32.78,
+   "centroid_mm": [
+    0.311,
+    2.749,
+    -1.977
+   ],
+   "bbox_min_mm": [
+    -1.909,
+    1.068,
+    -3.474
+   ],
+   "bbox_max_mm": [
+    2.302,
+    5.183,
+    -0.226
+   ],
+   "extent_mm": [
+    4.211,
+    4.115,
+    3.247
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.111,
+    0.053,
+    -0.067
+   ],
+   "distance_from_waxholm_atlas_mm": 0.14
+  },
+  "rat07_sigma_on_rat": {
+   "rat": 7,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1795,
+   "volume_mm3": 17.95,
+   "centroid_mm": [
+    -0.017,
+    2.04,
+    -1.49
+   ],
+   "bbox_min_mm": [
+    -2.027,
+    0.058,
+    -2.7
+   ],
+   "bbox_max_mm": [
+    1.776,
+    4.154,
+    -0.1
+   ],
+   "extent_mm": [
+    3.803,
+    4.096,
+    2.6
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.217,
+    -0.656,
+    0.42
+   ],
+   "distance_from_waxholm_atlas_mm": 0.809
+  },
+  "rat08_manual_me": {
+   "rat": 8,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 2386,
+   "volume_mm3": 23.86,
+   "centroid_mm": [
+    0.152,
+    2.553,
+    -1.614
+   ],
+   "bbox_min_mm": [
+    -1.736,
+    0.729,
+    -2.901
+   ],
+   "bbox_max_mm": [
+    1.976,
+    4.89,
+    -0.326
+   ],
+   "extent_mm": [
+    3.712,
+    4.161,
+    2.575
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.048,
+    -0.143,
+    0.296
+   ],
+   "distance_from_waxholm_atlas_mm": 0.332
+  },
+  "rat08_manual_other": {
+   "rat": 8,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2442,
+   "volume_mm3": 24.42,
+   "centroid_mm": [
+    0.275,
+    2.584,
+    -1.53
+   ],
+   "bbox_min_mm": [
+    -1.502,
+    0.689,
+    -2.702
+   ],
+   "bbox_max_mm": [
+    2.096,
+    4.89,
+    0.195
+   ],
+   "extent_mm": [
+    3.598,
+    4.201,
+    2.898
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.075,
+    -0.112,
+    0.38
+   ],
+   "distance_from_waxholm_atlas_mm": 0.403
+  },
+  "rat08_sigma_on_rat": {
+   "rat": 8,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1853,
+   "volume_mm3": 18.53,
+   "centroid_mm": [
+    0.133,
+    2.233,
+    -1.278
+   ],
+   "bbox_min_mm": [
+    -1.659,
+    0.714,
+    -2.66
+   ],
+   "bbox_max_mm": [
+    1.938,
+    3.855,
+    1.024
+   ],
+   "extent_mm": [
+    3.597,
+    3.142,
+    3.684
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.067,
+    -0.463,
+    0.632
+   ],
+   "distance_from_waxholm_atlas_mm": 0.786
+  },
+  "rat09_manual_me": {
+   "rat": 9,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 1964,
+   "volume_mm3": 19.64,
+   "centroid_mm": [
+    0.692,
+    2.857,
+    -1.801
+   ],
+   "bbox_min_mm": [
+    -1.115,
+    1.387,
+    -2.984
+   ],
+   "bbox_max_mm": [
+    2.31,
+    5.447,
+    -0.424
+   ],
+   "extent_mm": [
+    3.424,
+    4.06,
+    2.56
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.492,
+    0.161,
+    0.109
+   ],
+   "distance_from_waxholm_atlas_mm": 0.529
+  },
+  "rat09_manual_other": {
+   "rat": 9,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2392,
+   "volume_mm3": 23.92,
+   "centroid_mm": [
+    0.811,
+    2.979,
+    -1.66
+   ],
+   "bbox_min_mm": [
+    -1.118,
+    1.38,
+    -3.103
+   ],
+   "bbox_max_mm": [
+    2.79,
+    5.433,
+    0.064
+   ],
+   "extent_mm": [
+    3.909,
+    4.054,
+    3.168
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.611,
+    0.283,
+    0.25
+   ],
+   "distance_from_waxholm_atlas_mm": 0.718
+  },
+  "rat09_sigma_on_rat": {
+   "rat": 9,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1872,
+   "volume_mm3": 18.72,
+   "centroid_mm": [
+    0.712,
+    2.866,
+    -1.439
+   ],
+   "bbox_min_mm": [
+    -1.023,
+    1.389,
+    -2.743
+   ],
+   "bbox_max_mm": [
+    2.493,
+    4.434,
+    0.8
+   ],
+   "extent_mm": [
+    3.517,
+    3.045,
+    3.543
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    0.512,
+    0.17,
+    0.471
+   ],
+   "distance_from_waxholm_atlas_mm": 0.716
+  },
+  "rat10_manual_me": {
+   "rat": 10,
+   "atlas_derived_file": false,
+   "source": "hand trace (Me)",
+   "voxels": 2091,
+   "volume_mm3": 20.91,
+   "centroid_mm": [
+    0.017,
+    2.726,
+    -2.342
+   ],
+   "bbox_min_mm": [
+    -2.01,
+    1.13,
+    -3.492
+   ],
+   "bbox_max_mm": [
+    1.713,
+    5.31,
+    -1.107
+   ],
+   "extent_mm": [
+    3.723,
+    4.179,
+    2.386
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.183,
+    0.03,
+    -0.432
+   ],
+   "distance_from_waxholm_atlas_mm": 0.47
+  },
+  "rat10_manual_other": {
+   "rat": 10,
+   "atlas_derived_file": false,
+   "source": "hand trace (Other)",
+   "voxels": 2873,
+   "volume_mm3": 28.73,
+   "centroid_mm": [
+    0.119,
+    2.75,
+    -2.087
+   ],
+   "bbox_min_mm": [
+    -1.81,
+    1.012,
+    -3.495
+   ],
+   "bbox_max_mm": [
+    2.299,
+    5.369,
+    -0.223
+   ],
+   "extent_mm": [
+    4.109,
+    4.357,
+    3.272
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.081,
+    0.054,
+    -0.177
+   ],
+   "distance_from_waxholm_atlas_mm": 0.202
+  },
+  "rat10_sigma_on_rat": {
+   "rat": 10,
+   "atlas_derived_file": false,
+   "source": "SIGMA registered to the rat on its own",
+   "voxels": 1957,
+   "volume_mm3": 19.57,
+   "centroid_mm": [
+    -0.069,
+    1.737,
+    -1.389
+   ],
+   "bbox_min_mm": [
+    -1.929,
+    -0.05,
+    -2.709
+   ],
+   "bbox_max_mm": [
+    1.777,
+    4.233,
+    0.24
+   ],
+   "extent_mm": [
+    3.707,
+    4.283,
+    2.949
+   ],
+   "offset_from_waxholm_atlas_mm": [
+    -0.269,
+    -0.959,
+    0.521
+   ],
+   "distance_from_waxholm_atlas_mm": 1.124
+  }
+ }
+}

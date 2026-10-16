@@ -1,0 +1,2678 @@
+[
+ {
+  "id": 0,
+  "name": "Clear Label",
+  "rgb": [
+   0,
+   0,
+   0
+  ],
+  "alpha": 0.0,
+  "visible": false,
+  "mesh_visible": false
+ },
+ {
+  "id": 1,
+  "name": "corticofugal tract and corona radiata",
+  "rgb": [
+   255,
+   52,
+   39
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 3,
+  "name": "Subthalamic nucleus",
+  "rgb": [
+   0,
+   0,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 4,
+  "name": "Molecular cell layer of the cerebellum",
+  "rgb": [
+   255,
+   255,
+   1
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 5,
+  "name": "Cerebellum, unspecified",
+  "rgb": [
+   0,
+   255,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 6,
+  "name": "alveus of the hippocampus",
+  "rgb": [
+   255,
+   0,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 7,
+  "name": "inferior cerebellar peduncle",
+  "rgb": [
+   52,
+   255,
+   13
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 10,
+  "name": "Cingulate area 2",
+  "rgb": [
+   29,
+   104,
+   235
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 32,
+  "name": "Entopeduncular nucleus",
+  "rgb": [
+   26,
+   231,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 33,
+  "name": "Ventricular system, unspecified",
+  "rgb": [
+   2,
+   44,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 34,
+  "name": "medial lemniscus, unspecified",
+  "rgb": [
+   212,
+   255,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 35,
+  "name": "facial nerve, unspecified",
+  "rgb": [
+   255,
+   25,
+   240
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 36,
+  "name": "anterior commissure, anterior limb",
+  "rgb": [
+   124,
+   252,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 37,
+  "name": "anterior commissure, posterior limb",
+  "rgb": [
+   255,
+   186,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 38,
+  "name": "ventral hippocampal commissure",
+  "rgb": [
+   174,
+   0,
+   232
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 40,
+  "name": "Septal region",
+  "rgb": [
+   255,
+   8,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 41,
+  "name": "optic nerve",
+  "rgb": [
+   48,
+   218,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 42,
+  "name": "optic tract and optic chiasm",
+  "rgb": [
+   38,
+   126,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 43,
+  "name": "Pineal gland",
+  "rgb": [
+   218,
+   170,
+   62
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 45,
+  "name": "Spinal cord",
+  "rgb": [
+   134,
+   255,
+   90
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 46,
+  "name": "commissure of the superior colliculus",
+  "rgb": [
+   33,
+   230,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 47,
+  "name": "Brainstem, unspecified",
+  "rgb": [
+   153,
+   83,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 48,
+  "name": "Hypothalamic region, unspecified",
+  "rgb": [
+   226,
+   120,
+   161
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 50,
+  "name": "Superficial gray layer of the superior colliculus",
+  "rgb": [
+   86,
+   0,
+   221
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 51,
+  "name": "Periaqueductal gray",
+  "rgb": [
+   7,
+   255,
+   89
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 52,
+  "name": "fornix",
+  "rgb": [
+   21,
+   192,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 53,
+  "name": "mammillotegmental tract",
+  "rgb": [
+   238,
+   186,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 54,
+  "name": "commissural stria terminalis",
+  "rgb": [
+   173,
+   255,
+   47
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 55,
+  "name": "Deeper layers of the superior colliculus",
+  "rgb": [
+   225,
+   151,
+   15
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 56,
+  "name": "Periventricular gray",
+  "rgb": [
+   235,
+   87,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 57,
+  "name": "genu of the facial nerve",
+  "rgb": [
+   250,
+   244,
+   247
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 58,
+  "name": "Pontine nuclei",
+  "rgb": [
+   0,
+   215,
+   11
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 59,
+  "name": "fimbria of the hippocampus",
+  "rgb": [
+   0,
+   255,
+   29
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 60,
+  "name": "fasciculus retroflexus",
+  "rgb": [
+   244,
+   67,
+   69
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 61,
+  "name": "stria medullaris thalami",
+  "rgb": [
+   0,
+   255,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 62,
+  "name": "stria terminalis",
+  "rgb": [
+   238,
+   117,
+   51
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 63,
+  "name": "posterior commissure",
+  "rgb": [
+   255,
+   0,
+   218
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 64,
+  "name": "Glomerular layer of the accessory olfactory bulb",
+  "rgb": [
+   15,
+   109,
+   230
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 65,
+  "name": "Glomerular layer of the olfactory bulb",
+  "rgb": [
+   255,
+   227,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 66,
+  "name": "Olfactory bulb, unspecified",
+  "rgb": [
+   255,
+   135,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 67,
+  "name": "corpus callosum and associated subcortical white matter",
+  "rgb": [
+   255,
+   110,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 68,
+  "name": "brachium of the superior colliculus",
+  "rgb": [
+   188,
+   32,
+   173
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 69,
+  "name": "inferior colliculus, commissure",
+  "rgb": [
+   255,
+   42,
+   39
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 70,
+  "name": "Central canal",
+  "rgb": [
+   39,
+   244,
+   253
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 71,
+  "name": "Interpeduncular nucleus",
+  "rgb": [
+   63,
+   192,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 72,
+  "name": "ascending fibers of the facial nerve",
+  "rgb": [
+   179,
+   28,
+   53
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 73,
+  "name": "anterior commissure, intrabulbar part",
+  "rgb": [
+   255,
+   79,
+   206
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 74,
+  "name": "Inferior olive",
+  "rgb": [
+   0,
+   246,
+   14
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 75,
+  "name": "Spinal trigeminal nucleus",
+  "rgb": [
+   91,
+   241,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 76,
+  "name": "spinal trigeminal tract",
+  "rgb": [
+   250,
+   128,
+   114
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 77,
+  "name": "Frontal association cortex",
+  "rgb": [
+   206,
+   211,
+   7
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 78,
+  "name": "middle cerebellar peduncle",
+  "rgb": [
+   134,
+   204,
+   76
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 79,
+  "name": "transverse fibers of the pons",
+  "rgb": [
+   128,
+   170,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 80,
+  "name": "habenular commissure",
+  "rgb": [
+   69,
+   235,
+   202
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 81,
+  "name": "Nucleus of the stria medullaris",
+  "rgb": [
+   222,
+   7,
+   237
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 82,
+  "name": "Basal forebrain region, unspecified",
+  "rgb": [
+   225,
+   240,
+   13
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 83,
+  "name": "supraoptic decussation",
+  "rgb": [
+   250,
+   170,
+   64
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 84,
+  "name": "medial lemniscus decussation",
+  "rgb": [
+   65,
+   150,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 85,
+  "name": "pyramidal decussation",
+  "rgb": [
+   114,
+   9,
+   212
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 93,
+  "name": "Bed nucleus of the stria terminalis",
+  "rgb": [
+   0,
+   8,
+   182
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 94,
+  "name": "Pretectal region",
+  "rgb": [
+   255,
+   87,
+   30
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 95,
+  "name": "Cornu ammonis 3",
+  "rgb": [
+   165,
+   131,
+   107
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 96,
+  "name": "Dentate gyrus",
+  "rgb": [
+   91,
+   45,
+   10
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 97,
+  "name": "Cornu ammonis 2",
+  "rgb": [
+   255,
+   255,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 98,
+  "name": "Cornu ammonis 1",
+  "rgb": [
+   217,
+   104,
+   13
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 99,
+  "name": "Fasciola cinereum",
+  "rgb": [
+   255,
+   0,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 100,
+  "name": "Subiculum",
+  "rgb": [
+   255,
+   192,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 108,
+  "name": "Postrhinal cortex",
+  "rgb": [
+   40,
+   112,
+   130
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 109,
+  "name": "Presubiculum",
+  "rgb": [
+   80,
+   123,
+   175
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 110,
+  "name": "Parasubiculum",
+  "rgb": [
+   23,
+   54,
+   96
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 112,
+  "name": "Perirhinal area 35",
+  "rgb": [
+   205,
+   51,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 113,
+  "name": "Perirhinal area 36",
+  "rgb": [
+   112,
+   48,
+   160
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 114,
+  "name": "Medial entorhinal cortex",
+  "rgb": [
+   122,
+   187,
+   51
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 115,
+  "name": "Lateral entorhinal cortex",
+  "rgb": [
+   90,
+   111,
+   47
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 119,
+  "name": "Vestibular apparatus",
+  "rgb": [
+   0,
+   144,
+   55
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 120,
+  "name": "Cochlea",
+  "rgb": [
+   0,
+   255,
+   28
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 121,
+  "name": "Cochlear nerve",
+  "rgb": [
+   253,
+   148,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 122,
+  "name": "Vestibular nerve",
+  "rgb": [
+   253,
+   50,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 123,
+  "name": "Ventral cochlear nucleus, granule cell layer",
+  "rgb": [
+   0,
+   12,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 125,
+  "name": "4th ventricle",
+  "rgb": [
+   52,
+   29,
+   144
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 126,
+  "name": "Dorsal cochlear nucleus, molecular layer",
+  "rgb": [
+   92,
+   156,
+   211
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 127,
+  "name": "Dorsal cochlear nucleus, fusiform and granule layer",
+  "rgb": [
+   0,
+   80,
+   156
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 128,
+  "name": "Dorsal cochlear nucleus, deep core",
+  "rgb": [
+   197,
+   238,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 129,
+  "name": "acoustic striae",
+  "rgb": [
+   255,
+   217,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 130,
+  "name": "trapezoid body",
+  "rgb": [
+   213,
+   255,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 131,
+  "name": "Nucleus of the trapezoid body",
+  "rgb": [
+   0,
+   255,
+   81
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 132,
+  "name": "Superior paraolivary nucleus",
+  "rgb": [
+   0,
+   238,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 133,
+  "name": "Medial superior olive",
+  "rgb": [
+   219,
+   239,
+   61
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 134,
+  "name": "Lateral superior olive",
+  "rgb": [
+   35,
+   76,
+   190
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 135,
+  "name": "Superior periolivary region",
+  "rgb": [
+   1,
+   153,
+   21
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 136,
+  "name": "Ventral periolivary nuclei",
+  "rgb": [
+   0,
+   174,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 137,
+  "name": "Lateral lemniscus, ventral nucleus",
+  "rgb": [
+   255,
+   0,
+   115
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 138,
+  "name": "Lateral lemniscus, intermediate nucleus",
+  "rgb": [
+   171,
+   16,
+   91
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 139,
+  "name": "Lateral lemniscus, dorsal nucleus",
+  "rgb": [
+   108,
+   18,
+   91
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 140,
+  "name": "lateral lemniscus, commissure",
+  "rgb": [
+   255,
+   29,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 141,
+  "name": "lateral lemniscus, unspecified",
+  "rgb": [
+   255,
+   166,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 142,
+  "name": "Inferior colliculus, dorsal cortex",
+  "rgb": [
+   206,
+   255,
+   142
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 143,
+  "name": "Inferior colliculus, central nucleus",
+  "rgb": [
+   0,
+   238,
+   254
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 145,
+  "name": "Inferior colliculus, external cortex",
+  "rgb": [
+   48,
+   136,
+   203
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 146,
+  "name": "inferior colliculus, brachium",
+  "rgb": [
+   176,
+   58,
+   72
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 150,
+  "name": "Medial geniculate body, marginal zone",
+  "rgb": [
+   255,
+   47,
+   242
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 151,
+  "name": "Primary auditory area",
+  "rgb": [
+   255,
+   215,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 152,
+  "name": "Secondary auditory area, dorsal part",
+  "rgb": [
+   240,
+   255,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 153,
+  "name": "Secondary auditory area, ventral part",
+  "rgb": [
+   216,
+   191,
+   216
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 157,
+  "name": "external medullary lamina, auditory radiation",
+  "rgb": [
+   244,
+   156,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 158,
+  "name": "Ventral cochlear nucleus, anterior part",
+  "rgb": [
+   34,
+   152,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 159,
+  "name": "Ventral cochlear nucleus, posterior part",
+  "rgb": [
+   0,
+   230,
+   207
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 160,
+  "name": "Ventral cochlear nucleus, cap area",
+  "rgb": [
+   0,
+   255,
+   106
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 162,
+  "name": "Spiral ganglion",
+  "rgb": [
+   185,
+   255,
+   233
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 163,
+  "name": "Nucleus sagulum",
+  "rgb": [
+   99,
+   205,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 164,
+  "name": "Reticular (pre)thalamic nucleus, auditory segment",
+  "rgb": [
+   110,
+   0,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 180,
+  "name": "lateral olfactory tract",
+  "rgb": [
+   255,
+   0,
+   221
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 181,
+  "name": "Piriform cortex, layer 1",
+  "rgb": [
+   0,
+   204,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 182,
+  "name": "Piriform cortex, layer 2",
+  "rgb": [
+   0,
+   0,
+   254
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 183,
+  "name": "Piriform cortex, layer 3",
+  "rgb": [
+   165,
+   120,
+   221
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 184,
+  "name": "Nucleus accumbens, core",
+  "rgb": [
+   230,
+   216,
+   250
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 187,
+  "name": "Substantia nigra, reticular part",
+  "rgb": [
+   99,
+   197,
+   18
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 188,
+  "name": "Substantia nigra, compact part",
+  "rgb": [
+   255,
+   255,
+   127
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 189,
+  "name": "Substantia nigra, lateral part",
+  "rgb": [
+   0,
+   159,
+   159
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 192,
+  "name": "Nucleus accumbens, shell",
+  "rgb": [
+   88,
+   47,
+   108
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 193,
+  "name": "Ventral pallidum",
+  "rgb": [
+   0,
+   162,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 195,
+  "name": "Globus pallidus external, medial part",
+  "rgb": [
+   255,
+   85,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 196,
+  "name": "Ventral tegmental area",
+  "rgb": [
+   127,
+   255,
+   212
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 197,
+  "name": "Caudate putamen",
+  "rgb": [
+   129,
+   79,
+   155
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 198,
+  "name": "Globus pallidus external, lateral part",
+  "rgb": [
+   200,
+   25,
+   200
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 199,
+  "name": "Ventral striatal region, unspecified",
+  "rgb": [
+   220,
+   20,
+   60
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 200,
+  "name": "Reticular (pre)thalamic nucleus, unspecified",
+  "rgb": [
+   0,
+   217,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 201,
+  "name": "Peripeduncular nucleus",
+  "rgb": [
+   183,
+   199,
+   136
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 204,
+  "name": "Pregeniculate nucleus ",
+  "rgb": [
+   255,
+   25,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 205,
+  "name": "Dorsal lateral geniculate nucleus",
+  "rgb": [
+   255,
+   226,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 206,
+  "name": "Lateral habenular nucleus",
+  "rgb": [
+   217,
+   108,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 207,
+  "name": "Medial habenular nucleus",
+  "rgb": [
+   205,
+   0,
+   24
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 208,
+  "name": "Posterior intralaminar nucleus",
+  "rgb": [
+   228,
+   112,
+   214
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 210,
+  "name": "Posterior thalamic nuclear group, triangular part",
+  "rgb": [
+   255,
+   255,
+   200
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 211,
+  "name": "Parataenial thalamic nucleus",
+  "rgb": [
+   205,
+   0,
+   6
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 213,
+  "name": "Anterodorsal thalamic nucleus",
+  "rgb": [
+   131,
+   10,
+   121
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 214,
+  "name": "Anteroventral thalamic nucleus, dorsomedial part",
+  "rgb": [
+   239,
+   121,
+   218
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 215,
+  "name": "Anteroventral thalamic nucleus, ventrolateral part",
+  "rgb": [
+   101,
+   35,
+   142
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 216,
+  "name": "Rhomboid thalamic nucleus",
+  "rgb": [
+   0,
+   255,
+   17
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 218,
+  "name": "Xiphoid thalamic nucleus",
+  "rgb": [
+   35,
+   255,
+   236
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 219,
+  "name": "Reuniens thalamic nucleus",
+  "rgb": [
+   255,
+   170,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 221,
+  "name": "Ventromedial thalamic nucleus",
+  "rgb": [
+   0,
+   185,
+   126
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 222,
+  "name": "Submedius thalamic nucleus",
+  "rgb": [
+   130,
+   0,
+   217
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 223,
+  "name": "Angular thalamic nucleus",
+  "rgb": [
+   139,
+   93,
+   139
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 227,
+  "name": "Ventral posteromedial thalamic nucleus",
+  "rgb": [
+   255,
+   0,
+   254
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 228,
+  "name": "Laterodorsal thalamic nucleus, dorsomedial part",
+  "rgb": [
+   255,
+   123,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 229,
+  "name": "Laterodorsal thalamic nucleus, ventrolateral part",
+  "rgb": [
+   43,
+   153,
+   31
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 230,
+  "name": "Posterior thalamic nucleus",
+  "rgb": [
+   255,
+   255,
+   2
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 231,
+  "name": "Ventrolateral thalamic nucleus",
+  "rgb": [
+   170,
+   170,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 232,
+  "name": "Mediodorsal thalamic nucleus, lateral part",
+  "rgb": [
+   255,
+   85,
+   127
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 233,
+  "name": "Mediodorsal thalamic nucleus, central part",
+  "rgb": [
+   85,
+   170,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 235,
+  "name": "Zona incerta, dorsal part",
+  "rgb": [
+   216,
+   191,
+   217
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 236,
+  "name": "Zona incerta, ventral part",
+  "rgb": [
+   75,
+   200,
+   138
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 238,
+  "name": "Zona incerta, A13 dopamine cells",
+  "rgb": [
+   194,
+   71,
+   79
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 239,
+  "name": "pretectothalamic lamina",
+  "rgb": [
+   219,
+   143,
+   247
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 240,
+  "name": "Mediodorsal thalamic nucleus, medial part",
+  "rgb": [
+   170,
+   255,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 242,
+  "name": "Paraventricular thalamic nuclei (anterior and posterior)",
+  "rgb": [
+   156,
+   51,
+   51
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 246,
+  "name": "Paracentral thalamic nucleus",
+  "rgb": [
+   240,
+   248,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 247,
+  "name": "Central medial thalamic nucleus",
+  "rgb": [
+   224,
+   182,
+   64
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 248,
+  "name": "Central lateral thalamic nucleus",
+  "rgb": [
+   153,
+   50,
+   204
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 249,
+  "name": "external medullary lamina, unspecified",
+  "rgb": [
+   170,
+   255,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 254,
+  "name": "Anteromedial thalamic nucleus",
+  "rgb": [
+   0,
+   85,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 255,
+  "name": "Interanteromedial thalamic nucleus",
+  "rgb": [
+   248,
+   117,
+   222
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 257,
+  "name": "Zona incerta, rostral part",
+  "rgb": [
+   30,
+   144,
+   255
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 260,
+  "name": "Intermediodorsal thalamic nucleus",
+  "rgb": [
+   160,
+   82,
+   45
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 266,
+  "name": "Ventral posterior nucleus of the thalamus, parvicellular part",
+  "rgb": [
+   0,
+   255,
+   8
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 267,
+  "name": "Parafascicular thalamic nucleus",
+  "rgb": [
+   255,
+   239,
+   213
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 268,
+  "name": "Retroreuniens thalamic nucleus",
+  "rgb": [
+   0,
+   0,
+   205
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 270,
+  "name": "superior cerebellar peduncle and prerubral field",
+  "rgb": [
+   210,
+   182,
+   140
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 272,
+  "name": "Intergeniculate leaflet",
+  "rgb": [
+   0,
+   0,
+   128
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 278,
+  "name": "Subparafascicular nucleus",
+  "rgb": [
+   233,
+   150,
+   122
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 280,
+  "name": "Fields of Forel",
+  "rgb": [
+   255,
+   250,
+   250
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 281,
+  "name": "Subgeniculate nucleus",
+  "rgb": [
+   147,
+   112,
+   219
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 282,
+  "name": "Ethmoid-Limitans nucleus",
+  "rgb": [
+   131,
+   50,
+   128
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 283,
+  "name": "Lateral posterior thalamic nucleus, lateral part",
+  "rgb": [
+   199,
+   87,
+   61
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 284,
+  "name": "Zona incerta, A11 dopamine cells",
+  "rgb": [
+   255,
+   182,
+   193
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 285,
+  "name": "Lateral posterior thalamic nucleus, mediorostral part",
+  "rgb": [
+   60,
+   179,
+   113
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 286,
+  "name": "Lateral posterior thalamic nucleus, mediocaudal part",
+  "rgb": [
+   255,
+   235,
+   205
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 287,
+  "name": "Zona incerta, caudal part",
+  "rgb": [
+   255,
+   228,
+   196
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 290,
+  "name": "intramedullary thalamic area",
+  "rgb": [
+   155,
+   148,
+   111
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 291,
+  "name": "internal medullary lamina",
+  "rgb": [
+   255,
+   92,
+   10
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 293,
+  "name": "Ventral anterior thalamic nucleus",
+  "rgb": [
+   255,
+   136,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 294,
+  "name": "Ventral posterolateral thalamic nucleus",
+  "rgb": [
+   171,
+   86,
+   62
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 295,
+  "name": "Medial geniculate body, dorsal division",
+  "rgb": [
+   239,
+   163,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 297,
+  "name": "Medial geniculate body, medial division",
+  "rgb": [
+   10,
+   244,
+   217
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 298,
+  "name": "Medial geniculate body, ventral division",
+  "rgb": [
+   131,
+   58,
+   31
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 299,
+  "name": "Medial geniculate body, suprageniculate nucleus",
+  "rgb": [
+   10,
+   244,
+   150
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 400,
+  "name": "Ventrolateral orbital area",
+  "rgb": [
+   255,
+   0,
+   1
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 401,
+  "name": "Lateral orbital area",
+  "rgb": [
+   255,
+   174,
+   201
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 402,
+  "name": "Ventral orbital area",
+  "rgb": [
+   200,
+   191,
+   231
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 403,
+  "name": "Medial orbital area",
+  "rgb": [
+   63,
+   72,
+   204
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 404,
+  "name": "Dorsolateral orbital area",
+  "rgb": [
+   185,
+   122,
+   87
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 405,
+  "name": "Prelimbic area",
+  "rgb": [
+   163,
+   73,
+   164
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 406,
+  "name": "Secondary motor area",
+  "rgb": [
+   0,
+   162,
+   232
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 407,
+  "name": "Frontal association area 3",
+  "rgb": [
+   136,
+   0,
+   21
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 408,
+  "name": "Primary motor area",
+  "rgb": [
+   153,
+   217,
+   234
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 409,
+  "name": "Agranular insular cortex, ventral area",
+  "rgb": [
+   255,
+   201,
+   14
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 410,
+  "name": "Agranular insular cortex dorsal area ",
+  "rgb": [
+   255,
+   127,
+   39
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 411,
+  "name": "Cingulate area 1",
+  "rgb": [
+   0,
+   128,
+   128
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 412,
+  "name": "Claustrum",
+  "rgb": [
+   153,
+   217,
+   200
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 413,
+  "name": "Infralimbic area",
+  "rgb": [
+   34,
+   177,
+   76
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 414,
+  "name": "Dysgranular insular cortex",
+  "rgb": [
+   255,
+   242,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 416,
+  "name": "Granular insular cortex",
+  "rgb": [
+   239,
+   228,
+   176
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 417,
+  "name": "Primary somatosensory area, forelimb representation",
+  "rgb": [
+   185,
+   14,
+   131
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 418,
+  "name": "Primary somatosensory area, dysgranular zone",
+  "rgb": [
+   237,
+   28,
+   36
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 420,
+  "name": "Primary somatosensory area, face representation",
+  "rgb": [
+   255,
+   128,
+   192
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 422,
+  "name": "Secondary somatosensory area",
+  "rgb": [
+   200,
+   100,
+   250
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 423,
+  "name": "Primary somatosensory area, hindlimb representation",
+  "rgb": [
+   136,
+   100,
+   21
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 424,
+  "name": "Agranular insular cortex, posterior area ",
+  "rgb": [
+   181,
+   230,
+   29
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 425,
+  "name": "Primary somatosensory area, barrel field",
+  "rgb": [
+   120,
+   177,
+   76
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 427,
+  "name": "Retrosplenial dysgranular area",
+  "rgb": [
+   200,
+   73,
+   164
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 429,
+  "name": "Primary somatosensory area, trunk representation",
+  "rgb": [
+   225,
+   150,
+   201
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 430,
+  "name": "Retrosplenial granular area",
+  "rgb": [
+   25,
+   100,
+   200
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 432,
+  "name": "Parietal association cortex, lateral area",
+  "rgb": [
+   255,
+   240,
+   29
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 433,
+  "name": "Parietal association cortex, medial area",
+  "rgb": [
+   108,
+   0,
+   108
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 436,
+  "name": "Parietal association cortex, posterior area ",
+  "rgb": [
+   128,
+   0,
+   64
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 442,
+  "name": "Primary visual area",
+  "rgb": [
+   84,
+   52,
+   35
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 443,
+  "name": "Secondary visual area, lateral part",
+  "rgb": [
+   255,
+   100,
+   100
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 444,
+  "name": "Temporal association cortex",
+  "rgb": [
+   0,
+   128,
+   0
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 448,
+  "name": "Secondary visual area, medial part",
+  "rgb": [
+   128,
+   0,
+   100
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 500,
+  "name": "Endopiriform nucleus",
+  "rgb": [
+   1,
+   10,
+   100
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 501,
+  "name": "Amygdaloid area, unspecified",
+  "rgb": [
+   2,
+   20,
+   200
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ },
+ {
+  "id": 502,
+  "name": "Nucleus of the lateral olfactory tract",
+  "rgb": [
+   230,
+   184,
+   67
+  ],
+  "alpha": 1.0,
+  "visible": true,
+  "mesh_visible": false
+ }
+]
