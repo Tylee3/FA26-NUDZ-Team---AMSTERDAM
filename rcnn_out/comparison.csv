@@ -10,3 +10,6 @@ Mask R-CNN,mask,9,38/45,0/63,0.527,0.586,0.739,0.572
 Mask R-CNN + augmentation,mask,9,44/45,5/63,0.544,0.557,0.716,0.576
 Mask R-CNN + neighbor slices,mask,9,41/45,2/63,0.534,0.526,0.69,0.563
 Mask R-CNN + neighbor slices + augmentation,mask,9,45/45,8/63,0.55,0.547,0.707,0.566
+3D U-Net,mask,9,43/45,1/63,0.523,0.567,0.724,0.567
+3D U-Net + augmentation,mask,9,39/45,1/63,0.551,0.594,0.745,0.619
+Mask R-CNN + zoom (box first),mask,9,39/45,0/63,0.586,0.634,0.776,0.59

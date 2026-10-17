@@ -19,6 +19,9 @@ labeler 2 is the second, independent set. Regenerate with `python3 make_results_
 | Mask R-CNN + augmentation | outline | 0.72 | 0.56 | 0.73 | 0.58 | 44/45 | 5/63 |  |
 | Mask R-CNN + neighbor slices | outline | 0.69 | 0.53 | 0.72 | 0.56 | 41/45 | 2/63 |  |
 | Mask R-CNN + neighbor slices + augmentation | outline | 0.71 | 0.55 | 0.72 | 0.57 | 45/45 | 8/63 |  |
+| Mask R-CNN on a zoomed view, box first (Faster R-CNN) | outline | 0.78 | 0.63 | 0.74 | 0.59 | 39/45 | 0/63 |  |
+| 3D U-Net | outline | 0.72 | 0.57 | 0.72 | 0.57 | 43/45 | 1/63 |  |
+| 3D U-Net + augmentation | outline | 0.75 | 0.59 | 0.76 | 0.62 | 39/45 | 1/63 |  |
 | Mesh R-CNN | 3D mesh | — | — | — | — | — | — | planned |
 
 **How to read it:**
