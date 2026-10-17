@@ -50,9 +50,9 @@ def to_device(images, targets, device):
     return images, targets
 
 
-def train_network(name, model, device, out_dir, log, epochs, max_iters, limit, neighbors, augment):
-    ds = SliceDataset("train", with_masks=name in MASK_MODELS, with_proposals=name == "fast_rcnn",
-                      limit=limit, neighbors=neighbors, augment=augment)
+def train_network(name, model, device, out_dir, log, epochs, max_iters, limit, neighbors, augment, dataset=None):
+    ds = dataset or SliceDataset("train", with_masks=name in MASK_MODELS, with_proposals=name == "fast_rcnn",
+                                 limit=limit, neighbors=neighbors, augment=augment)
     loader = torch.utils.data.DataLoader(ds, batch_size=BATCH, shuffle=True, collate_fn=collate)
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.SGD(params, lr=LR, momentum=0.9, weight_decay=5e-4)
