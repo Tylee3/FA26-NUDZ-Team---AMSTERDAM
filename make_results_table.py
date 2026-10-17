@@ -84,6 +84,7 @@ def main():
               ("Mask R-CNN + neighbor slices", "mask_rcnn_neighbors", "outline"),
               ("Mask R-CNN + neighbor slices + augmentation", "mask_rcnn_neighbors_augment", "outline"),
               ("Mask R-CNN on a zoomed view, box first (Faster R-CNN)", "zoom_mask_rcnn", "outline"),
+              ("Mask R-CNN on a zoomed view, box first + augmentation", "zoom_mask_rcnn_augment", "outline"),
               ("3D U-Net", "unet3d", "outline"),
               ("3D U-Net + augmentation", "unet3d_augment", "outline")]
     for name, run, output in models:

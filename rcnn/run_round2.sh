@@ -18,6 +18,7 @@ run() {
 run zoom_mask_rcnn rcnn.zoom
 run unet3d rcnn.unet3d
 run unet3d_augment rcnn.unet3d --augment
+run zoom_mask_rcnn_augment rcnn.zoom --augment
 
 python3 -m rcnn.evaluate
 python3 make_results_table.py

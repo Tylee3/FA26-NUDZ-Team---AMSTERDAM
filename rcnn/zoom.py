@@ -12,8 +12,8 @@ structure, so it can answer "nothing here". Same training settings as every othe
 One expectation to state up front: Mask R-CNN always draws its outline on a 28x28 grid per
 box, so zooming adds detail to what the network sees rather than to the outline's grid.
 
-Usage (from the repo root):  python3 -m rcnn.zoom          (--smoke for a tiny check)
-Writes rcnn_out/zoom_mask_rcnn/ in the usual format, so rcnn.evaluate scores it.
+Usage (from the repo root):  python3 -m rcnn.zoom [--augment]   (--smoke for a tiny check)
+Writes rcnn_out/zoom_mask_rcnn[_augment]/ in the usual format, so rcnn.evaluate scores it.
 """
 
 import argparse
@@ -26,7 +26,7 @@ import torch
 import torch.nn.functional as F
 
 from . import models
-from .common import ROOT, image_tensor, load_split, mask_to_box, pick_device
+from .common import ROOT, augment, image_tensor, load_split, mask_to_box, pick_device
 from .train import Log, train_network
 
 CROP = 256
@@ -71,7 +71,8 @@ def paste(prob, win, shape):
 
 
 class ZoomDataset(torch.utils.data.Dataset):
-    def __init__(self, limit=None):
+    def __init__(self, limit=None, augment=False):
+        self.augment = augment
         self.data = load_split("train")
         n = len(self.data["files"]) if limit is None else limit
         self.items = list(range(n))
@@ -90,8 +91,10 @@ class ZoomDataset(torch.utils.data.Dataset):
         scale = float(torch.empty(()).uniform_(1.6, 2.4))
         shift = (float(torch.empty(()).uniform_(-0.25, 0.25)) * size, float(torch.empty(()).uniform_(-0.25, 0.25)) * size)
         win = window(box, scale, shift)
-        img = cut(gray, win, "bilinear").clip(0, 255).astype(np.uint8)
+        img = image_tensor(cut(gray, win, "bilinear").clip(0, 255).astype(np.uint8))
         m = cut(mask.astype(np.uint8), win, "nearest") > 0.5
+        if self.augment:
+            img, m = augment(img, m)
         target = {"image_id": torch.tensor(i)}
         b = mask_to_box(m)
         if b is None:
@@ -100,7 +103,7 @@ class ZoomDataset(torch.utils.data.Dataset):
         else:
             target.update(boxes=torch.from_numpy(b[None]), labels=torch.ones((1,), dtype=torch.int64),
                           masks=torch.from_numpy(m[None].astype(np.uint8)))
-        return image_tensor(img), target
+        return img, target
 
 
 @torch.no_grad()
@@ -133,13 +136,16 @@ def predict(model, device, limit=None):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--augment", action="store_true", help="flip/rotate/shift/zoom/brightness each window while training")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
-    out_dir = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out") / "zoom_mask_rcnn"
+    run = "zoom_mask_rcnn" + ("_augment" if args.augment else "")
+    out_dir = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out") / run
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(json.dumps(
-        {"model": "mask_rcnn", "zoom": True, "stage1": STAGE1, "crop": CROP, "context": CONTEXT}, indent=2))
+        {"model": "mask_rcnn", "zoom": True, "augment": args.augment, "stage1": STAGE1, "crop": CROP,
+         "context": CONTEXT}, indent=2))
     log = Log(out_dir / "train.log")
     device = pick_device(args.device)
     torch.manual_seed(0)
@@ -147,7 +153,7 @@ def main():
     t0 = time.time()
     model = models.build("mask_rcnn").to(device)
     train_network("mask_rcnn", model, device, out_dir, log, 10, max_iters, None, False, False,
-                  dataset=ZoomDataset(limit_train))
+                  dataset=ZoomDataset(limit_train, augment=args.augment))
     preds = predict(model, device, limit_test)
     with open(out_dir / "predictions.pkl", "wb") as f:
         pickle.dump(preds, f)
