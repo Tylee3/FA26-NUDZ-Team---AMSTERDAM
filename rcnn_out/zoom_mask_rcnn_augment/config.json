@@ -1,0 +1,8 @@
+{
+  "model": "mask_rcnn",
+  "zoom": true,
+  "augment": true,
+  "stage1": "faster_rcnn",
+  "crop": 256,
+  "context": 2.0
+}

@@ -14,3 +14,4 @@
 | 3D U-Net | mask | 9 | 43/45 | 1/63 | 0.523 | 0.567 | 0.724 | 0.567 |
 | 3D U-Net + augmentation | mask | 9 | 39/45 | 1/63 | 0.551 | 0.594 | 0.745 | 0.619 |
 | Mask R-CNN + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.586 | 0.634 | 0.776 | 0.59 |
+| Mask R-CNN + augmentation + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.576 | 0.603 | 0.752 | 0.605 |
