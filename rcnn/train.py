@@ -57,7 +57,7 @@ def train_network(name, model, device, out_dir, log, epochs, max_iters, limit, n
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.SGD(params, lr=LR, momentum=0.9, weight_decay=5e-4)
     total = max_iters or epochs * len(loader)
-    drop_at = LR_DROP_EPOCH * len(loader)
+    drop_at = round(total * LR_DROP_EPOCH / epochs)
 
     def lr_at(it):
         warm = min(1.0, (it + 1) / WARMUP_ITERS) * (1 - 0.001) + 0.001

@@ -71,12 +71,13 @@ def paste(prob, win, shape):
 
 
 class ZoomDataset(torch.utils.data.Dataset):
-    def __init__(self, limit=None, augment=False):
+    def __init__(self, limit=None, augment=False, rats=None):
         self.augment = augment
         self.data = load_split("train")
         n = len(self.data["files"]) if limit is None else limit
-        self.items = list(range(n))
-        boxes = [mask_to_box(m) for m in self.data["masks"][:n]]
+        self.items = [i for i in range(n) if rats is None or int(self.data["subjects"][i]) in rats]
+        chosen = set(self.items)
+        boxes = [mask_to_box(m) if i in chosen else None for i, m in enumerate(self.data["masks"][:n])]
         known = np.array([b for b in boxes if b is not None])
         self.typical = known.mean(axis=0)
         self.boxes = boxes
@@ -84,7 +85,8 @@ class ZoomDataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.items)
 
-    def __getitem__(self, i):
+    def __getitem__(self, k):
+        i = self.items[k]
         gray, mask = self.data["images"][i], self.data["masks"][i]
         box = self.boxes[i] if self.boxes[i] is not None else self.typical
         size = max(box[2] - box[0], box[3] - box[1])
