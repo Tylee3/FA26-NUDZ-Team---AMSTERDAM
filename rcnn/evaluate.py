@@ -32,7 +32,7 @@ from .common import (ATLAS_TEST_DIR, DEFAULT_SCORE_THRESHOLD, MASK_MODELS, MODEL
 LABELS = {"atlas": "Atlas (Charley's method)", "atlas_box": "Atlas, as a box",
           "rcnn": "R-CNN", "fast_rcnn": "Fast R-CNN", "faster_rcnn": "Faster R-CNN",
           "rfcn": "R-FCN", "cascade_rcnn": "Cascade R-CNN", "mask_rcnn": "Mask R-CNN",
-          "unet3d": "3D U-Net"}
+          "unet3d": "3D U-Net", "mesh_rcnn": "Mesh R-CNN"}
 
 
 def overlap(a, b):

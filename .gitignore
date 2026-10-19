@@ -44,3 +44,6 @@ sigma_out/**/*.nrrd
 
 # per-voxel coordinates of the hand traces are the proprietary segmentations in another form
 hypothalamus_coordinates/voxels/rat*_manual_*.json
+
+# Mesh R-CNN upload folder for Colab: holds scan images
+mesh_rcnn_colab/

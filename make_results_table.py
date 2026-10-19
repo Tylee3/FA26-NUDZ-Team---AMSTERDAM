@@ -86,13 +86,15 @@ def main():
               ("Mask R-CNN on a zoomed view, box first (Faster R-CNN)", "zoom_mask_rcnn", "outline"),
               ("Mask R-CNN on a zoomed view, box first + augmentation", "zoom_mask_rcnn_augment", "outline"),
               ("3D U-Net", "unet3d", "outline"),
-              ("3D U-Net + augmentation", "unet3d_augment", "outline")]
+              ("3D U-Net + augmentation", "unet3d_augment", "outline"),
+              ("Mesh R-CNN (3D shape from one slice)", "mesh_rcnn", "3D mesh")]
     for name, run, output in models:
         path = ROOT / "rcnn_out" / run / "results.csv"
         if path.exists():
-            note = "scored as a filled box" if output == "box" else ""
+            note = {"box": "scored as a filled box", "3D mesh": "mesh cut back into slices"}.get(output, "")
             lines.append(row(name, output, medians(path), note))
-    lines.append("| Mesh R-CNN | 3D mesh | — | — | — | — | — | — | planned |")
+    if not (ROOT / "rcnn_out" / "mesh_rcnn" / "results.csv").exists():
+        lines.append("| Mesh R-CNN | 3D mesh | — | — | — | — | — | — | runs on Colab, see `rcnn/mesh_pack.py` |")
 
     lines += [
         "",
