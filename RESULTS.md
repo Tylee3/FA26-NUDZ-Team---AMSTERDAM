@@ -23,7 +23,7 @@ labeler 2 is the second, independent set. Regenerate with `python3 make_results_
 | Mask R-CNN on a zoomed view, box first + augmentation | outline | 0.75 | 0.60 | 0.75 | 0.60 | 39/45 | 0/63 |  |
 | 3D U-Net | outline | 0.72 | 0.57 | 0.72 | 0.57 | 43/45 | 1/63 |  |
 | 3D U-Net + augmentation | outline | 0.75 | 0.59 | 0.76 | 0.62 | 39/45 | 1/63 |  |
-| Mesh R-CNN | 3D mesh | — | — | — | — | — | — | runs on Colab, see `rcnn/mesh_pack.py` |
+| Mesh R-CNN (3D shape from one slice) | 3D mesh | 0.76 | 0.62 | 0.75 | 0.60 | 45/45 | 1/63 | mesh cut back into slices |
 
 **How to read it:**
 - Box-only models are scored as filled rectangles, which also cover tissue around the structure.

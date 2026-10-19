@@ -1,0 +1,23 @@
+{
+  "model": "mesh_rcnn",
+  "stage1": "faster_rcnn",
+  "crop": 256,
+  "context": 2.0,
+  "grid": [
+    24,
+    32,
+    32
+  ],
+  "z_half_slices": 6.0,
+  "cubify_thresh": 0.2,
+  "stages": 3,
+  "epochs": 50,
+  "batch": 8,
+  "lr": 0.0001,
+  "loss_weights": [
+    1.0,
+    1.0,
+    0.1,
+    1.0
+  ]
+}
