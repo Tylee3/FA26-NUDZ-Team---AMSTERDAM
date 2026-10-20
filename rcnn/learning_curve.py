@@ -27,7 +27,7 @@ import numpy as np
 import torch
 
 from . import models
-from .common import ROOT, load_split, pick_device
+from .common import ROOT, TEST_RATS, load_split, pick_device
 from .evaluate import score
 from .train import Log, train_network
 from .zoom import ZoomDataset, predict
@@ -66,7 +66,7 @@ def run_one(name, rats, device, smoke):
 
 def medians(results_csv):
     with open(results_csv) as f:
-        rows = list(csv.DictReader(f))
+        rows = [r for r in csv.DictReader(f) if int(r["rat"]) in TEST_RATS]
     return {k: float(np.median([float(r[k]) for r in rows])) for k in ["dice_vs_me", "iou_vs_me", "dice_vs_other"]}
 
 
