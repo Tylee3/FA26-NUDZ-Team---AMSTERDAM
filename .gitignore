@@ -47,3 +47,7 @@ hypothalamus_coordinates/voxels/rat*_manual_*.json
 
 # Mesh R-CNN upload folder for Colab: holds scan images
 mesh_rcnn_colab/
+
+# overlay pictures show scan crops: kept local unless Tyler OKs them
+rcnn_out/**/overlay.png
+rcnn_out/*grid.png
