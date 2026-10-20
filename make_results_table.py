@@ -87,7 +87,12 @@ def main():
               ("Mask R-CNN on a zoomed view, box first + augmentation", "zoom_mask_rcnn_augment", "outline"),
               ("3D U-Net", "unet3d", "outline"),
               ("3D U-Net + augmentation", "unet3d_augment", "outline"),
-              ("Mesh R-CNN (3D shape from one slice)", "mesh_rcnn", "3D mesh")]
+              ("Mesh R-CNN (3D shape from one slice)", "mesh_rcnn", "3D mesh"),
+              ("Zoomed Mask R-CNN + mirror pass", "zoom_mask_rcnn_mirror", "outline"),
+              ("Zoomed Mask R-CNN + augmentation + mirror pass", "zoom_mask_rcnn_augment_mirror", "outline"),
+              ("3D U-Net + augmentation + mirror pass", "unet3d_augment_mirror", "outline"),
+              ("**Vote of 5** (atlas, 2 zoomed, Mesh R-CNN, 3D U-Net; 3 needed)", "ensemble_vote", "outline"),
+              ("**Vote of 5 + mirror pass**", "ensemble_vote_mirror", "outline")]
     for name, run, output in models:
         path = ROOT / "rcnn_out" / run / "results.csv"
         if path.exists():

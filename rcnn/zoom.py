@@ -71,9 +71,10 @@ def paste(prob, win, shape):
 
 
 class ZoomDataset(torch.utils.data.Dataset):
-    def __init__(self, limit=None, augment=False, rats=None):
+    def __init__(self, limit=None, augment=False, rats=None, split="train", mask_key="masks"):
         self.augment = augment
-        self.data = load_split("train")
+        self.data = load_split(split)
+        self.data["masks"] = self.data[mask_key]
         n = len(self.data["files"]) if limit is None else limit
         self.items = [i for i in range(n) if rats is None or int(self.data["subjects"][i]) in rats]
         chosen = set(self.items)

@@ -32,7 +32,7 @@ from .common import (ATLAS_TEST_DIR, DEFAULT_SCORE_THRESHOLD, MASK_MODELS, MODEL
 LABELS = {"atlas": "Atlas (Charley's method)", "atlas_box": "Atlas, as a box",
           "rcnn": "R-CNN", "fast_rcnn": "Fast R-CNN", "faster_rcnn": "Faster R-CNN",
           "rfcn": "R-FCN", "cascade_rcnn": "Cascade R-CNN", "mask_rcnn": "Mask R-CNN",
-          "unet3d": "3D U-Net", "mesh_rcnn": "Mesh R-CNN"}
+          "unet3d": "3D U-Net", "mesh_rcnn": "Mesh R-CNN", "ensemble": "Vote of 5 (3 needed)"}
 
 
 def overlap(a, b):
@@ -171,10 +171,11 @@ def main():
         base = config["model"]
         extras = [t for t, on in (("neighbor slices", config.get("neighbors")),
                                   ("augmentation", config.get("augment")),
-                                  ("zoom (box first)", config.get("zoom"))) if on]
+                                  ("zoom (box first)", config.get("zoom")),
+                                  ("mirror pass", config.get("mirror"))) if on]
         base_of[name] = base
         label_of[name] = LABELS[base] + (" + " + " + ".join(extras) if extras else "")
-        short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug", "zoom (box first)": " +zoom"}[e] for e in extras)
+        short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug", "zoom (box first)": " +zoom", "mirror pass": " +mirror"}[e] for e in extras)
         with open(out_root / name / "predictions.pkl", "rb") as f:
             preds = pickle.load(f)
         per_slice = slice_predictions(base, preds, data)

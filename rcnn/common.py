@@ -25,7 +25,7 @@ TEST_RATS = [1, 3, 4, 5, 6, 7, 8, 9, 10]
 PILOT_RATS = set(range(1, 11))
 
 MODELS = ["rcnn", "fast_rcnn", "faster_rcnn", "rfcn", "cascade_rcnn", "mask_rcnn"]
-MASK_MODELS = {"mask_rcnn", "unet3d", "mesh_rcnn"}
+MASK_MODELS = {"mask_rcnn", "unet3d", "mesh_rcnn", "ensemble"}
 
 # One detection per slice counts as "found it" above this score. R-CNN's SVM outputs a
 # margin rather than a probability, so its natural cut-off is 0.
