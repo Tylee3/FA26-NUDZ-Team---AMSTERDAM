@@ -24,6 +24,20 @@ labeler 2 is the second, independent set. Regenerate with `python3 make_results_
 | 3D U-Net | outline | 0.72 | 0.57 | 0.72 | 0.57 | 43/45 | 1/63 |  |
 | 3D U-Net + augmentation | outline | 0.75 | 0.59 | 0.76 | 0.62 | 39/45 | 1/63 |  |
 | Mesh R-CNN (3D shape from one slice) | 3D mesh | 0.76 | 0.62 | 0.75 | 0.60 | 45/45 | 1/63 | mesh cut back into slices |
+| Zoomed Mask R-CNN + mirror pass | outline | 0.78 | 0.64 | 0.75 | 0.61 | 39/45 | 0/63 |  |
+| Zoomed Mask R-CNN + augmentation + mirror pass | outline | 0.76 | 0.61 | 0.76 | 0.61 | 39/45 | 0/63 |  |
+| 3D U-Net + augmentation + mirror pass | outline | 0.75 | 0.60 | 0.76 | 0.62 | 39/45 | 1/63 |  |
+| **Vote of 5** (atlas, 2 zoomed, Mesh R-CNN, 3D U-Net; 3 needed) | outline | 0.79 | 0.66 | 0.80 | 0.67 | 40/45 | 0/63 |  |
+| **Vote of 5 + mirror pass** | outline | 0.80 | 0.66 | 0.79 | 0.65 | 40/45 | 0/63 |  |
+
+**Preview: fine-tuned on hand traces** (zoomed Mask R-CNN, 3-fold cross-validation on the same 9 rats:
+fine-tuned on 6, scored on the 3 held out). The fair comparison with human vs. human is the score
+against the labeler the model did *not* learn from (bold). Details: `rcnn_out/finetune_cv/FINETUNE_CV.md`.
+
+| Fine-tuned on | Dice (lab. 1) | Dice (lab. 2) |
+|---|---|---|
+| labeler 1's traces | 0.81 | **0.81** |
+| labeler 2's traces | **0.81** | 0.84 |
 
 **How to read it:**
 - Box-only models are scored as filled rectangles, which also cover tissue around the structure.

@@ -101,6 +101,23 @@ def main():
     if not (ROOT / "rcnn_out" / "mesh_rcnn" / "results.csv").exists():
         lines.append("| Mesh R-CNN | 3D mesh | — | — | — | — | — | — | runs on Colab, see `rcnn/mesh_pack.py` |")
 
+    cv = ROOT / "rcnn_out" / "finetune_cv" / "results.csv"
+    if cv.exists():
+        with open(cv) as f:
+            rows_cv = list(csv.DictReader(f))
+        m = lambda run, k: float(np.median([float(r[k]) for r in rows_cv if r["run"] == run]))
+        lines += [
+            "",
+            "**Preview: fine-tuned on hand traces** (zoomed Mask R-CNN, 3-fold cross-validation on the same 9 rats:",
+            "fine-tuned on 6, scored on the 3 held out). The fair comparison with human vs. human is the score",
+            "against the labeler the model did *not* learn from (bold). Details: `rcnn_out/finetune_cv/FINETUNE_CV.md`.",
+            "",
+            "| Fine-tuned on | Dice (lab. 1) | Dice (lab. 2) |",
+            "|---|---|---|",
+            f"| labeler 1's traces | {m('fine-tuned on labeler1', 'dice_vs_me'):.2f} | **{m('fine-tuned on labeler1', 'dice_vs_other'):.2f}** |",
+            f"| labeler 2's traces | **{m('fine-tuned on labeler2', 'dice_vs_me'):.2f}** | {m('fine-tuned on labeler2', 'dice_vs_other'):.2f} |",
+        ]
+
     lines += [
         "",
         "**How to read it:**",

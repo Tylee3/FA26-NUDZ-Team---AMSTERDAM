@@ -1,0 +1,11 @@
+{
+  "model": "ensemble",
+  "members": [
+    "atlas",
+    "zoom_mask_rcnn",
+    "zoom_mask_rcnn_augment",
+    "mesh_rcnn",
+    "unet3d_augment"
+  ],
+  "votes_needed": 3
+}
