@@ -109,7 +109,11 @@ def summarize():
         ax.scatter([r["rats"] for r in rows], [r[key] for r in rows], color=color, alpha=0.6)
         ax.plot(xs, [np.mean([r[key] for r in rows if r["rats"] == x]) for x in xs], color=color, label=label)
     ax.axhline(0.825, color="gray", ls="--", lw=1)
-    ax.text(14, 0.828, "human vs. human", color="gray", fontsize=8)
+    ax.text(14, 0.817, "human vs. human", color="gray", fontsize=8)
+    atlas = medians(ROOT / "auto_seg_out" / "results.csv")
+    for key, color in [("dice_vs_me", "tab:blue"), ("dice_vs_other", "tab:orange")]:
+        ax.axhline(atlas[key], color=color, ls=":", lw=1)
+    ax.text(14, atlas["dice_vs_me"] - 0.008, "atlas (the training labels), dotted", color="gray", fontsize=8)
     ax.set_xlabel("atlas-labeled training rats")
     ax.set_ylabel("median 3D Dice, 9 test rats")
     ax.set_title("Zoomed Mask R-CNN: more scans vs. score")
