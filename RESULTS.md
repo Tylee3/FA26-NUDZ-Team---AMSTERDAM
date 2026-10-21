@@ -1,7 +1,7 @@
 # Results
 
 Median Dice and IoU of every method on the 9 hand-traced test rats (1, 3–10), measured over the
-whole 3D volume. No method saw these rats during training. Labeler 1 is Tyler's traces;
+whole 3D volume. No method saw these rats during training. Labeler 1 is first labeler;
 labeler 2 is the second, independent set. Regenerate with `python3 make_results_table.py`.
 
 | Method | Output | Dice (lab. 1) | IoU (lab. 1) | Dice (lab. 2) | IoU (lab. 2) | Slices found | False alarms | Notes |
