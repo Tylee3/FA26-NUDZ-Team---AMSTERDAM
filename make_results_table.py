@@ -127,8 +127,9 @@ def main():
         "- All learned models were trained on Waxholm atlas labels for 53 other rats, so the atlas is their",
         "  ceiling until training moves to hand traces.",
         "",
-        "Details: [Waxholm baseline](auto_seg_out/WAXHOLM_BASELINE.md) · six-model baseline and experiments:",
-        "`rcnn_out/comparison.md` · SIGMA: `sigma_registration.py` docstring.",
+        "What each method does and why it scores what it does: [MODELS.md](MODELS.md) · every method in one",
+        "table: [rcnn_out/comparison.md](rcnn_out/comparison.md) (and `.csv`) · Waxholm baseline:",
+        "[auto_seg_out/WAXHOLM_BASELINE.md](auto_seg_out/WAXHOLM_BASELINE.md).",
     ]
     (ROOT / "RESULTS.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines[6:-11]))

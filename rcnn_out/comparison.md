@@ -1,23 +1,39 @@
-| model | output | rats | slices_found | false_alarms | mean_box_iou | median_3d_iou_vs_me | median_3d_dice_vs_me | median_3d_iou_vs_other |
-|---|---|---|---|---|---|---|---|---|
-| Atlas (Charley's method) | mask | 9 | 41/45 | 0/63 | 0.556 | 0.599 | 0.749 | 0.647 |
-| Atlas, as a box | box | 9 | 41/45 | 0/63 | 0.556 | 0.475 | 0.644 | 0.529 |
-| R-CNN | box | 9 | 11/45 | 8/63 | 0.096 | 0.142 | 0.249 | 0.119 |
-| Fast R-CNN | box | 9 | 5/45 | 0/63 | 0.058 | 0.0 | 0.0 | 0.0 |
-| Faster R-CNN | box | 9 | 39/45 | 0/63 | 0.53 | 0.476 | 0.645 | 0.521 |
-| R-FCN | box | 9 | 37/45 | 1/63 | 0.493 | 0.446 | 0.617 | 0.48 |
-| Cascade R-CNN | box | 9 | 35/45 | 0/63 | 0.491 | 0.482 | 0.651 | 0.56 |
-| Mask R-CNN | mask | 9 | 38/45 | 0/63 | 0.527 | 0.586 | 0.739 | 0.572 |
-| Vote of 5 (3 needed) | mask | 9 | 40/45 | 0/63 | 0.608 | 0.657 | 0.793 | 0.668 |
-| Vote of 5 (3 needed) + mirror pass | mask | 9 | 40/45 | 0/63 | 0.609 | 0.661 | 0.796 | 0.654 |
-| Mask R-CNN + augmentation | mask | 9 | 44/45 | 5/63 | 0.544 | 0.557 | 0.716 | 0.576 |
-| Mask R-CNN + neighbor slices | mask | 9 | 41/45 | 2/63 | 0.534 | 0.526 | 0.69 | 0.563 |
-| Mask R-CNN + neighbor slices + augmentation | mask | 9 | 45/45 | 8/63 | 0.55 | 0.547 | 0.707 | 0.566 |
-| Mesh R-CNN | mask | 9 | 45/45 | 1/63 | 0.569 | 0.616 | 0.762 | 0.603 |
-| 3D U-Net | mask | 9 | 43/45 | 1/63 | 0.523 | 0.567 | 0.724 | 0.567 |
-| 3D U-Net + augmentation | mask | 9 | 39/45 | 1/63 | 0.551 | 0.594 | 0.745 | 0.619 |
-| 3D U-Net + augmentation + mirror pass | mask | 9 | 39/45 | 1/63 | 0.552 | 0.598 | 0.748 | 0.619 |
-| Mask R-CNN + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.586 | 0.634 | 0.776 | 0.59 |
-| Mask R-CNN + augmentation + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.576 | 0.603 | 0.752 | 0.605 |
-| Mask R-CNN + augmentation + zoom (box first) + mirror pass | mask | 9 | 39/45 | 0/63 | 0.588 | 0.608 | 0.756 | 0.613 |
-| Mask R-CNN + zoom (box first) + mirror pass | mask | 9 | 39/45 | 0/63 | 0.589 | 0.641 | 0.781 | 0.605 |
+| group | model | output | rats | slices_found | false_alarms | mean_box_iou | median_3d_iou_vs_me | median_3d_dice_vs_me | median_3d_iou_vs_other | median_3d_dice_vs_other |
+|---|---|---|---|---|---|---|---|---|---|---|
+| human | Labeler 2's traces (human vs. human) | mask | 9 | 44/45 | 1/63 | 0.65 | 0.702 | 0.825 | — | — |
+| atlas | Atlas (Charley's method) | mask | 9 | 41/45 | 0/63 | 0.556 | 0.599 | 0.749 | 0.647 | 0.785 |
+| atlas | Atlas, as a box | box | 9 | 41/45 | 0/63 | 0.556 | 0.475 | 0.644 | 0.529 | 0.692 |
+| atlas | Waxholm atlas, deformable (setting a) | mask | 9 | 44/45 | 0/63 | 0.55 | 0.526 | 0.69 | 0.475 | 0.644 |
+| atlas | Waxholm atlas, deformable (setting b) | mask | 9 | 42/45 | 0/63 | 0.551 | 0.593 | 0.744 | 0.61 | 0.758 |
+| atlas | Waxholm atlas, deformable (setting c) | mask | 9 | 41/45 | 0/63 | 0.55 | 0.598 | 0.748 | 0.626 | 0.77 |
+| atlas | SIGMA atlas (plain) | mask | 9 | 37/45 | 4/63 | 0.448 | 0.467 | 0.637 | 0.506 | 0.672 |
+| atlas | SIGMA atlas (mask) | mask | 9 | 31/45 | 6/63 | 0.344 | 0.455 | 0.625 | 0.495 | 0.663 |
+| atlas | SIGMA atlas (waxholm_init) | mask | 9 | 38/45 | 3/63 | 0.51 | 0.542 | 0.703 | 0.54 | 0.701 |
+| atlas | SIGMA atlas (waxholm_init_refine) | mask | 9 | 33/45 | 6/63 | 0.303 | 0.516 | 0.681 | 0.376 | 0.547 |
+| R-CNN family | R-CNN | box | 9 | 11/45 | 8/63 | 0.096 | 0.142 | 0.249 | 0.119 | 0.212 |
+| R-CNN family | Fast R-CNN | box | 9 | 5/45 | 0/63 | 0.058 | 0.0 | 0.0 | 0.0 | 0.0 |
+| R-CNN family | Faster R-CNN | box | 9 | 39/45 | 0/63 | 0.53 | 0.476 | 0.645 | 0.521 | 0.685 |
+| R-CNN family | R-FCN | box | 9 | 37/45 | 1/63 | 0.493 | 0.446 | 0.617 | 0.48 | 0.648 |
+| R-CNN family | Cascade R-CNN | box | 9 | 35/45 | 0/63 | 0.491 | 0.482 | 0.651 | 0.56 | 0.718 |
+| R-CNN family | Mask R-CNN | mask | 9 | 38/45 | 0/63 | 0.527 | 0.586 | 0.739 | 0.572 | 0.728 |
+| experiments | Mask R-CNN + augmentation | mask | 9 | 44/45 | 5/63 | 0.544 | 0.557 | 0.716 | 0.576 | 0.731 |
+| experiments | Mask R-CNN + neighbor slices | mask | 9 | 41/45 | 2/63 | 0.534 | 0.526 | 0.69 | 0.563 | 0.721 |
+| experiments | Mask R-CNN + neighbor slices + augmentation | mask | 9 | 45/45 | 8/63 | 0.55 | 0.547 | 0.707 | 0.566 | 0.723 |
+| experiments | Mesh R-CNN | mask | 9 | 45/45 | 1/63 | 0.569 | 0.616 | 0.762 | 0.603 | 0.752 |
+| experiments | 3D U-Net | mask | 9 | 43/45 | 1/63 | 0.523 | 0.567 | 0.724 | 0.567 | 0.724 |
+| experiments | 3D U-Net + augmentation | mask | 9 | 39/45 | 1/63 | 0.551 | 0.594 | 0.745 | 0.619 | 0.764 |
+| experiments | 3D U-Net + augmentation + mirror pass | mask | 9 | 39/45 | 1/63 | 0.552 | 0.598 | 0.748 | 0.619 | 0.765 |
+| experiments | Mask R-CNN + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.586 | 0.634 | 0.776 | 0.59 | 0.742 |
+| experiments | Mask R-CNN + augmentation + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.576 | 0.603 | 0.752 | 0.605 | 0.754 |
+| experiments | Mask R-CNN + augmentation + zoom (box first) + mirror pass | mask | 9 | 39/45 | 0/63 | 0.588 | 0.608 | 0.756 | 0.613 | 0.76 |
+| experiments | Mask R-CNN + zoom (box first) + mirror pass | mask | 9 | 39/45 | 0/63 | 0.589 | 0.641 | 0.781 | 0.605 | 0.754 |
+| ensemble | Vote of 5 (3 needed) | mask | 9 | 40/45 | 0/63 | 0.608 | 0.657 | 0.793 | 0.668 | 0.801 |
+| ensemble | Vote of 5 (3 needed) + mirror pass | mask | 9 | 40/45 | 0/63 | 0.609 | 0.661 | 0.796 | 0.654 | 0.791 |
+| learning curve | Mask R-CNN + zoom, 13 training rats (subset 0) | mask | 9 | 32/45 | 0/63 | 0.473 | 0.549 | 0.709 | 0.55 | 0.71 |
+| learning curve | Mask R-CNN + zoom, 13 training rats (subset 1) | mask | 9 | 36/45 | 0/63 | 0.502 | 0.518 | 0.683 | 0.563 | 0.721 |
+| learning curve | Mask R-CNN + zoom, 26 training rats (subset 0) | mask | 9 | 37/45 | 0/63 | 0.548 | 0.603 | 0.752 | 0.648 | 0.787 |
+| learning curve | Mask R-CNN + zoom, 26 training rats (subset 1) | mask | 9 | 39/45 | 0/63 | 0.534 | 0.561 | 0.719 | 0.548 | 0.708 |
+| learning curve | Mask R-CNN + zoom, 40 training rats (subset 0) | mask | 9 | 39/45 | 0/63 | 0.569 | 0.608 | 0.756 | 0.611 | 0.758 |
+| learning curve | Mask R-CNN + zoom, 40 training rats (subset 1) | mask | 9 | 39/45 | 0/63 | 0.568 | 0.624 | 0.768 | 0.612 | 0.759 |
+| hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 1's hand traces (3-fold) | mask | 9 | 38/45 | 0/63 | 0.609 | 0.683 | 0.812 | 0.68 | 0.809 |
+| hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 2's hand traces (3-fold) | mask | 9 | 39/45 | 0/63 | 0.621 | 0.685 | 0.813 | 0.726 | 0.841 |

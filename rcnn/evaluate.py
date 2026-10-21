@@ -13,6 +13,10 @@ Metrics, all against Tyler's manual traces ("Me") unless noted:
                     scored as filled rectangles, which also covers tissue around the
                     structure, so compare them against "atlas (as box)" rather than "atlas".
 
+The comparison table also lists, scored the same way: labeler 2's traces (human vs. human),
+the deformable and SIGMA atlas runs, the learning-curve runs and the hand-trace fine-tune
+(its 3 folds joined, so each rat is scored by the fold that held it out).
+
 Writes rcnn_out/comparison.csv, comparison.md, comparison_grid.png, and per model:
 results.csv, overlay.png, pred_XXX.nrrd (open in 3D Slicer with rcnn/slicer_compare.py).
 """
@@ -69,14 +73,58 @@ def slice_predictions(model, preds, data):
     return out
 
 
-def atlas_predictions(data, as_box):
+def atlas_predictions(data, as_box, folder=ATLAS_TEST_DIR):
+    """Per test slice: (box, mask) from a folder of registered-atlas volumes auto_seg_XXX.nrrd."""
     out, cache = {}, {}
     for i, (n, z) in enumerate(zip(data["subjects"], data["zs"])):
         if n not in cache:
-            cache[n] = sitk.GetArrayFromImage(sitk.ReadImage(str(ATLAS_TEST_DIR / f"auto_seg_{n:03d}.nrrd"))) > 0
+            cache[n] = sitk.GetArrayFromImage(sitk.ReadImage(str(folder / f"auto_seg_{n:03d}.nrrd"))) > 0
         m = cache[n][z]
         box = mask_to_box(m)
         out[i] = (box, filled_box(box, m.shape) if as_box else m)
+    return out
+
+
+GROUPS = ["human", "atlas", "R-CNN family", "experiments", "ensemble", "learning curve", "hand-trace preview"]
+SIGMA_VARIANTS = ["plain", "mask", "waxholm_init", "waxholm_init_refine"]
+
+
+def extra_entries(data, out_root):
+    """Methods scored outside the rcnn_out/<run> folders, as (name, label, group, output, per_slice):
+    labeler 2's traces (the human-vs-human row), the deformable and SIGMA atlas runs, the
+    learning-curve runs, and the hand-trace fine-tune, whose 3 folds are joined so that every
+    rat is scored by the fold that held it out."""
+    out = [("human", "Labeler 2's traces (human vs. human)", "human", "mask",
+            {i: (mask_to_box(m), m) for i, m in enumerate(data["masks_other"])})]
+    for k in "abc":
+        d = ROOT / "atlas_deformable_out" / k
+        if (d / "auto_seg_001.nrrd").exists():
+            out.append((f"deformable_{k}", f"Waxholm atlas, deformable (setting {k})", "atlas", "mask",
+                        atlas_predictions(data, False, d)))
+    for v in SIGMA_VARIANTS:
+        d = ROOT / "sigma_out" / v
+        if (d / "auto_seg_001.nrrd").exists():
+            out.append((f"sigma_{v}", f"SIGMA atlas ({v})", "atlas", "mask", atlas_predictions(data, False, d)))
+    lc = out_root / "learning_curve"
+    for d in sorted(lc.glob("zoom_n*")) if lc.exists() else []:
+        if (d / "predictions.pkl").exists():
+            cfg = json.loads((d / "config.json").read_text())
+            with open(d / "predictions.pkl", "rb") as f:
+                per_slice = slice_predictions("mask_rcnn", pickle.load(f), data)
+            out.append((f"lc_{d.name}", f"Mask R-CNN + zoom, {len(cfg['train_rats'])} training rats "
+                        f"(subset {d.name[-1]})", "learning curve", "mask", per_slice))
+    for labeler, who in [("labeler1", "labeler 1's"), ("labeler2", "labeler 2's")]:
+        per_slice = {}
+        for d in sorted((out_root / "finetune_cv" / labeler).glob("fold*")):
+            if not (d / "predictions.pkl").exists():
+                continue
+            held_out = set(json.loads((d / "config.json").read_text())["held_out"])
+            with open(d / "predictions.pkl", "rb") as f:
+                ps = slice_predictions("mask_rcnn", pickle.load(f), data)
+            per_slice.update({i: v for i, v in ps.items() if int(data["subjects"][i]) in held_out})
+        if len(per_slice) == len(data["files"]):
+            out.append((f"ft_{labeler}", f"Mask R-CNN + zoom, fine-tuned on {who} hand traces (3-fold)",
+                        "hand-trace preview", "mask", per_slice))
     return out
 
 
@@ -158,6 +206,8 @@ def main():
     base_of = {"atlas": "atlas", "atlas_box": "atlas_box"}
     short_of = {"atlas": "Atlas", "atlas_box": "Atlas box"}
     label_of = {"atlas": LABELS["atlas"], "atlas_box": LABELS["atlas_box"]}
+    group_of = {"atlas": "atlas", "atlas_box": "atlas"}
+    output_of = {}
     for name, per_slice, out_dir in [("atlas", atlas_predictions(data, False), None),
                                      ("atlas_box", atlas_predictions(data, True), None)]:
         results[name], all_volumes[name] = score(name, per_slice, data, out_dir, False)
@@ -174,6 +224,7 @@ def main():
                                   ("zoom (box first)", config.get("zoom")),
                                   ("mirror pass", config.get("mirror"))) if on]
         base_of[name] = base
+        group_of[name] = "R-CNN family" if name in MODELS else "ensemble" if base == "ensemble" else "experiments"
         label_of[name] = LABELS[base] + (" + " + " + ".join(extras) if extras else "")
         short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug", "zoom (box first)": " +zoom", "mirror pass": " +mirror"}[e] for e in extras)
         with open(out_root / name / "predictions.pkl", "rb") as f:
@@ -181,14 +232,19 @@ def main():
         per_slice = slice_predictions(base, preds, data)
         results[name], all_volumes[name] = score(base, per_slice, data, out_root / name, True)
 
+    for name, label, group, output, per_slice in extra_entries(data, out_root):
+        results[name], _ = score(name, per_slice, data, None, False)
+        label_of[name], group_of[name], output_of[name] = label, group, output
+
     summary = []
-    for name, rows in results.items():
+    for name, rows in sorted(results.items(), key=lambda kv: GROUPS.index(group_of[kv[0]])):
         if not rows:
             continue
         structure = sum(r["structure_slices"] for r in rows)
         empty = sum(r["slices"] - r["structure_slices"] for r in rows)
         summary.append({
-            "model": label_of[name], "output": "mask" if base_of[name] in MASK_MODELS | {"atlas"} else "box",
+            "group": group_of[name], "model": label_of[name],
+            "output": output_of.get(name) or ("mask" if base_of[name] in MASK_MODELS | {"atlas"} else "box"),
             "rats": len(rows),
             "slices_found": f"{sum(r['slices_found'] for r in rows)}/{structure}",
             "false_alarms": f"{sum(r['false_alarms'] for r in rows)}/{empty}",
@@ -196,7 +252,10 @@ def main():
             "median_3d_iou_vs_me": round(float(np.median([r["iou_vs_me"] for r in rows])), 3),
             "median_3d_dice_vs_me": round(float(np.median([r["dice_vs_me"] for r in rows])), 3),
             "median_3d_iou_vs_other": round(float(np.median([r["iou_vs_other"] for r in rows])), 3),
+            "median_3d_dice_vs_other": round(float(np.median([r["dice_vs_other"] for r in rows])), 3),
         })
+        if name == "human":
+            summary[-1].update(median_3d_iou_vs_other="—", median_3d_dice_vs_other="—")
     with open(out_root / "comparison.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(summary[0]))
         w.writeheader()
@@ -207,7 +266,7 @@ def main():
     (out_root / "comparison.md").write_text("\n".join(md) + "\n")
     print("\n".join(md))
 
-    names = [n for n in results if n != "atlas_box" and results[n]]
+    names = [n for n in results if n != "atlas_box" and results[n] and n in all_volumes]
     for name in names:
         if name == "atlas":
             continue
