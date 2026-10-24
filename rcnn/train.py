@@ -120,17 +120,21 @@ def main():
     ap.add_argument("--epochs", type=int, default=EPOCHS)
     ap.add_argument("--neighbors", action="store_true", help="feed the slices above and below as input channels")
     ap.add_argument("--augment", action="store_true", help="flip/rotate/shift/zoom/brightness while training")
+    ap.add_argument("--head", default=None, choices=["plain", "edge_loss", "aspp", "gated_edge"],
+                    help="edge-focused mask head (edge_heads.py), for cascade_mask_rcnn / mask_rcnn")
     ap.add_argument("--smoke", action="store_true", help="tiny run to check the model works end to end")
     args = ap.parse_args()
     if args.model in ("rcnn", "fast_rcnn") and (args.neighbors or args.augment):
         ap.error("--neighbors/--augment are only wired for models with learned proposals")
 
-    run = args.model + ("_neighbors" if args.neighbors else "") + ("_augment" if args.augment else "")
+    run = args.model + ("_neighbors" if args.neighbors else "") + ("_augment" if args.augment else "") \
+        + (f"_{args.head}" if args.head and args.head != "plain" else "")
     out_root = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out")
     out_dir = out_root / run
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(json.dumps(
-        {"model": args.model, "neighbors": args.neighbors, "augment": args.augment, "epochs": args.epochs}, indent=2))
+        {"model": args.model, "neighbors": args.neighbors, "augment": args.augment, "epochs": args.epochs,
+         "head": args.head}, indent=2))
     log = Log(out_dir / "train.log")
     device = pick_device(args.device)
     torch.manual_seed(0)
@@ -141,7 +145,7 @@ def main():
         extractor, scaler, svm, reg = rcnn_classic.train(out_dir, device, limit=limit_train, log=log)
         preds = rcnn_classic.predict(extractor, scaler, svm, reg, limit=limit_test)
     else:
-        model = models.build(args.model).to(device)
+        model = models.build(args.model, args.head).to(device)
         train_network(args.model, model, device, out_dir, log, args.epochs, max_iters, limit_train,
                       args.neighbors, args.augment)
         preds = predict_network(args.model, model, device, limit_test, args.neighbors)

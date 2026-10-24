@@ -36,7 +36,8 @@ from .common import (ATLAS_TEST_DIR, DEFAULT_SCORE_THRESHOLD, MASK_MODELS, MODEL
 LABELS = {"atlas": "Atlas (Charley's method)", "atlas_box": "Atlas, as a box",
           "rcnn": "R-CNN", "fast_rcnn": "Fast R-CNN", "faster_rcnn": "Faster R-CNN",
           "rfcn": "R-FCN", "cascade_rcnn": "Cascade R-CNN", "mask_rcnn": "Mask R-CNN",
-          "unet3d": "3D U-Net", "mesh_rcnn": "Mesh R-CNN", "ensemble": "Vote of 5 (3 needed)"}
+          "unet3d": "3D U-Net", "mesh_rcnn": "Mesh R-CNN", "ensemble": "Vote of 5 (3 needed)",
+          "cascade_mask_rcnn": "Cascade Mask R-CNN"}
 
 
 def overlap(a, b):
@@ -113,9 +114,11 @@ def extra_entries(data, out_root):
                 per_slice = slice_predictions("mask_rcnn", pickle.load(f), data)
             out.append((f"lc_{d.name}", f"Mask R-CNN + zoom, {len(cfg['train_rats'])} training rats "
                         f"(subset {d.name[-1]})", "learning curve", "mask", per_slice))
-    for labeler, who in [("labeler1", "labeler 1's"), ("labeler2", "labeler 2's")]:
+    for ft_dir, labeler, who in [(d, lab, w) for d in sorted(out_root.glob("finetune_cv*"))
+                                 for lab, w in [("labeler1", "labeler 1's"), ("labeler2", "labeler 2's")]]:
+        head = ft_dir.name[len("finetune_cv_"):] if ft_dir.name != "finetune_cv" else None
         per_slice = {}
-        for d in sorted((out_root / "finetune_cv" / labeler).glob("fold*")):
+        for d in sorted((ft_dir / labeler).glob("fold*")):
             if not (d / "predictions.pkl").exists():
                 continue
             held_out = set(json.loads((d / "config.json").read_text())["held_out"])
@@ -123,7 +126,8 @@ def extra_entries(data, out_root):
                 ps = slice_predictions("mask_rcnn", pickle.load(f), data)
             per_slice.update({i: v for i, v in ps.items() if int(data["subjects"][i]) in held_out})
         if len(per_slice) == len(data["files"]):
-            out.append((f"ft_{labeler}", f"Mask R-CNN + zoom, fine-tuned on {who} hand traces (3-fold)",
+            tag = f" + {head.replace('_', ' ')}" if head else ""
+            out.append((f"ft_{ft_dir.name}_{labeler}", f"Mask R-CNN + zoom{tag}, fine-tuned on {who} hand traces (3-fold)",
                         "hand-trace preview", "mask", per_slice))
     return out
 
@@ -222,11 +226,15 @@ def main():
         extras = [t for t, on in (("neighbor slices", config.get("neighbors")),
                                   ("augmentation", config.get("augment")),
                                   ("zoom (box first)", config.get("zoom")),
-                                  ("mirror pass", config.get("mirror"))) if on]
+                                  ("mirror pass", config.get("mirror")),
+                                  ("edge loss", config.get("head") == "edge_loss"),
+                                  ("ASPP", config.get("head") == "aspp"),
+                                  ("gated edge branch", config.get("head") == "gated_edge")) if on]
         base_of[name] = base
         group_of[name] = "R-CNN family" if name in MODELS else "ensemble" if base == "ensemble" else "experiments"
         label_of[name] = LABELS[base] + (" + " + " + ".join(extras) if extras else "")
-        short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug", "zoom (box first)": " +zoom", "mirror pass": " +mirror"}[e] for e in extras)
+        short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug", "zoom (box first)": " +zoom", "mirror pass": " +mirror", "edge loss": " +edge",
+                                               "ASPP": " +aspp", "gated edge branch": " +gate"}[e] for e in extras)
         with open(out_root / name / "predictions.pkl", "rb") as f:
             preds = pickle.load(f)
         per_slice = slice_predictions(base, preds, data)

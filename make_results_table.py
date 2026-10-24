@@ -91,6 +91,13 @@ def main():
               ("Zoomed Mask R-CNN + mirror pass", "zoom_mask_rcnn_mirror", "outline"),
               ("Zoomed Mask R-CNN + augmentation + mirror pass", "zoom_mask_rcnn_augment_mirror", "outline"),
               ("3D U-Net + augmentation + mirror pass", "unet3d_augment_mirror", "outline"),
+              ("Cascade Mask R-CNN", "cascade_mask_rcnn", "outline"),
+              ("Cascade Mask R-CNN + edge loss", "cascade_mask_rcnn_edge_loss", "outline"),
+              ("Cascade Mask R-CNN + ASPP", "cascade_mask_rcnn_aspp", "outline"),
+              ("Cascade Mask R-CNN + gated edge branch", "cascade_mask_rcnn_gated_edge", "outline"),
+              ("Zoomed Mask R-CNN + edge loss", "zoom_mask_rcnn_edge_loss", "outline"),
+              ("Zoomed Mask R-CNN + ASPP", "zoom_mask_rcnn_aspp", "outline"),
+              ("Zoomed Mask R-CNN + gated edge branch", "zoom_mask_rcnn_gated_edge", "outline"),
               ("**Vote of 5** (atlas, 2 zoomed, Mesh R-CNN, 3D U-Net; 3 needed)", "ensemble_vote", "outline"),
               ("**Vote of 5 + mirror pass**", "ensemble_vote_mirror", "outline")]
     for name, run, output in models:
@@ -101,10 +108,13 @@ def main():
     if not (ROOT / "rcnn_out" / "mesh_rcnn" / "results.csv").exists():
         lines.append("| Mesh R-CNN | 3D mesh | — | — | — | — | — | — | runs on Colab, see `rcnn/mesh_pack.py` |")
 
-    cv = ROOT / "rcnn_out" / "finetune_cv" / "results.csv"
-    if cv.exists():
-        with open(cv) as f:
-            rows_cv = list(csv.DictReader(f))
+    cv_runs = [(d, d.name[len("finetune_cv_"):].replace("_", " ") if d.name != "finetune_cv" else "")
+               for d in sorted((ROOT / "rcnn_out").glob("finetune_cv*")) if (d / "results.csv").exists()]
+    if cv_runs:
+        rows_cv = []
+        for d, head in cv_runs:
+            with open(d / "results.csv") as f:
+                rows_cv += [{**r, "run": r["run"] + (f" ({head})" if head else "")} for r in csv.DictReader(f)]
         m = lambda run, k: float(np.median([float(r[k]) for r in rows_cv if r["run"] == run]))
         lines += [
             "",
@@ -114,9 +124,15 @@ def main():
             "",
             "| Fine-tuned on | Dice (lab. 1) | Dice (lab. 2) |",
             "|---|---|---|",
-            f"| labeler 1's traces | {m('fine-tuned on labeler1', 'dice_vs_me'):.2f} | **{m('fine-tuned on labeler1', 'dice_vs_other'):.2f}** |",
-            f"| labeler 2's traces | **{m('fine-tuned on labeler2', 'dice_vs_me'):.2f}** | {m('fine-tuned on labeler2', 'dice_vs_other'):.2f} |",
         ]
+        for d, head in cv_runs:
+            tag = f" ({head})" if head else ""
+            name = f"zoomed Mask R-CNN + {head}" if head else "zoomed Mask R-CNN"
+            lines += [
+                f"| {name}, labeler 1's traces | {m('fine-tuned on labeler1' + tag, 'dice_vs_me'):.2f} | "
+                f"**{m('fine-tuned on labeler1' + tag, 'dice_vs_other'):.2f}** |",
+                f"| {name}, labeler 2's traces | **{m('fine-tuned on labeler2' + tag, 'dice_vs_me'):.2f}** | "
+                f"{m('fine-tuned on labeler2' + tag, 'dice_vs_other'):.2f} |"]
 
     lines += [
         "",

@@ -12,9 +12,13 @@ R-CNN weights) and gets a fresh 2-class output layer (background, hypothalamus).
                 per-region step is just an average over a 7x7 grid (Dai et al. 2016).
                 Single-scale, stride-16 features from ResNet layer3; its RPN head is new
                 (the COCO one was trained on different features). No OHEM.
+- cascade_mask_rcnn: cascade_rcnn plus a mask head on the final (IoU 0.7) stage, as in
+                Cascade Mask R-CNN (Cai & Vasconcelos 2019), with one of the edge-focused mask heads
+                from edge_heads.py (plain / edge_loss / aspp / gated_edge).
+- mask_rcnn can also take those edge heads: build("mask_rcnn", head=...).
 - rcnn (2014) is in rcnn_classic.py: it isn't an end-to-end network.
 
-fast_rcnn, cascade_rcnn and rfcn are our own implementations from torchvision parts,
+fast_rcnn, cascade_rcnn, cascade_mask_rcnn and rfcn are our own implementations from torchvision parts,
 not reference code.
 """
 
@@ -47,24 +51,29 @@ def build_faster_rcnn():
     return m
 
 
-def build_mask_rcnn():
+def build_mask_rcnn(head=None):
     m = maskrcnn_resnet50_fpn(weights=MaskRCNN_ResNet50_FPN_Weights.COCO_V1,
                               min_size=IMG_SIZE, max_size=IMG_SIZE)
     m.roi_heads.box_predictor = FastRCNNPredictor(1024, NUM_CLASSES)
     m.roi_heads.mask_predictor = MaskRCNNPredictor(256, 256, NUM_CLASSES)
+    if head is not None:
+        from .edge_heads import use_edge_heads
+        use_edge_heads(m, head)
     return m
 
 
-def sample_rois(proposals, targets, matcher, sampler, coder):
+def sample_rois(proposals, targets, matcher, sampler, coder, with_matches=False):
     """Adds ground-truth boxes to the proposals, labels each proposal by IoU, samples a
-    fixed-size foreground/background mix, and computes box-regression targets."""
-    out_props, out_labels, out_regs = [], [], []
+    fixed-size foreground/background mix, and computes box-regression targets (and, with
+    with_matches, which ground-truth object each sampled proposal was matched to)."""
+    out_props, out_labels, out_regs, out_matches = [], [], [], []
     for props, t in zip(proposals, targets):
         gt = t["boxes"]
         props = torch.cat([props, gt])
         if gt.numel() == 0:
             labels = torch.zeros(len(props), dtype=torch.int64, device=props.device)
             matched_gt = props.new_tensor([[0.0, 0.0, 1.0, 1.0]]).expand(len(props), 4)
+            clamped = torch.zeros(len(props), dtype=torch.int64, device=props.device)
         else:
             matched_idx = matcher(box_ops.box_iou(gt, props))
             clamped = matched_idx.clamp(min=0)
@@ -78,6 +87,9 @@ def sample_rois(proposals, targets, matcher, sampler, coder):
         out_props.append(props)
         out_labels.append(labels)
         out_regs.append(coder.encode_single(matched_gt, props))
+        out_matches.append(clamped[keep])
+    if with_matches:
+        return out_props, out_labels, out_regs, out_matches
     return out_props, out_labels, out_regs
 
 
@@ -179,6 +191,57 @@ class CascadeRCNN(nn.Module):
         return self.transform.postprocess(detections, sizes, original_sizes)
 
 
+class CascadeMaskRCNN(CascadeRCNN):
+    """Cascade R-CNN with a mask branch on the final stage. Training: the mask branch learns on
+    the final stage's positive samples (IoU >= 0.7 with the target). Inference: it outlines the
+    final detections. The mask head starts from COCO Mask R-CNN's pretrained head."""
+
+    def __init__(self, head="plain"):
+        super().__init__()
+        from .edge_heads import MaskBranch
+        coco = maskrcnn_resnet50_fpn(weights=MaskRCNN_ResNet50_FPN_Weights.COCO_V1)
+        self.mask_branch = MaskBranch(head, head=coco.roi_heads.mask_head)
+
+    def forward(self, images, targets=None):
+        original_sizes = [tuple(img.shape[-2:]) for img in images]
+        image_list, targets = self.transform(images, targets)
+        sizes = image_list.image_sizes
+        features = self.backbone(image_list.tensors)
+        proposals, rpn_losses = self.rpn(image_list, features, targets)
+
+        if self.training:
+            losses = dict(rpn_losses)
+            for s in range(len(self.STAGE_IOUS)):
+                proposals, labels, regs, matches = sample_rois([p.detach() for p in proposals], targets,
+                                                               self.matchers[s], self.sampler, self.coders[s],
+                                                               with_matches=True)
+                logits, deltas = self._stage(features, proposals, sizes, s)
+                cls_loss, box_loss = fastrcnn_loss(logits, deltas, labels, regs)
+                losses[f"stage{s + 1}_cls"] = cls_loss * self.STAGE_LOSS_WEIGHTS[s]
+                losses[f"stage{s + 1}_box"] = box_loss * self.STAGE_LOSS_WEIGHTS[s]
+                if s == len(self.STAGE_IOUS) - 1:
+                    pos = [torch.where(lab > 0)[0] for lab in labels]
+                    losses.update(self.mask_branch.loss(features, [p[k] for p, k in zip(proposals, pos)], sizes,
+                                                        [t["masks"] for t in targets],
+                                                        [m[k] for m, k in zip(matches, pos)]))
+                proposals = self._decode(deltas.detach(), proposals, sizes, s)
+            return losses
+
+        stage_scores = []
+        for s in range(len(self.STAGE_IOUS)):
+            logits, deltas = self._stage(features, proposals, sizes, s)
+            stage_scores.append(F.softmax(logits, -1)[:, 1])
+            refined = self._decode(deltas, proposals, sizes, s)
+            if s < len(self.STAGE_IOUS) - 1:
+                proposals = refined
+        scores = torch.stack(stage_scores).mean(0).split([len(p) for p in proposals])
+        detections = postprocess_boxes(refined, scores, sizes, 0.05, 0.5, 100)
+        probs = self.mask_branch.infer(features, [d["boxes"] for d in detections], sizes)
+        for d, p in zip(detections, probs):
+            d["masks"] = p
+        return self.transform.postprocess(detections, sizes, original_sizes)
+
+
 class RFCN(nn.Module):
     K = 7
 
@@ -234,8 +297,13 @@ BUILDERS = {
     "fast_rcnn": FastRCNN,
     "cascade_rcnn": CascadeRCNN,
     "rfcn": RFCN,
+    "cascade_mask_rcnn": CascadeMaskRCNN,
 }
 
 
-def build(name):
+def build(name, head=None):
+    if name == "cascade_mask_rcnn":
+        return CascadeMaskRCNN(head or "plain")
+    if name == "mask_rcnn":
+        return build_mask_rcnn(head)
     return BUILDERS[name]()

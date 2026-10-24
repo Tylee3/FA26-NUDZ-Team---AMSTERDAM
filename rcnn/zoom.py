@@ -12,7 +12,8 @@ structure, so it can answer "nothing here". Same training settings as every othe
 One expectation to state up front: Mask R-CNN always draws its outline on a 28x28 grid per
 box, so zooming adds detail to what the network sees rather than to the outline's grid.
 
-Usage (from the repo root):  python3 -m rcnn.zoom [--augment]   (--smoke for a tiny check)
+Usage (from the repo root):  python3 -m rcnn.zoom [--augment] [--head edge_loss|aspp|gated_edge]
+(--smoke for a tiny check)
 Writes rcnn_out/zoom_mask_rcnn[_augment]/ in the usual format, so rcnn.evaluate scores it.
 """
 
@@ -140,21 +141,23 @@ def predict(model, device, limit=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--augment", action="store_true", help="flip/rotate/shift/zoom/brightness each window while training")
+    ap.add_argument("--head", default=None, choices=["edge_loss", "aspp", "gated_edge"],
+                    help="edge-focused mask head from edge_heads.py")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
-    run = "zoom_mask_rcnn" + ("_augment" if args.augment else "")
+    run = "zoom_mask_rcnn" + ("_augment" if args.augment else "") + (f"_{args.head}" if args.head else "")
     out_dir = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out") / run
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(json.dumps(
         {"model": "mask_rcnn", "zoom": True, "augment": args.augment, "stage1": STAGE1, "crop": CROP,
-         "context": CONTEXT}, indent=2))
+         "context": CONTEXT, "head": args.head}, indent=2))
     log = Log(out_dir / "train.log")
     device = pick_device(args.device)
     torch.manual_seed(0)
     limit_train, limit_test, max_iters = (16, 12, 10) if args.smoke else (None, None, None)
     t0 = time.time()
-    model = models.build("mask_rcnn").to(device)
+    model = models.build("mask_rcnn", args.head).to(device)
     train_network("mask_rcnn", model, device, out_dir, log, 10, max_iters, None, False, False,
                   dataset=ZoomDataset(limit_train, augment=args.augment))
     preds = predict(model, device, limit_test)

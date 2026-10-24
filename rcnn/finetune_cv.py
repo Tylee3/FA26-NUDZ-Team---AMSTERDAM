@@ -18,7 +18,9 @@ Recipe, fixed before looking at any result: start from rcnn_out/zoom_mask_rcnn/m
 Caveat: 6 training rats is very few. No gain would not prove hand traces don't help; a gain
 is a strong sign that the Oct 30 traces will.
 
-Usage (from the repo root):  python3 -m rcnn.finetune_cv   (--smoke for a tiny check)
+Usage (from the repo root):  python3 -m rcnn.finetune_cv [--head edge_loss|aspp|gated_edge|best]
+(--smoke for a tiny check). With --head, it fine-tunes that edge variant of the zoomed model
+(rcnn_out/zoom_mask_rcnn_<head>) and writes rcnn_out/finetune_cv_<head>/.
 Writes rcnn_out/finetune_cv/<labeler>/fold<k>/ (skipped if done), results.csv and
 FINETUNE_CV.md.
 """
@@ -42,8 +44,23 @@ FOLDS = [[1, 3, 4], [5, 6, 7], [8, 9, 10]]
 LABELERS = {"labeler1": "masks", "labeler2": "masks_other"}
 ITERS = 600
 LR = 0.001
-BASE = ROOT / "rcnn_out" / "zoom_mask_rcnn" / "model.pt"
+HEADS = ["edge_loss", "aspp", "gated_edge"]
+BASE_RUN = "zoom_mask_rcnn"
+BASE_ROOT = ROOT / "rcnn_out"
+HEAD = None
 OUT = ROOT / "rcnn_out" / "finetune_cv"
+
+
+def best_head():
+    """The edge variant of the zoomed model with the best median Dice vs labeler 1 (rule fixed
+    before any of them was run)."""
+    def med(h):
+        with open(BASE_ROOT / f"zoom_mask_rcnn_{h}" / "results.csv") as f:
+            rows = [r for r in csv.DictReader(f) if int(r["rat"]) in TEST_RATS]
+        return float(np.median([float(r["dice_vs_me"]) for r in rows]))
+    scores = {h: med(h) for h in HEADS}
+    print("edge variants, median Dice vs labeler 1:", {h: round(v, 3) for h, v in scores.items()})
+    return max(scores, key=scores.get)
 
 
 def run_fold(labeler, key, k, held_out, device, smoke):
@@ -54,13 +71,13 @@ def run_fold(labeler, key, k, held_out, device, smoke):
     out_dir.mkdir(parents=True, exist_ok=True)
     train_rats = [n for n in TEST_RATS if n not in held_out]
     (out_dir / "config.json").write_text(json.dumps(
-        {"model": "mask_rcnn", "zoom": True, "base": str(BASE.relative_to(ROOT)), "finetune_on": labeler,
+        {"model": "mask_rcnn", "zoom": True, "head": HEAD, "base": f"rcnn_out/{BASE_RUN}/model.pt", "finetune_on": labeler,
          "train_rats": train_rats, "held_out": held_out, "iterations": ITERS, "lr": LR}, indent=2))
     log = Log(out_dir / "train.log")
     torch.manual_seed(0)
     t0 = time.time()
-    model = models.build("mask_rcnn")
-    model.load_state_dict(torch.load(BASE, map_location="cpu"))
+    model = models.build("mask_rcnn", HEAD)
+    model.load_state_dict(torch.load(BASE_ROOT / BASE_RUN / "model.pt", map_location="cpu"))
     model.to(device)
     ds = ZoomDataset(rats=set(train_rats), split="test", mask_key=key)
     train_network("mask_rcnn", model, device, out_dir, log, 10, 10 if smoke else ITERS, None, False, False,
@@ -81,7 +98,7 @@ def held_out_rows(preds, test, held_out):
 def summarize():
     test = load_split("test")
     rows = []
-    with open(ROOT / "rcnn_out" / "zoom_mask_rcnn" / "predictions.pkl", "rb") as f:
+    with open(BASE_ROOT / BASE_RUN / "predictions.pkl", "rb") as f:
         base = held_out_rows(pickle.load(f), test, TEST_RATS)
     for r in base:
         rows.append({"run": "atlas-trained (no fine-tune)", **r})
@@ -133,12 +150,20 @@ def summarize():
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--head", default=None, help="edge variant to fine-tune (edge_loss / aspp / gated_edge), "
+                                                  "or 'best' to pick by the rule in best_head()")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
-    global OUT
+    global OUT, HEAD, BASE_RUN, BASE_ROOT
+    if args.smoke and args.head:
+        BASE_ROOT = ROOT / "rcnn_out_smoke"
+    HEAD = best_head() if args.head == "best" else args.head
+    if HEAD:
+        BASE_RUN, OUT = f"zoom_mask_rcnn_{HEAD}", ROOT / "rcnn_out" / f"finetune_cv_{HEAD}"
+        print(f"fine-tuning the zoomed model with the {HEAD} head")
     if args.smoke:
-        OUT = ROOT / "rcnn_out_smoke" / "finetune_cv"
+        OUT = ROOT / "rcnn_out_smoke" / OUT.name
     device = pick_device(args.device)
     for labeler, key in list(LABELERS.items())[:1 if args.smoke else None]:
         for k, held_out in enumerate(FOLDS[:1] if args.smoke else FOLDS):
