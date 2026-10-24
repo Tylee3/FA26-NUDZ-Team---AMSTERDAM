@@ -36,8 +36,8 @@ against the labeler the model did *not* learn from (bold). Details: `rcnn_out/fi
 
 | Fine-tuned on | Dice (lab. 1) | Dice (lab. 2) |
 |---|---|---|
-| labeler 1's traces | 0.81 | **0.81** |
-| labeler 2's traces | **0.81** | 0.84 |
+| zoomed Mask R-CNN, labeler 1's traces | 0.81 | **0.81** |
+| zoomed Mask R-CNN, labeler 2's traces | **0.81** | 0.84 |
 
 **How to read it:**
 - Box-only models are scored as filled rectangles, which also cover tissue around the structure.

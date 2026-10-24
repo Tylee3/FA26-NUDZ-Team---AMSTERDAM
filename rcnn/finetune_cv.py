@@ -5,7 +5,7 @@ rats lift it past the atlas, toward the human-vs-human agreement (Dice 0.82)?
 Uses the 9 hand-traced rats we have, in 3 folds fixed in advance: [1, 3, 4], [5, 6, 7],
 [8, 9, 10]. Per fold, the model is fine-tuned on the hand traces of the 6 other rats and
 scored on the 3 held out, so every rat is scored once by a model that never saw it.
-Done twice: once fine-tuning on labeler 1's traces (Tyler), once on labeler 2's.
+Done twice: once fine-tuning on labeler 1's traces, once on labeler 2's.
 
 The fair comparison with human vs. human is the score against the labeler the model did
 NOT learn from: a model trained on labeler 1 scored against labeler 2 is judged exactly

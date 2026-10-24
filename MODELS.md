@@ -10,7 +10,7 @@ the median over the same 9 hand-traced test rats (1, 3–10), measured on the wh
   1.0 is a perfect match, 0 is no overlap. Dice = 2 × overlap / (size of both), IoU =
   overlap / (everything either one covers). They rank methods the same way; Dice is always the
   higher number (Dice 0.82 ≈ IoU 0.70).
-- **Labeler 1** is Tyler's traces, **labeler 2** the second, independent set. Scores are shown
+- **Labeler 1** is the first labeler, **labeler 2** the second, independent set. Scores are shown
   as *labeler 1 / labeler 2*.
 - **Slices found**: out of the 45 slices that contain the hypothalamus, how many the method
   outlined at all. **False alarms**: outlines drawn on the 63 slices that don't contain it.
