@@ -27,6 +27,13 @@ labeler 2 is the second, independent set. Regenerate with `python3 make_results_
 | Zoomed Mask R-CNN + mirror pass | outline | 0.78 | 0.64 | 0.75 | 0.61 | 39/45 | 0/63 |  |
 | Zoomed Mask R-CNN + augmentation + mirror pass | outline | 0.76 | 0.61 | 0.76 | 0.61 | 39/45 | 0/63 |  |
 | 3D U-Net + augmentation + mirror pass | outline | 0.75 | 0.60 | 0.76 | 0.62 | 39/45 | 1/63 |  |
+| Cascade Mask R-CNN | outline | 0.70 | 0.54 | 0.68 | 0.52 | 37/45 | 0/63 |  |
+| Cascade Mask R-CNN + edge loss | outline | 0.70 | 0.54 | 0.73 | 0.57 | 33/45 | 0/63 |  |
+| Cascade Mask R-CNN + ASPP | outline | 0.69 | 0.53 | 0.69 | 0.53 | 36/45 | 0/63 |  |
+| Cascade Mask R-CNN + gated edge branch | outline | 0.72 | 0.56 | 0.72 | 0.56 | 36/45 | 0/63 |  |
+| Zoomed Mask R-CNN + edge loss | outline | 0.75 | 0.60 | 0.72 | 0.57 | 39/45 | 0/63 |  |
+| Zoomed Mask R-CNN + ASPP | outline | 0.76 | 0.62 | 0.75 | 0.60 | 39/45 | 0/63 |  |
+| Zoomed Mask R-CNN + gated edge branch | outline | 0.76 | 0.61 | 0.75 | 0.60 | 39/45 | 0/63 |  |
 | **Vote of 5** (atlas, 2 zoomed, Mesh R-CNN, 3D U-Net; 3 needed) | outline | 0.79 | 0.66 | 0.80 | 0.67 | 40/45 | 0/63 |  |
 | **Vote of 5 + mirror pass** | outline | 0.80 | 0.66 | 0.79 | 0.65 | 40/45 | 0/63 |  |
 
@@ -38,6 +45,8 @@ against the labeler the model did *not* learn from (bold). Details: `rcnn_out/fi
 |---|---|---|
 | zoomed Mask R-CNN, labeler 1's traces | 0.81 | **0.81** |
 | zoomed Mask R-CNN, labeler 2's traces | **0.81** | 0.84 |
+| zoomed Mask R-CNN + aspp, labeler 1's traces | 0.81 | **0.81** |
+| zoomed Mask R-CNN + aspp, labeler 2's traces | **0.81** | 0.82 |
 
 **How to read it:**
 - Box-only models are scored as filled rectangles, which also cover tissue around the structure.

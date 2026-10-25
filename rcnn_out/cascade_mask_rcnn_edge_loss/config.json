@@ -1,0 +1,7 @@
+{
+  "model": "cascade_mask_rcnn",
+  "neighbors": false,
+  "augment": false,
+  "epochs": 10,
+  "head": "edge_loss"
+}

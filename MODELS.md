@@ -157,6 +157,33 @@ Each model also looks at the scan flipped left-right, and the two answers are av
 almost no change:** the models were already nearly symmetric, so the mirror view mostly agrees
 with the original. A tie: not worth the extra step.
 
+## Edge-focused mask heads (a teammate's three ideas)
+
+All three change only the mask head (`rcnn/edge_heads.py`) and were tried in two models: a new
+Cascade Mask R-CNN and the zoomed Mask R-CNN. Settings were fixed before running.
+
+- **Edge loss:** a second output learns the outline's border (a Sobel filter of the target mask),
+  so the model is penalized directly for blurry borders.
+- **ASPP:** parallel dilated convolutions (rates 1, 2, 3, scaled down from DeepLab's 6/12/18 for
+  the 14×14 head) give the mask head wider context.
+- **Gated edge branch:** a thin side branch predicts the border and produces a gate that scales
+  the mask features before the final layer.
+
+### Cascade Mask R-CNN — 0.70 / 0.68; with edge loss 0.70 / 0.73, ASPP 0.69 / 0.69, gated edge 0.72 / 0.72
+Cascade R-CNN's three box stages with a mask head on the last (IoU 0.7) stage. **Why below plain
+Mask R-CNN (0.74):** it finds fewer slices (33–37 of 45, missing small end slices), and its mask
+head trains only on the final stage's strictest matches, so it sees fewer examples (likely
+reasons, not measured separately). Tighter boxes don't help when the box was never the problem.
+The three edge heads beat its own baseline on about half the rats, which is a tie.
+
+### Zoomed Mask R-CNN + edge loss 0.75 / 0.72, + ASPP 0.76 / 0.75, + gated edge 0.76 / 0.75
+**Why no gain over plain zoom (0.78 / 0.74):** the models are trained on atlas outlines, so the
+edge heads learn to sharpen the *atlas's* borders, which sit about a slice off. Edge loss is
+better on 0 of 9 rats vs labeler 1, ASPP on 4, gated edge on 2. ASPP, the best of the three by the
+rule fixed in advance, also went through the hand-trace preview: **0.81 against the labeler it
+didn't learn from, the same as plain zoom.** On hand traces too, the extra head adds nothing that
+6 training rats can show.
+
 ## Combining models
 
 ### Vote of 5 — 0.79 / 0.80, IoU 0.66 / 0.67 (with mirror pass: 0.80 / 0.79)
