@@ -47,6 +47,8 @@ against the labeler the model did *not* learn from (bold). Details: `rcnn_out/fi
 | zoomed Mask R-CNN, labeler 2's traces | **0.81** | 0.84 |
 | zoomed Mask R-CNN + aspp, labeler 1's traces | 0.81 | **0.81** |
 | zoomed Mask R-CNN + aspp, labeler 2's traces | **0.81** | 0.82 |
+| zoomed Mask R-CNN + neighbors, labeler 1's traces | 0.79 | **0.82** |
+| zoomed Mask R-CNN + neighbors, labeler 2's traces | **0.81** | 0.83 |
 
 **How to read it:**
 - Box-only models are scored as filled rectangles, which also cover tissue around the structure.

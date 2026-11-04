@@ -34,6 +34,7 @@
 | experiments | Mask R-CNN + zoom (box first) + edge loss | mask | 9 | 39/45 | 0/63 | 0.562 | 0.601 | 0.751 | 0.567 | 0.723 |
 | experiments | Mask R-CNN + zoom (box first) + gated edge branch | mask | 9 | 39/45 | 0/63 | 0.57 | 0.614 | 0.761 | 0.6 | 0.75 |
 | experiments | Mask R-CNN + zoom (box first) + mirror pass | mask | 9 | 39/45 | 0/63 | 0.589 | 0.641 | 0.781 | 0.605 | 0.754 |
+| experiments | Mask R-CNN + neighbor slices + zoom (box first) | mask | 9 | 39/45 | 0/63 | 0.564 | 0.586 | 0.739 | 0.597 | 0.748 |
 | ensemble | Vote of 5 (3 needed) | mask | 9 | 40/45 | 0/63 | 0.608 | 0.657 | 0.793 | 0.668 | 0.801 |
 | ensemble | Vote of 5 (3 needed) + mirror pass | mask | 9 | 40/45 | 0/63 | 0.609 | 0.661 | 0.796 | 0.654 | 0.791 |
 | learning curve | Mask R-CNN + zoom, 13 training rats (subset 0) | mask | 9 | 32/45 | 0/63 | 0.473 | 0.549 | 0.709 | 0.55 | 0.71 |
@@ -46,3 +47,5 @@
 | hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 2's hand traces (3-fold) | mask | 9 | 39/45 | 0/63 | 0.621 | 0.685 | 0.813 | 0.726 | 0.841 |
 | hand-trace preview | Mask R-CNN + zoom + aspp, fine-tuned on labeler 1's hand traces (3-fold) | mask | 9 | 37/45 | 0/63 | 0.598 | 0.674 | 0.806 | 0.686 | 0.814 |
 | hand-trace preview | Mask R-CNN + zoom + aspp, fine-tuned on labeler 2's hand traces (3-fold) | mask | 9 | 39/45 | 0/63 | 0.616 | 0.675 | 0.806 | 0.698 | 0.822 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors, fine-tuned on labeler 1's hand traces (3-fold) | mask | 9 | 38/45 | 0/63 | 0.592 | 0.66 | 0.795 | 0.696 | 0.821 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors, fine-tuned on labeler 2's hand traces (3-fold) | mask | 9 | 38/45 | 0/63 | 0.6 | 0.675 | 0.806 | 0.709 | 0.83 |
