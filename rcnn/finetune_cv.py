@@ -18,9 +18,11 @@ Recipe, fixed before looking at any result: start from rcnn_out/zoom_mask_rcnn/m
 Caveat: 6 training rats is very few. No gain would not prove hand traces don't help; a gain
 is a strong sign that the Oct 30 traces will.
 
-Usage (from the repo root):  python3 -m rcnn.finetune_cv [--head edge_loss|aspp|gated_edge|best]
+Usage (from the repo root):  python3 -m rcnn.finetune_cv [--head edge_loss|aspp|gated_edge|best] [--neighbors]
 (--smoke for a tiny check). With --head, it fine-tunes that edge variant of the zoomed model
-(rcnn_out/zoom_mask_rcnn_<head>) and writes rcnn_out/finetune_cv_<head>/.
+(rcnn_out/zoom_mask_rcnn_<head>) and writes rcnn_out/finetune_cv_<head>/. With --neighbors,
+it fine-tunes the 2.5D zoomed model (rcnn_out/zoom_mask_rcnn_neighbors) the same way and
+writes rcnn_out/finetune_cv_neighbors/.
 Writes rcnn_out/finetune_cv/<labeler>/fold<k>/ (skipped if done), results.csv and
 FINETUNE_CV.md.
 """
@@ -48,6 +50,7 @@ HEADS = ["edge_loss", "aspp", "gated_edge"]
 BASE_RUN = "zoom_mask_rcnn"
 BASE_ROOT = ROOT / "rcnn_out"
 HEAD = None
+NEIGHBORS = False
 OUT = ROOT / "rcnn_out" / "finetune_cv"
 
 
@@ -71,7 +74,7 @@ def run_fold(labeler, key, k, held_out, device, smoke):
     out_dir.mkdir(parents=True, exist_ok=True)
     train_rats = [n for n in TEST_RATS if n not in held_out]
     (out_dir / "config.json").write_text(json.dumps(
-        {"model": "mask_rcnn", "zoom": True, "head": HEAD, "base": f"rcnn_out/{BASE_RUN}/model.pt", "finetune_on": labeler,
+        {"model": "mask_rcnn", "zoom": True, "head": HEAD, "neighbors": NEIGHBORS, "base": f"rcnn_out/{BASE_RUN}/model.pt", "finetune_on": labeler,
          "train_rats": train_rats, "held_out": held_out, "iterations": ITERS, "lr": LR}, indent=2))
     log = Log(out_dir / "train.log")
     torch.manual_seed(0)
@@ -79,10 +82,10 @@ def run_fold(labeler, key, k, held_out, device, smoke):
     model = models.build("mask_rcnn", HEAD)
     model.load_state_dict(torch.load(BASE_ROOT / BASE_RUN / "model.pt", map_location="cpu"))
     model.to(device)
-    ds = ZoomDataset(rats=set(train_rats), split="test", mask_key=key)
+    ds = ZoomDataset(rats=set(train_rats), split="test", mask_key=key, neighbors=NEIGHBORS)
     train_network("mask_rcnn", model, device, out_dir, log, 10, 10 if smoke else ITERS, None, False, False,
                   dataset=ds, lr=LR)
-    preds = predict(model, device)
+    preds = predict(model, device, neighbors=NEIGHBORS)
     with open(out_dir / "predictions.pkl", "wb") as f:
         pickle.dump(preds, f)
     log(f"done: fine-tuned on {labeler} traces of rats {train_rats}, {(time.time() - t0) / 60:.1f} min")
@@ -152,16 +155,23 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--head", default=None, help="edge variant to fine-tune (edge_loss / aspp / gated_edge), "
                                                   "or 'best' to pick by the rule in best_head()")
+    ap.add_argument("--neighbors", action="store_true", help="fine-tune the 2.5D zoomed model")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
-    global OUT, HEAD, BASE_RUN, BASE_ROOT
-    if args.smoke and args.head:
+    global OUT, HEAD, BASE_RUN, BASE_ROOT, NEIGHBORS
+    if args.head and args.neighbors:
+        ap.error("--head and --neighbors are separate experiments")
+    NEIGHBORS = args.neighbors
+    if args.smoke and (args.head or args.neighbors):
         BASE_ROOT = ROOT / "rcnn_out_smoke"
     HEAD = best_head() if args.head == "best" else args.head
     if HEAD:
         BASE_RUN, OUT = f"zoom_mask_rcnn_{HEAD}", ROOT / "rcnn_out" / f"finetune_cv_{HEAD}"
         print(f"fine-tuning the zoomed model with the {HEAD} head")
+    if NEIGHBORS:
+        BASE_RUN, OUT = "zoom_mask_rcnn_neighbors", ROOT / "rcnn_out" / "finetune_cv_neighbors"
+        print("fine-tuning the 2.5D zoomed model")
     if args.smoke:
         OUT = ROOT / "rcnn_out_smoke" / OUT.name
     device = pick_device(args.device)

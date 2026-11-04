@@ -12,9 +12,14 @@ structure, so it can answer "nothing here". Same training settings as every othe
 One expectation to state up front: Mask R-CNN always draws its outline on a 28x28 grid per
 box, so zooming adds detail to what the network sees rather than to the outline's grid.
 
-Usage (from the repo root):  python3 -m rcnn.zoom [--augment] [--head edge_loss|aspp|gated_edge]
+With --neighbors (2.5D, Dr. Ankit's suggestion), the same window is cut from the slice below,
+the slice itself and the slice above, and the three crops become the three input channels,
+as in train.py --neighbors. At the ends of a stack the slice itself fills in for the
+missing neighbor.
+
+Usage (from the repo root):  python3 -m rcnn.zoom [--augment] [--neighbors] [--head edge_loss|aspp|gated_edge]
 (--smoke for a tiny check)
-Writes rcnn_out/zoom_mask_rcnn[_augment]/ in the usual format, so rcnn.evaluate scores it.
+Writes rcnn_out/zoom_mask_rcnn[_neighbors][_augment]/ in the usual format, so rcnn.evaluate scores it.
 """
 
 import argparse
@@ -57,6 +62,22 @@ def cut(arr, win, mode):
     return out[0, 0].numpy()
 
 
+def slice_lookup(data):
+    return {(int(s), int(z)): k for k, (s, z) in enumerate(zip(data["subjects"], data["zs"]))}
+
+
+def crop_tensor(data, lookup, i, win, neighbors):
+    """The window cut from slice i as a 3-channel tensor: the slice repeated (2D), or the
+    slice below, the slice and the slice above (2.5D)."""
+    def crop(k):
+        return cut(data["images"][k], win, "bilinear").clip(0, 255).astype(np.uint8)
+    if not neighbors:
+        return image_tensor(crop(i))
+    n, z = int(data["subjects"][i]), int(data["zs"][i])
+    ks = [lookup.get((n, z - 1), i), i, lookup.get((n, z + 1), i)]
+    return torch.from_numpy(np.stack([crop(k) for k in ks])).float().div(255.0)
+
+
 def paste(prob, win, shape):
     """CROP x CROP probability map back into a full-size slice."""
     x, y, side = win
@@ -72,8 +93,9 @@ def paste(prob, win, shape):
 
 
 class ZoomDataset(torch.utils.data.Dataset):
-    def __init__(self, limit=None, augment=False, rats=None, split="train", mask_key="masks"):
+    def __init__(self, limit=None, augment=False, rats=None, split="train", mask_key="masks", neighbors=False):
         self.augment = augment
+        self.neighbors = neighbors
         self.data = load_split(split)
         self.data["masks"] = self.data[mask_key]
         n = len(self.data["files"]) if limit is None else limit
@@ -83,19 +105,20 @@ class ZoomDataset(torch.utils.data.Dataset):
         known = np.array([b for b in boxes if b is not None])
         self.typical = known.mean(axis=0)
         self.boxes = boxes
+        self.lookup = slice_lookup(self.data)
 
     def __len__(self):
         return len(self.items)
 
     def __getitem__(self, k):
         i = self.items[k]
-        gray, mask = self.data["images"][i], self.data["masks"][i]
+        mask = self.data["masks"][i]
         box = self.boxes[i] if self.boxes[i] is not None else self.typical
         size = max(box[2] - box[0], box[3] - box[1])
         scale = float(torch.empty(()).uniform_(1.6, 2.4))
         shift = (float(torch.empty(()).uniform_(-0.25, 0.25)) * size, float(torch.empty(()).uniform_(-0.25, 0.25)) * size)
         win = window(box, scale, shift)
-        img = image_tensor(cut(gray, win, "bilinear").clip(0, 255).astype(np.uint8))
+        img = crop_tensor(self.data, self.lookup, i, win, self.neighbors)
         m = cut(mask.astype(np.uint8), win, "nearest") > 0.5
         if self.augment:
             img, m = augment(img, m)
@@ -111,8 +134,9 @@ class ZoomDataset(torch.utils.data.Dataset):
 
 
 @torch.no_grad()
-def predict(model, device, limit=None):
+def predict(model, device, limit=None, neighbors=False):
     data = load_split("test")
+    lookup = slice_lookup(data)
     with open(ROOT / "rcnn_out" / STAGE1 / "predictions.pkl", "rb") as f:
         stage1 = {p["file"]: p for p in pickle.load(f)}
     model.eval()
@@ -125,8 +149,7 @@ def predict(model, device, limit=None):
                "boxes": np.zeros((0, 4), np.float32), "scores": np.zeros((0,), np.float32), "masks": None}
         if len(p1["scores"]) and p1["scores"].max() >= STAGE1_THRESHOLD:
             win = window(p1["boxes"][int(np.argmax(p1["scores"]))])
-            crop = cut(gray, win, "bilinear").clip(0, 255).astype(np.uint8)
-            det = model([image_tensor(crop).to(device)])[0]
+            det = model([crop_tensor(data, lookup, i, win, neighbors).to(device)])[0]
             if len(det["scores"]) and det["scores"].max() >= STAGE2_THRESHOLD:
                 k = int(det["scores"].argmax())
                 full = paste(det["masks"][k, 0].cpu().numpy(), win, gray.shape)
@@ -141,16 +164,17 @@ def predict(model, device, limit=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--augment", action="store_true", help="flip/rotate/shift/zoom/brightness each window while training")
+    ap.add_argument("--neighbors", action="store_true", help="2.5D: the slices below and above as input channels")
     ap.add_argument("--head", default=None, choices=["edge_loss", "aspp", "gated_edge"],
                     help="edge-focused mask head from edge_heads.py")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
-    run = "zoom_mask_rcnn" + ("_augment" if args.augment else "") + (f"_{args.head}" if args.head else "")
+    run = "zoom_mask_rcnn" + ("_neighbors" if args.neighbors else "") + ("_augment" if args.augment else "") + (f"_{args.head}" if args.head else "")
     out_dir = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out") / run
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(json.dumps(
-        {"model": "mask_rcnn", "zoom": True, "augment": args.augment, "stage1": STAGE1, "crop": CROP,
+        {"model": "mask_rcnn", "zoom": True, "augment": args.augment, "neighbors": args.neighbors, "stage1": STAGE1, "crop": CROP,
          "context": CONTEXT, "head": args.head}, indent=2))
     log = Log(out_dir / "train.log")
     device = pick_device(args.device)
@@ -159,8 +183,8 @@ def main():
     t0 = time.time()
     model = models.build("mask_rcnn", args.head).to(device)
     train_network("mask_rcnn", model, device, out_dir, log, 10, max_iters, None, False, False,
-                  dataset=ZoomDataset(limit_train, augment=args.augment))
-    preds = predict(model, device, limit_test)
+                  dataset=ZoomDataset(limit_train, augment=args.augment, neighbors=args.neighbors))
+    preds = predict(model, device, limit_test, neighbors=args.neighbors)
     with open(out_dir / "predictions.pkl", "wb") as f:
         pickle.dump(preds, f)
     log(f"done: {len(preds)} test slices predicted, {(time.time() - t0) / 60:.1f} min total")

@@ -51,3 +51,6 @@ mesh_rcnn_colab/
 # overlay pictures show scan crops: kept local unless Tyler OKs them
 rcnn_out/**/overlay.png
 rcnn_out/*grid.png
+
+# macOS metadata files written on the external drive
+._*
