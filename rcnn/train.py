@@ -24,7 +24,7 @@ import numpy as np
 import torch
 
 from . import models, rcnn_classic
-from .common import MASK_MODELS, ROOT, SliceDataset, collate, load_split, pick_device
+from .common import MASK_MODELS, SliceDataset, collate, load_split, out_root, pick_device
 
 EPOCHS = 10
 LR_DROP_EPOCH = 7
@@ -129,8 +129,7 @@ def main():
 
     run = args.model + ("_neighbors" if args.neighbors else "") + ("_augment" if args.augment else "") \
         + (f"_{args.head}" if args.head and args.head != "plain" else "")
-    out_root = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out")
-    out_dir = out_root / run
+    out_dir = out_root(args.smoke) / run
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(json.dumps(
         {"model": args.model, "neighbors": args.neighbors, "augment": args.augment, "epochs": args.epochs,

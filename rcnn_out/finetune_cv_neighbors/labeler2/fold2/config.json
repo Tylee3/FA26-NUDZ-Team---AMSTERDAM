@@ -1,0 +1,23 @@
+{
+  "model": "mask_rcnn",
+  "zoom": true,
+  "head": null,
+  "neighbors": true,
+  "base": "rcnn_out/zoom_mask_rcnn_neighbors/model.pt",
+  "finetune_on": "labeler2",
+  "train_rats": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "held_out": [
+    8,
+    9,
+    10
+  ],
+  "iterations": 600,
+  "lr": 0.001
+}

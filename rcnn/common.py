@@ -13,7 +13,15 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-DATA_DIR = ROOT / "rcnn_data"
+# Round 6 (Nov 2026): NUDZ traced 5 more thick rats, all of them atlas-labeled training rats
+# until now. With HYPO_TEST=14 in the environment, the test set is all 14 traced rats, those 5
+# leave training, and data and runs go to rcnn_data_14/ and rcnn_out_14/, so the 9-rat results
+# in rcnn_data/ and rcnn_out/ stay exactly as they were.
+NEW_TRACED_RATS = [15, 25, 35, 100, 125]
+TEST14 = os.environ.get("HYPO_TEST") == "14"
+SUFFIX = "_14" if TEST14 else ""
+
+DATA_DIR = ROOT / f"rcnn_data{SUFFIX}"
 SLICES_DIR = ROOT / "roboflow_slices"
 T2_DIR = ROOT / "T2 for segmentation"
 MANUAL_DIR = ROOT / "Manual Segments" / "Segmented nrrd"
@@ -21,8 +29,10 @@ ATLAS_TRAIN_DIR = ROOT / "atlas_labels"
 ATLAS_TEST_DIR = ROOT / "auto_seg_out"
 
 # The 9 hand-traced rats are the test set. Rat 2's "manual" file is itself atlas-derived.
-TEST_RATS = [1, 3, 4, 5, 6, 7, 8, 9, 10]
+TEST_RATS = [1, 3, 4, 5, 6, 7, 8, 9, 10] + (NEW_TRACED_RATS if TEST14 else [])
 PILOT_RATS = set(range(1, 11))
+# Rats no model may train on with atlas labels.
+HELD_OUT_RATS = PILOT_RATS | set(TEST_RATS)
 
 MODELS = ["rcnn", "fast_rcnn", "faster_rcnn", "rfcn", "cascade_rcnn", "mask_rcnn"]
 MASK_MODELS = {"mask_rcnn", "unet3d", "mesh_rcnn", "ensemble", "cascade_mask_rcnn"}
@@ -31,6 +41,10 @@ MASK_MODELS = {"mask_rcnn", "unet3d", "mesh_rcnn", "ensemble", "cascade_mask_rcn
 # margin rather than a probability, so its natural cut-off is 0.
 SCORE_THRESHOLDS = {"rcnn": 0.0}
 DEFAULT_SCORE_THRESHOLD = 0.5
+
+
+def out_root(smoke=False) -> Path:
+    return ROOT / f"rcnn_out{SUFFIX}{'_smoke' if smoke else ''}"
 
 
 def t2_path(n: int) -> Path:

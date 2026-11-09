@@ -25,6 +25,10 @@ it fine-tunes the 2.5D zoomed model (rcnn_out/zoom_mask_rcnn_neighbors) the same
 writes rcnn_out/finetune_cv_neighbors/.
 Writes rcnn_out/finetune_cv/<labeler>/fold<k>/ (skipped if done), results.csv and
 FINETUNE_CV.md.
+
+Round 6 (HYPO_TEST=14): the 14 traced rats in 3 folds, [1, 3, 4, 15, 25], [5, 6, 7, 35, 100],
+[8, 9, 10, 125], so each fold fine-tunes on 9 or 10 rats instead of 6. Starts from
+rcnn_out_14/zoom_mask_rcnn, which never saw any of the 14, and writes rcnn_out_14/finetune_cv/.
 """
 
 import argparse
@@ -37,21 +41,24 @@ import numpy as np
 import torch
 
 from . import models
-from .common import ROOT, TEST_RATS, load_split, pick_device
+from .common import ROOT, TEST14, TEST_RATS, load_split, out_root, pick_device
 from .evaluate import score, slice_predictions
 from .train import Log, train_network
 from .zoom import ZoomDataset, predict
 
 FOLDS = [[1, 3, 4], [5, 6, 7], [8, 9, 10]]
+if TEST14:
+    # Round 6, fixed before any result: the 5 new rats spread over the same 3 folds.
+    FOLDS = [[1, 3, 4, 15, 25], [5, 6, 7, 35, 100], [8, 9, 10, 125]]
 LABELERS = {"labeler1": "masks", "labeler2": "masks_other"}
 ITERS = 600
 LR = 0.001
 HEADS = ["edge_loss", "aspp", "gated_edge"]
 BASE_RUN = "zoom_mask_rcnn"
-BASE_ROOT = ROOT / "rcnn_out"
+BASE_ROOT = out_root()
 HEAD = None
 NEIGHBORS = False
-OUT = ROOT / "rcnn_out" / "finetune_cv"
+OUT = out_root() / "finetune_cv"
 
 
 def best_head():
@@ -74,7 +81,7 @@ def run_fold(labeler, key, k, held_out, device, smoke):
     out_dir.mkdir(parents=True, exist_ok=True)
     train_rats = [n for n in TEST_RATS if n not in held_out]
     (out_dir / "config.json").write_text(json.dumps(
-        {"model": "mask_rcnn", "zoom": True, "head": HEAD, "neighbors": NEIGHBORS, "base": f"rcnn_out/{BASE_RUN}/model.pt", "finetune_on": labeler,
+        {"model": "mask_rcnn", "zoom": True, "head": HEAD, "neighbors": NEIGHBORS, "base": str((BASE_ROOT / BASE_RUN / "model.pt").relative_to(ROOT)), "finetune_on": labeler,
          "train_rats": train_rats, "held_out": held_out, "iterations": ITERS, "lr": LR}, indent=2))
     log = Log(out_dir / "train.log")
     torch.manual_seed(0)
@@ -85,7 +92,7 @@ def run_fold(labeler, key, k, held_out, device, smoke):
     ds = ZoomDataset(rats=set(train_rats), split="test", mask_key=key, neighbors=NEIGHBORS)
     train_network("mask_rcnn", model, device, out_dir, log, 10, 10 if smoke else ITERS, None, False, False,
                   dataset=ds, lr=LR)
-    preds = predict(model, device, neighbors=NEIGHBORS)
+    preds = predict(model, device, limit=12 if smoke else None, neighbors=NEIGHBORS, smoke=smoke)
     with open(out_dir / "predictions.pkl", "wb") as f:
         pickle.dump(preds, f)
     log(f"done: fine-tuned on {labeler} traces of rats {train_rats}, {(time.time() - t0) / 60:.1f} min")
@@ -125,11 +132,11 @@ def summarize():
         vals = [r[key] for r in rows if r["run"] == run]
         return (f"{np.median(vals):.3f}", len(vals)) if vals else ("—", 0)
 
-    md = ["# Fine-tuning on hand traces: 3-fold preview", "",
-          "Median 3D Dice on the 9 hand-traced rats; every rat scored by a model that never saw it.",
+    md = [f"# Fine-tuning on hand traces: 3-fold {'(14 rats)' if TEST14 else 'preview'}", "",
+          f"Median 3D Dice on the {len(TEST_RATS)} hand-traced rats; every rat scored by a model that never saw it.",
           "**Bold** = scored against the labeler the model did not learn from (the fair comparison with human vs. human).",
           "", "| Model | Dice vs labeler 1 | Dice vs labeler 2 | Rats |", "|---|---|---|---|",
-          f"| Human vs. human (labeler 1 vs labeler 2) | {np.median(human):.3f} | {np.median(human):.3f} | 9 |"]
+          f"| Human vs. human (labeler 1 vs labeler 2) | {np.median(human):.3f} | {np.median(human):.3f} | {len(human)} |"]
     for run, bold in [("atlas-trained (no fine-tune)", None), ("fine-tuned on labeler1", "dice_vs_other"),
                       ("fine-tuned on labeler2", "dice_vs_me")]:
         (d1, n), (d2, _) = med(run, "dice_vs_me"), med(run, "dice_vs_other")
@@ -163,17 +170,17 @@ def main():
     if args.head and args.neighbors:
         ap.error("--head and --neighbors are separate experiments")
     NEIGHBORS = args.neighbors
-    if args.smoke and (args.head or args.neighbors):
-        BASE_ROOT = ROOT / "rcnn_out_smoke"
+    if args.smoke and (args.head or args.neighbors or TEST14):
+        BASE_ROOT = out_root(smoke=True)
     HEAD = best_head() if args.head == "best" else args.head
     if HEAD:
-        BASE_RUN, OUT = f"zoom_mask_rcnn_{HEAD}", ROOT / "rcnn_out" / f"finetune_cv_{HEAD}"
+        BASE_RUN, OUT = f"zoom_mask_rcnn_{HEAD}", out_root() / f"finetune_cv_{HEAD}"
         print(f"fine-tuning the zoomed model with the {HEAD} head")
     if NEIGHBORS:
-        BASE_RUN, OUT = "zoom_mask_rcnn_neighbors", ROOT / "rcnn_out" / "finetune_cv_neighbors"
+        BASE_RUN, OUT = "zoom_mask_rcnn_neighbors", out_root() / "finetune_cv_neighbors"
         print("fine-tuning the 2.5D zoomed model")
     if args.smoke:
-        OUT = ROOT / "rcnn_out_smoke" / OUT.name
+        OUT = out_root(smoke=True) / OUT.name
     device = pick_device(args.device)
     for labeler, key in list(LABELERS.items())[:1 if args.smoke else None]:
         for k, held_out in enumerate(FOLDS[:1] if args.smoke else FOLDS):

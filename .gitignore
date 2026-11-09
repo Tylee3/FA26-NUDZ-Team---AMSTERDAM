@@ -35,6 +35,13 @@ rcnn_out/**/model.pt
 rcnn_out/**/predictions.pkl
 rcnn_out/*/rcnn_classic.pkl
 rcnn_out/*/pred_*.nrrd
+# round 6 (14 test rats): same rules for its own data and run folders
+rcnn_data_14/
+rcnn_out_14_smoke/
+rcnn_out_14/**/model.pt
+rcnn_out_14/**/predictions.pkl
+rcnn_out_14/**/overlay.png
+rcnn_out_14/*grid.png
 atlas_labels/*.nrrd
 atlas_deformable_out/*/*.nrrd
 

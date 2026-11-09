@@ -1,5 +1,6 @@
 """Scores every trained model on the 9 hand-traced test rats, next to the atlas baseline.
 Usage, from the repo root:  python3 -m rcnn.evaluate
+With HYPO_TEST=14 it scores rcnn_out_14/ on all 14 traced rats instead (round 6).
 
 Per slice, a model's single best detection counts if its score clears the threshold
 (0.5; 0 for R-CNN's SVM margin). One hypothalamus per slice at most, so one detection.
@@ -30,8 +31,8 @@ import numpy as np
 import SimpleITK as sitk
 from PIL import Image
 
-from .common import (ATLAS_TEST_DIR, DEFAULT_SCORE_THRESHOLD, MASK_MODELS, MODELS, ROOT,
-                     SCORE_THRESHOLDS, box_iou, load_split, mask_to_box, t2_path)
+from .common import (ATLAS_TEST_DIR, ATLAS_TRAIN_DIR, DEFAULT_SCORE_THRESHOLD, MASK_MODELS, MODELS,
+                     ROOT, SCORE_THRESHOLDS, SUFFIX, box_iou, load_split, mask_to_box, t2_path)
 
 LABELS = {"atlas": "Atlas (Charley's method)", "atlas_box": "Atlas, as a box",
           "rcnn": "R-CNN", "fast_rcnn": "Fast R-CNN", "faster_rcnn": "Faster R-CNN",
@@ -74,12 +75,23 @@ def slice_predictions(model, preds, data):
     return out
 
 
+def atlas_file(folder, n):
+    """Rat n's registered atlas in folder. The round-6 test rats were training rats, so their
+    rigid atlas (the same pipeline) is in atlas_labels/ rather than auto_seg_out/."""
+    path = folder / f"auto_seg_{n:03d}.nrrd"
+    return ATLAS_TRAIN_DIR / path.name if folder == ATLAS_TEST_DIR and not path.exists() else path
+
+
+def has_all_rats(data, folder):
+    return all(atlas_file(folder, int(n)).exists() for n in set(data["subjects"].tolist()))
+
+
 def atlas_predictions(data, as_box, folder=ATLAS_TEST_DIR):
     """Per test slice: (box, mask) from a folder of registered-atlas volumes auto_seg_XXX.nrrd."""
     out, cache = {}, {}
     for i, (n, z) in enumerate(zip(data["subjects"], data["zs"])):
         if n not in cache:
-            cache[n] = sitk.GetArrayFromImage(sitk.ReadImage(str(folder / f"auto_seg_{n:03d}.nrrd"))) > 0
+            cache[n] = sitk.GetArrayFromImage(sitk.ReadImage(str(atlas_file(folder, int(n))))) > 0
         m = cache[n][z]
         box = mask_to_box(m)
         out[i] = (box, filled_box(box, m.shape) if as_box else m)
@@ -99,12 +111,12 @@ def extra_entries(data, out_root):
             {i: (mask_to_box(m), m) for i, m in enumerate(data["masks_other"])})]
     for k in "abc":
         d = ROOT / "atlas_deformable_out" / k
-        if (d / "auto_seg_001.nrrd").exists():
+        if has_all_rats(data, d):
             out.append((f"deformable_{k}", f"Waxholm atlas, deformable (setting {k})", "atlas", "mask",
                         atlas_predictions(data, False, d)))
     for v in SIGMA_VARIANTS:
         d = ROOT / "sigma_out" / v
-        if (d / "auto_seg_001.nrrd").exists():
+        if has_all_rats(data, d):
             out.append((f"sigma_{v}", f"SIGMA atlas ({v})", "atlas", "mask", atlas_predictions(data, False, d)))
     lc = out_root / "learning_curve"
     for d in sorted(lc.glob("zoom_n*")) if lc.exists() else []:
@@ -201,7 +213,7 @@ def grid(tiles, labels, path, cols, size=200):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default="rcnn_out")
+    ap.add_argument("--out", default=f"rcnn_out{SUFFIX}")
     args = ap.parse_args()
     out_root = ROOT / args.out
     data = load_split("test")

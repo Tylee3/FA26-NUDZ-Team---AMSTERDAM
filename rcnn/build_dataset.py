@@ -6,6 +6,9 @@ train: the 53 thick-slice rats outside the pilot 10, labeled automatically by th
 test:  the 9 hand-traced pilot rats (1, 3-10), labeled with Tyler's manual traces ("Me"),
        with the second labeler's traces ("Other") kept alongside for a second score.
        None of these rats appear in training.
+       With HYPO_TEST=14 (round 6), NUDZ's 5 newly traced thick rats (15, 25, 35, 100, 125)
+       join the test set and leave training: 48 training rats, 14 test rats, written to
+       rcnn_data_14/ instead.
 
 The 69 isotropic-protocol rats are left out: the atlas pipeline was never checked against
 ground truth on that protocol, and their slices are stored rotated.
@@ -22,7 +25,7 @@ import numpy as np
 import SimpleITK as sitk
 from PIL import Image
 
-from .common import (ATLAS_TRAIN_DIR, DATA_DIR, MANUAL_DIR, PILOT_RATS, SLICES_DIR,
+from .common import (ATLAS_TRAIN_DIR, DATA_DIR, HELD_OUT_RATS, MANUAL_DIR, SLICES_DIR,
                      TEST_RATS, t2_path)
 from generate_coco_annotations import mask_to_annotations
 
@@ -87,7 +90,8 @@ def main():
     DATA_DIR.mkdir(exist_ok=True)
     manifest = manifest_by_subject()
     thick = sorted(n for n, rows in manifest.items() if rows[0]["protocol"] == "thick")
-    train_rats = [n for n in thick if n not in PILOT_RATS]
+    train_rats = [n for n in thick if n not in HELD_OUT_RATS]
+    assert not set(train_rats) & set(TEST_RATS), "a test rat is in training"
 
     build("train", train_rats, {"atlas": lambda n: ATLAS_TRAIN_DIR / f"auto_seg_{n:03d}.nrrd"}, manifest)
     build("test", TEST_RATS, {

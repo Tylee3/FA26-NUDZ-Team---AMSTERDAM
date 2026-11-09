@@ -19,7 +19,8 @@ missing neighbor.
 
 Usage (from the repo root):  python3 -m rcnn.zoom [--augment] [--neighbors] [--head edge_loss|aspp|gated_edge]
 (--smoke for a tiny check)
-Writes rcnn_out/zoom_mask_rcnn[_neighbors][_augment]/ in the usual format, so rcnn.evaluate scores it.
+Writes rcnn_out/zoom_mask_rcnn[_neighbors][_augment]/ in the usual format, so rcnn.evaluate scores it
+(rcnn_out_14/ with HYPO_TEST=14, stage 1 read from there too).
 """
 
 import argparse
@@ -32,7 +33,7 @@ import torch
 import torch.nn.functional as F
 
 from . import models
-from .common import ROOT, augment, image_tensor, load_split, mask_to_box, pick_device
+from .common import augment, image_tensor, load_split, mask_to_box, out_root, pick_device
 from .train import Log, train_network
 
 CROP = 256
@@ -133,11 +134,17 @@ class ZoomDataset(torch.utils.data.Dataset):
         return img, target
 
 
+def stage1_root(smoke):
+    """Where stage 1's test predictions are read from: a smoke run's own when there is one."""
+    smoke_root = out_root(smoke=True)
+    return smoke_root if smoke and (smoke_root / STAGE1 / "predictions.pkl").exists() else out_root()
+
+
 @torch.no_grad()
-def predict(model, device, limit=None, neighbors=False):
+def predict(model, device, limit=None, neighbors=False, smoke=False):
     data = load_split("test")
     lookup = slice_lookup(data)
-    with open(ROOT / "rcnn_out" / STAGE1 / "predictions.pkl", "rb") as f:
+    with open(stage1_root(smoke) / STAGE1 / "predictions.pkl", "rb") as f:
         stage1 = {p["file"]: p for p in pickle.load(f)}
     model.eval()
     n = len(data["files"]) if limit is None else limit
@@ -171,7 +178,7 @@ def main():
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
     run = "zoom_mask_rcnn" + ("_neighbors" if args.neighbors else "") + ("_augment" if args.augment else "") + (f"_{args.head}" if args.head else "")
-    out_dir = ROOT / ("rcnn_out_smoke" if args.smoke else "rcnn_out") / run
+    out_dir = out_root(args.smoke) / run
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "config.json").write_text(json.dumps(
         {"model": "mask_rcnn", "zoom": True, "augment": args.augment, "neighbors": args.neighbors, "stage1": STAGE1, "crop": CROP,
@@ -184,7 +191,7 @@ def main():
     model = models.build("mask_rcnn", args.head).to(device)
     train_network("mask_rcnn", model, device, out_dir, log, 10, max_iters, None, False, False,
                   dataset=ZoomDataset(limit_train, augment=args.augment, neighbors=args.neighbors))
-    preds = predict(model, device, limit_test, neighbors=args.neighbors)
+    preds = predict(model, device, limit_test, neighbors=args.neighbors, smoke=args.smoke)
     with open(out_dir / "predictions.pkl", "wb") as f:
         pickle.dump(preds, f)
     log(f"done: {len(preds)} test slices predicted, {(time.time() - t0) / 60:.1f} min total")
