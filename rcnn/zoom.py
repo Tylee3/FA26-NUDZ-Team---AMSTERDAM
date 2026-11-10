@@ -33,7 +33,7 @@ import torch
 import torch.nn.functional as F
 
 from . import models
-from .common import augment, image_tensor, load_split, mask_to_box, out_root, pick_device
+from .common import augment, elastic_warp, image_tensor, load_split, mask_to_box, out_root, pick_device
 from .train import Log, train_network
 
 CROP = 256
@@ -94,8 +94,10 @@ def paste(prob, win, shape):
 
 
 class ZoomDataset(torch.utils.data.Dataset):
-    def __init__(self, limit=None, augment=False, rats=None, split="train", mask_key="masks", neighbors=False):
+    def __init__(self, limit=None, augment=False, rats=None, split="train", mask_key="masks", neighbors=False,
+                 warp=False):
         self.augment = augment
+        self.warp = warp
         self.neighbors = neighbors
         self.data = load_split(split)
         self.data["masks"] = self.data[mask_key]
@@ -121,6 +123,8 @@ class ZoomDataset(torch.utils.data.Dataset):
         win = window(box, scale, shift)
         img = crop_tensor(self.data, self.lookup, i, win, self.neighbors)
         m = cut(mask.astype(np.uint8), win, "nearest") > 0.5
+        if self.warp:
+            img, m = elastic_warp(img, m)
         if self.augment:
             img, m = augment(img, m)
         target = {"image_id": torch.tensor(i)}

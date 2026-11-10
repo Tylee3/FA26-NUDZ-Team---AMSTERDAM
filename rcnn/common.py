@@ -118,6 +118,24 @@ def augment(img: torch.Tensor, mask: np.ndarray):
     return img, m[0].numpy().astype(bool)
 
 
+def elastic_warp(img: torch.Tensor, mask: np.ndarray, max_shift=0.03, grid=4):
+    """A gentle random local warp (Hoku's idea): random shifts on a coarse grid, smoothly
+    interpolated, bend the structure's shape instead of moving the whole slice. The mask gets
+    exactly the same warp. max_shift is a fraction of the image width (0.03 of a 256 crop is
+    about 8 px at the control points)."""
+    import torch.nn.functional as F
+
+    _, h, w = img.shape
+    coarse = (torch.rand(1, 2, grid, grid) * 2 - 1) * max_shift * 2
+    flow = F.interpolate(coarse, size=(h, w), mode="bicubic", align_corners=True).permute(0, 2, 3, 1)
+    ys, xs = torch.meshgrid(torch.linspace(-1, 1, h), torch.linspace(-1, 1, w), indexing="ij")
+    where = torch.stack([xs, ys], -1)[None] + flow
+    img = F.grid_sample(img[None], where, mode="bilinear", padding_mode="border", align_corners=True)[0]
+    m = torch.from_numpy(mask[None, None].astype(np.float32))
+    m = F.grid_sample(m, where, mode="nearest", padding_mode="zeros", align_corners=True)[0, 0]
+    return img, m.numpy() > 0.5
+
+
 class SliceDataset(torch.utils.data.Dataset):
     def __init__(self, split: str, with_masks: bool = False, with_proposals: bool = False,
                  limit=None, neighbors: bool = False, augment: bool = False):
