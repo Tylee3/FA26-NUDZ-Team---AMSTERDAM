@@ -9,6 +9,9 @@ Median 3D Dice on the 14 hand-traced rats; every rat scored by a model that neve
 | atlas-trained (no fine-tune) | 0.706 | 0.700 | 14 |
 | fine-tuned on labeler1 | 0.806 | **0.799** | 14 |
 | fine-tuned on labeler2 | **0.798** | 0.810 | 14 |
+| fine-tuned on both | 0.800 | 0.803 | 14 |
+
+Fine-tuned on both = each training slice once with each labeler's trace, so the model learns both; scored against each, it is compared with human vs. human the way a third labeler would be.
 
 Per rat (Dice vs labeler 1 / vs labeler 2):
 
