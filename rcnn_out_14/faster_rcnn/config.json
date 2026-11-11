@@ -1,0 +1,7 @@
+{
+  "model": "faster_rcnn",
+  "neighbors": false,
+  "augment": false,
+  "epochs": 10,
+  "head": null
+}
