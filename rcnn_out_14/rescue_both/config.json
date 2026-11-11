@@ -1,0 +1,7 @@
+{
+  "model": "mask_rcnn",
+  "zoom": true,
+  "rescue": 0.2,
+  "member": "both",
+  "label": "Mask R-CNN + zoom, fine-tuned on both experts' traces + end-slice rescue (3-fold)"
+}

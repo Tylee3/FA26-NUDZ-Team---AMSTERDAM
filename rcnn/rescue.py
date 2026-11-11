@@ -40,6 +40,7 @@ RESCUE = 0.2
 SWEEP = [0.1, 0.2, 0.3]
 SEEDS = {0: "finetune_cv", 1: "finetune_cv_seed1", 2: "finetune_cv_seed2"}
 MEMBERS = {"labeler1": "expert 1", "labeler2": "expert 2", "both": "both experts"}
+WHOSE = {"labeler1": "expert 1's", "labeler2": "expert 2's", "both": "both experts'"}
 # The expert each model never learned from: the fair score is the one against that expert.
 FAIR = {"labeler1": "dice_vs_other", "labeler2": "dice_vs_me", "both": None}
 
@@ -133,7 +134,7 @@ def main():
         if seed == 0 and not args.smoke:
             write_run(base, f"rescue_{member}", rescued[RESCUE], data, {
                 "model": "mask_rcnn", "zoom": True, "rescue": RESCUE, "member": member,
-                "label": f"Mask R-CNN + zoom, fine-tuned on {MEMBERS[member]}' traces + end-slice rescue (3-fold)"})
+                "label": f"Mask R-CNN + zoom, fine-tuned on {WHOSE[member]} traces + end-slice rescue (3-fold)"})
     if not args.smoke:
         write_summary(base / "RESCUE.md", results)
 
