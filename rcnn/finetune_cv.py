@@ -26,6 +26,11 @@ writes rcnn_out/finetune_cv_neighbors/.
 Writes rcnn_out/finetune_cv/<labeler>/fold<k>/ (skipped if done), results.csv and
 FINETUNE_CV.md.
 
+With --both, a third run ("both") fine-tunes on both labelers' traces at once: every training
+slice appears twice, once with each trace, in finetune_cv/both/. With --seed N, the same
+recipe is repeated with another random seed in <out>_seed<N>/, to measure how much a result
+moves by chance alone.
+
 With --warp (Hoku's idea), every training window also gets a gentle random local warp
 (common.elastic_warp), the trace warped identically, and the run writes finetune_cv_warp/.
 Same base model, folds, seed and settings as the plain run, so warp is the only difference.
@@ -57,12 +62,14 @@ if TEST14:
     # Round 6, fixed before any result: the 5 new rats spread over the same 3 folds.
     FOLDS = [[1, 3, 4, 15, 25], [5, 6, 7, 35, 100], [8, 9, 10, 125]]
 LABELERS = {"labeler1": "masks", "labeler2": "masks_other"}
+BOTH = {"both": ("masks", "masks_other")}
 ITERS = 600
 LR = 0.001
 HEADS = ["edge_loss", "aspp", "gated_edge"]
 BASE_RUN = "zoom_mask_rcnn"
 BASE_ROOT = out_root()
 HEAD = None
+SEED = 0
 NEIGHBORS = False
 WARP = False
 OUT = out_root() / "finetune_cv"
@@ -89,14 +96,16 @@ def run_fold(labeler, key, k, held_out, device, smoke):
     train_rats = [n for n in TEST_RATS if n not in held_out]
     (out_dir / "config.json").write_text(json.dumps(
         {"model": "mask_rcnn", "zoom": True, "head": HEAD, "neighbors": NEIGHBORS, "warp": WARP, "base": str((BASE_ROOT / BASE_RUN / "model.pt").relative_to(ROOT)), "finetune_on": labeler,
-         "train_rats": train_rats, "held_out": held_out, "iterations": ITERS, "lr": LR}, indent=2))
+         "train_rats": train_rats, "held_out": held_out, "iterations": ITERS, "lr": LR, "seed": SEED}, indent=2))
     log = Log(out_dir / "train.log")
-    torch.manual_seed(0)
+    torch.manual_seed(SEED)
     t0 = time.time()
     model = models.build("mask_rcnn", HEAD)
     model.load_state_dict(torch.load(BASE_ROOT / BASE_RUN / "model.pt", map_location="cpu"))
     model.to(device)
-    ds = ZoomDataset(rats=set(train_rats), split="test", mask_key=key, neighbors=NEIGHBORS, warp=WARP)
+    keys = key if isinstance(key, tuple) else (key,)
+    ds = torch.utils.data.ConcatDataset([ZoomDataset(rats=set(train_rats), split="test", mask_key=k,
+                                                     neighbors=NEIGHBORS, warp=WARP) for k in keys])
     train_network("mask_rcnn", model, device, out_dir, log, 10, 10 if smoke else ITERS, None, False, False,
                   dataset=ds, lr=LR)
     preds = predict(model, device, limit=12 if smoke else None, neighbors=NEIGHBORS, smoke=smoke)
@@ -119,7 +128,7 @@ def summarize():
         base = held_out_rows(pickle.load(f), test, TEST_RATS)
     for r in base:
         rows.append({"run": "atlas-trained (no fine-tune)", **r})
-    for labeler in LABELERS:
+    for labeler in {**LABELERS, **BOTH}:
         for k, held_out in enumerate(FOLDS):
             p = OUT / labeler / f"fold{k}" / "predictions.pkl"
             if not p.exists():
@@ -145,13 +154,16 @@ def summarize():
           "", "| Model | Dice vs labeler 1 | Dice vs labeler 2 | Rats |", "|---|---|---|---|",
           f"| Human vs. human (labeler 1 vs labeler 2) | {np.median(human):.3f} | {np.median(human):.3f} | {len(human)} |"]
     for run, bold in [("atlas-trained (no fine-tune)", None), ("fine-tuned on labeler1", "dice_vs_other"),
-                      ("fine-tuned on labeler2", "dice_vs_me")]:
+                      ("fine-tuned on labeler2", "dice_vs_me"), ("fine-tuned on both", None)]:
         (d1, n), (d2, _) = med(run, "dice_vs_me"), med(run, "dice_vs_other")
         if not n:
             continue
         d1 = f"**{d1}**" if bold == "dice_vs_me" else d1
         d2 = f"**{d2}**" if bold == "dice_vs_other" else d2
         md.append(f"| {run} | {d1} | {d2} | {n} |")
+    if med("fine-tuned on both", "dice_vs_me")[1]:
+        md += ["", "Fine-tuned on both = each training slice once with each labeler's trace, so the model learns "
+               "both; scored against each, it is compared with human vs. human the way a third labeler would be."]
     md += ["", "Per rat (Dice vs labeler 1 / vs labeler 2):", "",
            "| Rat | Human vs. human | Atlas-trained | Fine-tuned on labeler 1 | Fine-tuned on labeler 2 |",
            "|---|---|---|---|---|"]
@@ -171,10 +183,12 @@ def main():
                                                   "or 'best' to pick by the rule in best_head()")
     ap.add_argument("--neighbors", action="store_true", help="fine-tune the 2.5D zoomed model")
     ap.add_argument("--warp", action="store_true", help="gentle random local warp of each training window")
+    ap.add_argument("--both", action="store_true", help="fine-tune on both labelers' traces at once (labeler 'both')")
+    ap.add_argument("--seed", type=int, default=0, help="a repeat with another random seed writes <out>_seed<N>/")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--device", default=None)
     args = ap.parse_args()
-    global OUT, HEAD, BASE_RUN, BASE_ROOT, NEIGHBORS, WARP
+    global OUT, HEAD, BASE_RUN, BASE_ROOT, NEIGHBORS, WARP, SEED
     if sum(map(bool, (args.head, args.neighbors, args.warp))) > 1:
         ap.error("--head, --neighbors and --warp are separate experiments")
     NEIGHBORS, WARP = args.neighbors, args.warp
@@ -190,10 +204,14 @@ def main():
     if WARP:
         OUT = out_root() / "finetune_cv_warp"
         print("fine-tuning with a gentle random local warp of each training window")
+    SEED = args.seed
+    if SEED:
+        OUT = OUT.with_name(f"{OUT.name}_seed{SEED}")
     if args.smoke:
         OUT = out_root(smoke=True) / OUT.name
     device = pick_device(args.device)
-    for labeler, key in list(LABELERS.items())[:1 if args.smoke else None]:
+    labelers = BOTH if args.both else LABELERS
+    for labeler, key in list(labelers.items())[:1 if args.smoke else None]:
         for k, held_out in enumerate(FOLDS[:1] if args.smoke else FOLDS):
             run_fold(labeler, key, k, held_out, device, args.smoke)
     summarize()

@@ -127,7 +127,7 @@ def extra_entries(data, out_root):
             out.append((f"lc_{d.name}", f"Mask R-CNN + zoom, {len(cfg['train_rats'])} training rats "
                         f"(subset {d.name[-1]})", "learning curve", "mask", per_slice))
     for ft_dir, labeler, who in [(d, lab, w) for d in sorted(out_root.glob("finetune_cv*"))
-                                 for lab, w in [("labeler1", "labeler 1's"), ("labeler2", "labeler 2's")]]:
+                                 for lab, w in [("labeler1", "labeler 1's"), ("labeler2", "labeler 2's"), ("both", "both labelers'")]]:
         head = ft_dir.name[len("finetune_cv_"):] if ft_dir.name != "finetune_cv" else None
         per_slice = {}
         for d in sorted((ft_dir / labeler).glob("fold*")):
@@ -244,7 +244,7 @@ def main():
                                   ("gated edge branch", config.get("head") == "gated_edge")) if on]
         base_of[name] = base
         group_of[name] = "R-CNN family" if name in MODELS else "ensemble" if base == "ensemble" else "experiments"
-        label_of[name] = LABELS[base] + (" + " + " + ".join(extras) if extras else "")
+        label_of[name] = config.get("label") or LABELS[base] + (" + " + " + ".join(extras) if extras else "")
         short_of[name] = LABELS[base] + "".join({"neighbor slices": " +nbr", "augmentation": " +aug", "zoom (box first)": " +zoom", "mirror pass": " +mirror", "edge loss": " +edge",
                                                "ASPP": " +aspp", "gated edge branch": " +gate"}[e] for e in extras)
         with open(out_root / name / "predictions.pkl", "rb") as f:
