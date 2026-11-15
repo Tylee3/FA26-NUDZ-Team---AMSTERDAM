@@ -6,10 +6,10 @@ Median 3D Dice on the 14 hand-traced rats; every rat scored by a model that neve
 | Model | Dice vs labeler 1 | Dice vs labeler 2 | Rats |
 |---|---|---|---|
 | Human vs. human (labeler 1 vs labeler 2) | 0.824 | 0.824 | 14 |
-| atlas-trained (no fine-tune) | 0.706 | 0.700 | 14 |
-| fine-tuned on labeler1 | 0.806 | **0.799** | 14 |
-| fine-tuned on labeler2 | **0.798** | 0.810 | 14 |
-| fine-tuned on both | 0.800 | 0.803 | 14 |
+| atlas-trained (no fine-tune) | 0.706 | 0.704 | 14 |
+| fine-tuned on labeler1 | 0.806 | **0.810** | 14 |
+| fine-tuned on labeler2 | **0.798** | 0.814 | 14 |
+| fine-tuned on both | 0.800 | 0.816 | 14 |
 
 Fine-tuned on both = each training slice once with each labeler's trace, so the model learns both; scored against each, it is compared with human vs. human the way a third labeler would be.
 
@@ -19,7 +19,7 @@ Per rat (Dice vs labeler 1 / vs labeler 2):
 |---|---|---|---|---|
 | 1 | 0.79 | 0.68 / 0.70 | 0.72 / 0.79 | 0.69 / 0.80 |
 | 3 | 0.84 | 0.77 / 0.72 | 0.84 / 0.85 | 0.85 / 0.85 |
-| 4 | 0.64 | 0.68 / 0.48 | 0.70 / 0.55 | 0.69 / 0.59 |
+| 4 | 0.76 | 0.68 / 0.71 | 0.70 / 0.84 | 0.69 / 0.82 |
 | 5 | 0.85 | 0.68 / 0.66 | 0.80 / 0.84 | 0.80 / 0.85 |
 | 6 | 0.86 | 0.73 / 0.73 | 0.82 / 0.82 | 0.84 / 0.85 |
 | 7 | 0.82 | 0.74 / 0.70 | 0.82 / 0.77 | 0.83 / 0.81 |
