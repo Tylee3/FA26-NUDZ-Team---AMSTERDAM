@@ -61,3 +61,11 @@ rcnn_out/*grid.png
 
 # macOS metadata files written on the external drive
 ._*
+
+# round 9: high-resolution test set, MedSAM2 code + weights + its own environment
+rcnn_data_hr/
+rcnn_out_hr/**/*.pkl
+rcnn_out_hr/*_smoke/
+rcnn_out_14/_trained_on_duplicate_rat4/
+third_party/
+.venv-medsam2/
