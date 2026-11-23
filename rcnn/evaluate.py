@@ -13,6 +13,14 @@ Metrics, all against Tyler's manual traces ("Me") unless noted:
   3D IoU / Dice     the same 3D overlap as auto_seg_out/results.csv. Box-only models are
                     scored as filled rectangles, which also covers tissue around the
                     structure, so compare them against "atlas (as box)" rather than "atlas".
+  vs agree / STAPLE also against two references built from both experts (combined_references):
+                    the voxels both traced, and STAPLE's estimate of the true outline (SimpleITK,
+                    per rat in 3D, cut at 0.5). With only two experts STAPLE came out voxel for
+                    voxel equal to the both-agree mask (2026-11-23, 14 rats); it is kept so a third
+                    expert can be added. Every combined reference contains part of the expert a
+                    model learned from, so it is a consensus score, not a held-out one. Models fine-tuned on both experts learned from
+                    both, so these columns are not a held-out score for them; the human row
+                    leaves them blank (labeler 2 is part of both references).
 
 The comparison table also lists, scored the same way: labeler 2's traces (human vs. human),
 the deformable and SIGMA atlas runs, the learning-curve runs and the hand-trace fine-tune
@@ -44,6 +52,21 @@ LABELS = {"atlas": "Atlas (Charley's method)", "atlas_box": "Atlas, as a box",
 def overlap(a, b):
     inter, union, total = (a & b).sum(), (a | b).sum(), a.sum() + b.sum()
     return (inter / union if union else 1.0), (2 * inter / total if total else 1.0)
+
+
+def combined_references(data):
+    """Adds masks_agree (both experts traced it) and masks_staple (STAPLE of the two) per slice."""
+    agree = data["masks"] & data["masks_other"]
+    staple = np.zeros_like(agree)
+    for n in sorted(set(data["subjects"].tolist())):
+        idx = sorted(np.where(data["subjects"] == n)[0], key=lambda i: data["zs"][i])
+        raters = [sitk.GetImageFromArray(data[k][idx].astype(np.uint8)) for k in ("masks", "masks_other")]
+        f = sitk.STAPLEImageFilter()
+        f.SetForegroundValue(1)
+        prob = sitk.GetArrayFromImage(f.Execute(raters))
+        staple[idx] = prob >= 0.5
+    data["masks_agree"], data["masks_staple"] = agree, staple
+    return data
 
 
 def filled_box(box, shape):
@@ -166,10 +189,15 @@ def score(model, per_slice, data, out_dir, write_nrrd):
                 alarms += 1
         iou_me, dice_me = overlap(pred, gt_me)
         iou_other, dice_other = overlap(pred, gt_other)
+        combined = {}
+        for ref in ("agree", "staple"):
+            if f"masks_{ref}" in data:
+                iou_c, dice_c = overlap(pred, np.stack([data[f"masks_{ref}"][i] for i in idx]))
+                combined.update({f"iou_vs_{ref}": float(iou_c), f"dice_vs_{ref}": float(dice_c)})
         rows.append({"rat": int(n), "slices": len(idx), "structure_slices": len(box_scores), "slices_found": found,
                      "false_alarms": alarms, "box_iou": float(np.mean(box_scores)),
                      "iou_vs_me": float(iou_me), "dice_vs_me": float(dice_me),
-                     "iou_vs_other": float(iou_other), "dice_vs_other": float(dice_other)})
+                     "iou_vs_other": float(iou_other), "dice_vs_other": float(dice_other), **combined})
         volumes[int(n)] = (pred, gt_me, idx)
         if write_nrrd:
             img = sitk.GetImageFromArray(pred.astype(np.uint8))
@@ -216,7 +244,7 @@ def main():
     ap.add_argument("--out", default=f"rcnn_out{SUFFIX}")
     args = ap.parse_args()
     out_root = ROOT / args.out
-    data = load_split("test")
+    data = combined_references(load_split("test"))
 
     results, all_volumes = {}, {}
     base_of = {"atlas": "atlas", "atlas_box": "atlas_box"}
@@ -273,9 +301,11 @@ def main():
             "median_3d_dice_vs_me": round(float(np.median([r["dice_vs_me"] for r in rows])), 3),
             "median_3d_iou_vs_other": round(float(np.median([r["iou_vs_other"] for r in rows])), 3),
             "median_3d_dice_vs_other": round(float(np.median([r["dice_vs_other"] for r in rows])), 3),
+            **{f"median_3d_{m}_vs_{ref}": round(float(np.median([r[f"{m}_vs_{ref}"] for r in rows])), 3)
+               for ref in ("agree", "staple") for m in ("iou", "dice")},
         })
         if name == "human":
-            summary[-1].update(median_3d_iou_vs_other="—", median_3d_dice_vs_other="—")
+            summary[-1].update({k: "—" for k in summary[-1] if k.startswith("median_3d_") and not k.endswith("_me")})
     with open(out_root / "comparison.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(summary[0]))
         w.writeheader()

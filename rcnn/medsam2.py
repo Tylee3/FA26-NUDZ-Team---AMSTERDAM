@@ -153,8 +153,9 @@ def run_thick(predictor, prompts, views, device, smoke):
     results = run_dataset(predictor, data, s1, prompts, views, device, rats=[1] if smoke else None)
     for (p, v), masks in results.items():
         rows, _ = score("mask_rcnn", {i: (mask_to_box(m), m) for i, m in masks.items()}, data, None, False)
-        print(f"{label(p, v)}: median Dice vs expert 1 {np.median([r['dice_vs_me'] for r in rows]):.3f}, "
-              f"vs expert 2 {np.median([r['dice_vs_other'] for r in rows]):.3f}", flush=True)
+        med = lambda k: np.median([r[k] for r in rows])
+        print(f"{label(p, v)}: median IoU / Dice vs expert 1 {med('iou_vs_me'):.3f} / {med('dice_vs_me'):.3f}, "
+              f"vs expert 2 {med('iou_vs_other'):.3f} / {med('dice_vs_other'):.3f}", flush=True)
         if not smoke:
             write_run(out_root(), f"medsam2_{p}_{v}", masks, data, {"model": "mask_rcnn", "prompt": p, "view": v, "label": label(p, v)})
 

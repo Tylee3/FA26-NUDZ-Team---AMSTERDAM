@@ -12,7 +12,9 @@ their probability maps averaged before the 0.5 cut (the same for 2D and 2.5D, so
 stay comparable). The 2.5D models' neighbour slices are 1 mm away, as in training: the next
 slice on the 1mm data, 5 slices over on the 0.2 mm data.
 
-Scores: 3D Dice / IoU against expert 1 (Jaison, all 5 rats) and expert 2 (rats 50 and 60).
+Scores: 3D IoU / Dice against expert 1 (Jaison, all 5 rats), expert 2, and two references
+built from both experts (the voxels both traced; STAPLE, as in rcnn.evaluate), the last three
+on the rats expert 2 traced.
 Writes rcnn_out_hr/<version>/<run>/ in the usual format and rcnn_out_hr/HIGHRES.md, which
 also picks up the MedSAM2 runs (rcnn/medsam2.py) written to the same folders.
 
@@ -34,8 +36,9 @@ NAMES = {"1mm": "1 mm slices (like the training scans)", "02mm": "0.2 mm slices 
 
 def load_hr(version):
     from .build_highres import HR_DIR
+    from .evaluate import combined_references
     with np.load(HR_DIR / f"test_{version}.npz") as f:
-        return {k: f[k] for k in f.files}
+        return combined_references({k: f[k] for k in f.files})
 
 
 def specs():
@@ -120,10 +123,15 @@ def score_hr(masks, data):
         pred = np.stack([masks[i] for i in idx])
         me, other = data["masks"][idx], data["masks_other"][idx]
         iou1, dice1 = overlap(pred, me)
-        iou2, dice2 = overlap(pred, other) if data["has_other"][idx[0]] else (None, None)
+        both = bool(data["has_other"][idx[0]])
+        iou2, dice2 = overlap(pred, other) if both else (None, None)
+        comb = {}
+        for ref in ("agree", "staple"):
+            iou_c, dice_c = overlap(pred, data[f"masks_{ref}"][idx]) if both else (None, None)
+            comb.update({f"iou_vs_{ref}": iou_c, f"dice_vs_{ref}": dice_c})
         has = me.reshape(len(idx), -1).any(1)
         hit = pred.reshape(len(idx), -1).any(1)
-        rows.append({"rat": int(n), "dice_vs_me": dice1, "iou_vs_me": iou1, "dice_vs_other": dice2, "iou_vs_other": iou2,
+        rows.append({"rat": int(n), "dice_vs_me": dice1, "iou_vs_me": iou1, "dice_vs_other": dice2, "iou_vs_other": iou2, **comb,
                      "found": int((has & hit).sum()), "of": int(has.sum()), "alarms": int((~has & hit).sum())})
     return rows
 
@@ -147,20 +155,27 @@ def summarize():
         return f"{np.median(vals):.3f}" if vals else "—"
 
     md = ["# Round 9: the 5 high-resolution rats", "",
-          "Median 3D Dice / IoU. Expert 1 = Jaison (all 5 rats); expert 2 traced rats 50 and 60 only, so the "
-          "expert 2 columns are 2 rats. No model trained on any of these rats or on this scan protocol. "
-          "Fine-tuned R-CNN rows average their 3 fold models.", ""]
+          "Median 3D IoU / Dice. Expert 1 = Jaison (all 5 rats). Expert 2 traced only the rats listed in the "
+          "human row, so the expert 2, both-agree and STAPLE columns cover only those. Both-agree = the voxels "
+          "both experts traced; STAPLE = SimpleITK's estimate of the true outline from the two traces (with only two experts it equals "
+          "both-agree; kept for a third). "
+          "No model trained on any of these rats or on this scan protocol. Fine-tuned R-CNN rows average "
+          "their 3 fold models; rows fine-tuned on both experts learned from both, so their combined-reference "
+          "scores are not held out.", "",
+          "Noise rule: a change counts only if it gains more than 0.01 against both experts; rerunning the "
+          "same model moves scores by up to 0.007.", ""]
     for version in STEPS:
         if not (OUT_HR / version).exists():
             continue
         data = load_hr(version)
         human = score_hr({i: m for i, m in enumerate(data["masks_other"])}, data)
         human = [r for r in human if r["dice_vs_other"] is not None]
+        pairs = [("me", "expert 1"), ("other", "expert 2"), ("agree", "both agree"), ("staple", "STAPLE")]
         md += [f"## {NAMES[version]}", "",
-               "| Model | Dice vs expert 1 | IoU vs expert 1 | Dice vs expert 2 | IoU vs expert 2 | Slices found | False alarms |",
-               "|---|---|---|---|---|---|---|",
+               "| Model | " + " | ".join(f"IoU / Dice vs {w}" for _, w in pairs) + " | Slices found | False alarms |",
+               "|---|" + "---|" * (len(pairs) + 2),
                f"| Expert 2 vs expert 1 (human vs human, rats {', '.join(str(r['rat']) for r in human)}) | "
-               f"{med(human, 'dice_vs_me')} | {med(human, 'iou_vs_me')} | — | — | | |"]
+               f"{med(human, 'iou_vs_me')} / {med(human, 'dice_vs_me')} | — | — | — | | |"]
         per_rat = {}
         for d in sorted((OUT_HR / version).iterdir()):
             cfg = d / "config.json"
@@ -169,15 +184,15 @@ def summarize():
             label = json.loads(cfg.read_text())["label"]
             rows = score_hr(read_masks(d, data), data)
             per_rat[label] = rows
-            md.append(f"| {label} | {med(rows, 'dice_vs_me')} | {med(rows, 'iou_vs_me')} | {med(rows, 'dice_vs_other')} | "
-                      f"{med(rows, 'iou_vs_other')} | {sum(r['found'] for r in rows)}/{sum(r['of'] for r in rows)} | "
-                      f"{sum(r['alarms'] for r in rows)} |")
+            md.append(f"| {label} | " + " | ".join(f"{med(rows, 'iou_vs_' + k)} / {med(rows, 'dice_vs_' + k)}" for k, _ in pairs)
+                      + f" | {sum(r['found'] for r in rows)}/{sum(r['of'] for r in rows)} | {sum(r['alarms'] for r in rows)} |")
         rats = sorted(set(data["subjects"].tolist()))
-        md += ["", "Per rat, Dice vs expert 1:", "", "| Model | " + " | ".join(f"Rat {n}" for n in rats) + " |",
+        md += ["", "Per rat, IoU / Dice vs expert 1:", "", "| Model | " + " | ".join(f"Rat {n}" for n in rats) + " |",
                "|---|" + "---|" * len(rats)]
         for label, rows in per_rat.items():
-            by = {r["rat"]: r["dice_vs_me"] for r in rows}
-            md.append(f"| {label} | " + " | ".join(f"{by[n]:.2f}" if n in by else "—" for n in rats) + " |")
+            by = {r["rat"]: r for r in rows}
+            md.append(f"| {label} | " + " | ".join(f"{by[n]['iou_vs_me']:.2f} / {by[n]['dice_vs_me']:.2f}" if n in by else "—"
+                                                   for n in rats) + " |")
         md.append("")
     (OUT_HR / "HIGHRES.md").write_text("\n".join(md) + "\n")
     print("\n".join(md))
@@ -210,7 +225,8 @@ def main():
                         {"model": "mask_rcnn", "zoom": True, "neighbors": neighbors, "models": [str(p.relative_to(ROOT)) for p in paths],
                          "label": f"R-CNN {label}"})
             rows = score_hr(masks, data)
-            print(f"{version} {run}: median Dice vs expert 1 {np.median([r['dice_vs_me'] for r in rows]):.3f}", flush=True)
+            print(f"{version} {run}: median IoU / Dice vs expert 1 {np.median([r['iou_vs_me'] for r in rows]):.3f} / "
+                  f"{np.median([r['dice_vs_me'] for r in rows]):.3f}", flush=True)
     if not args.smoke:
         summarize()
 

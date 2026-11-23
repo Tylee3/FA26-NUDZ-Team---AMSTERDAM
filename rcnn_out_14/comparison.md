@@ -1,31 +1,31 @@
-| group | model | output | rats | slices_found | false_alarms | mean_box_iou | median_3d_iou_vs_me | median_3d_dice_vs_me | median_3d_iou_vs_other | median_3d_dice_vs_other |
-|---|---|---|---|---|---|---|---|---|---|---|
-| human | Labeler 2's traces (human vs. human) | mask | 14 | 68/69 | 0/99 | 0.675 | 0.701 | 0.824 | — | — |
-| atlas | Atlas (Charley's method) | mask | 14 | 62/69 | 1/99 | 0.509 | 0.547 | 0.707 | 0.582 | 0.736 |
-| atlas | Atlas, as a box | box | 14 | 62/69 | 1/99 | 0.509 | 0.471 | 0.641 | 0.52 | 0.684 |
-| R-CNN family | Faster R-CNN | box | 14 | 64/69 | 3/99 | 0.527 | 0.484 | 0.653 | 0.501 | 0.667 |
-| experiments | Average of the 3 fine-tuned models (labeler 1, labeler 2, both) + mirror pass (3-fold) | mask | 14 | 61/69 | 2/99 | 0.615 | 0.674 | 0.805 | 0.697 | 0.822 |
-| experiments | Mask R-CNN + zoom, fine-tuned on both labelers' traces + mirror pass (3-fold) | mask | 14 | 61/69 | 2/99 | 0.617 | 0.666 | 0.8 | 0.69 | 0.816 |
-| experiments | MedSAM2 (no training), the atlas-trained detector's box, whole slice | mask | 14 | 69/69 | 64/99 | 0.568 | 0.364 | 0.533 | 0.373 | 0.543 |
-| experiments | MedSAM2 (no training), the atlas-trained detector's box, zoomed window | mask | 14 | 68/69 | 47/99 | 0.533 | 0.351 | 0.52 | 0.39 | 0.562 |
-| experiments | MedSAM2 (no training), a box around expert 1's trace, whole slice | mask | 14 | 69/69 | 51/99 | 0.595 | 0.362 | 0.532 | 0.363 | 0.533 |
-| experiments | MedSAM2 (no training), a box around expert 1's trace, zoomed window | mask | 14 | 69/69 | 34/99 | 0.612 | 0.379 | 0.55 | 0.401 | 0.572 |
-| experiments | Mask R-CNN + zoom (box first) | mask | 14 | 64/69 | 3/99 | 0.532 | 0.545 | 0.706 | 0.543 | 0.704 |
-| experiments | Mask R-CNN + neighbor slices + zoom (box first) | mask | 14 | 64/69 | 3/99 | 0.536 | 0.58 | 0.734 | 0.574 | 0.729 |
-| hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.613 | 0.675 | 0.806 | 0.68 | 0.81 |
-| hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.613 | 0.673 | 0.804 | 0.688 | 0.815 |
-| hand-trace preview | Mask R-CNN + zoom, fine-tuned on both labelers' hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.614 | 0.669 | 0.802 | 0.692 | 0.818 |
-| hand-trace preview | Mask R-CNN + zoom + neighbors, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 58/69 | 2/99 | 0.587 | 0.662 | 0.797 | 0.721 | 0.838 |
-| hand-trace preview | Mask R-CNN + zoom + neighbors, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 60/69 | 3/99 | 0.606 | 0.65 | 0.787 | 0.704 | 0.826 |
-| hand-trace preview | Mask R-CNN + zoom + neighbors seed1, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 57/69 | 2/99 | 0.577 | 0.647 | 0.785 | 0.723 | 0.839 |
-| hand-trace preview | Mask R-CNN + zoom + neighbors seed1, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 59/69 | 3/99 | 0.599 | 0.65 | 0.787 | 0.695 | 0.82 |
-| hand-trace preview | Mask R-CNN + zoom + neighbors seed2, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 58/69 | 2/99 | 0.588 | 0.654 | 0.791 | 0.722 | 0.839 |
-| hand-trace preview | Mask R-CNN + zoom + neighbors seed2, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 60/69 | 3/99 | 0.605 | 0.659 | 0.793 | 0.689 | 0.816 |
-| hand-trace preview | Mask R-CNN + zoom + seed1, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 62/69 | 2/99 | 0.617 | 0.68 | 0.81 | 0.684 | 0.812 |
-| hand-trace preview | Mask R-CNN + zoom + seed1, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.619 | 0.678 | 0.808 | 0.703 | 0.825 |
-| hand-trace preview | Mask R-CNN + zoom + seed1, fine-tuned on both labelers' hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.611 | 0.672 | 0.804 | 0.704 | 0.826 |
-| hand-trace preview | Mask R-CNN + zoom + seed2, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.605 | 0.675 | 0.806 | 0.682 | 0.811 |
-| hand-trace preview | Mask R-CNN + zoom + seed2, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.623 | 0.67 | 0.802 | 0.695 | 0.82 |
-| hand-trace preview | Mask R-CNN + zoom + seed2, fine-tuned on both labelers' hand traces (3-fold) | mask | 14 | 62/69 | 2/99 | 0.62 | 0.682 | 0.811 | 0.704 | 0.827 |
-| hand-trace preview | Mask R-CNN + zoom + warp, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.612 | 0.666 | 0.8 | 0.694 | 0.82 |
-| hand-trace preview | Mask R-CNN + zoom + warp, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 63/69 | 2/99 | 0.64 | 0.671 | 0.803 | 0.696 | 0.821 |
+| group | model | output | rats | slices_found | false_alarms | mean_box_iou | median_3d_iou_vs_me | median_3d_dice_vs_me | median_3d_iou_vs_other | median_3d_dice_vs_other | median_3d_iou_vs_agree | median_3d_dice_vs_agree | median_3d_iou_vs_staple | median_3d_dice_vs_staple |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| human | Labeler 2's traces (human vs. human) | mask | 14 | 68/69 | 0/99 | 0.675 | 0.701 | 0.824 | — | — | — | — | — | — |
+| atlas | Atlas (Charley's method) | mask | 14 | 62/69 | 1/99 | 0.509 | 0.547 | 0.707 | 0.582 | 0.736 | 0.566 | 0.723 | 0.566 | 0.723 |
+| atlas | Atlas, as a box | box | 14 | 62/69 | 1/99 | 0.509 | 0.471 | 0.641 | 0.52 | 0.684 | 0.438 | 0.609 | 0.438 | 0.609 |
+| R-CNN family | Faster R-CNN | box | 14 | 64/69 | 3/99 | 0.527 | 0.484 | 0.653 | 0.501 | 0.667 | 0.448 | 0.619 | 0.448 | 0.619 |
+| experiments | Average of the 3 fine-tuned models (labeler 1, labeler 2, both) + mirror pass (3-fold) | mask | 14 | 61/69 | 2/99 | 0.615 | 0.674 | 0.805 | 0.697 | 0.822 | 0.658 | 0.793 | 0.658 | 0.793 |
+| experiments | Mask R-CNN + zoom, fine-tuned on both labelers' traces + mirror pass (3-fold) | mask | 14 | 61/69 | 2/99 | 0.617 | 0.666 | 0.8 | 0.69 | 0.816 | 0.66 | 0.795 | 0.66 | 0.795 |
+| experiments | MedSAM2 (no training), the atlas-trained detector's box, whole slice | mask | 14 | 69/69 | 64/99 | 0.568 | 0.364 | 0.533 | 0.373 | 0.543 | 0.325 | 0.49 | 0.325 | 0.49 |
+| experiments | MedSAM2 (no training), the atlas-trained detector's box, zoomed window | mask | 14 | 68/69 | 47/99 | 0.533 | 0.351 | 0.52 | 0.39 | 0.562 | 0.32 | 0.484 | 0.32 | 0.484 |
+| experiments | MedSAM2 (no training), a box around expert 1's trace, whole slice | mask | 14 | 69/69 | 51/99 | 0.595 | 0.362 | 0.532 | 0.363 | 0.533 | 0.318 | 0.483 | 0.318 | 0.483 |
+| experiments | MedSAM2 (no training), a box around expert 1's trace, zoomed window | mask | 14 | 69/69 | 34/99 | 0.612 | 0.379 | 0.55 | 0.401 | 0.572 | 0.355 | 0.524 | 0.355 | 0.524 |
+| experiments | Mask R-CNN + zoom (box first) | mask | 14 | 64/69 | 3/99 | 0.532 | 0.545 | 0.706 | 0.543 | 0.704 | 0.529 | 0.692 | 0.529 | 0.692 |
+| experiments | Mask R-CNN + neighbor slices + zoom (box first) | mask | 14 | 64/69 | 3/99 | 0.536 | 0.58 | 0.734 | 0.574 | 0.729 | 0.554 | 0.713 | 0.554 | 0.713 |
+| hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.613 | 0.675 | 0.806 | 0.68 | 0.81 | 0.649 | 0.787 | 0.649 | 0.787 |
+| hand-trace preview | Mask R-CNN + zoom, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.613 | 0.673 | 0.804 | 0.688 | 0.815 | 0.634 | 0.776 | 0.634 | 0.776 |
+| hand-trace preview | Mask R-CNN + zoom, fine-tuned on both labelers' hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.614 | 0.669 | 0.802 | 0.692 | 0.818 | 0.664 | 0.798 | 0.664 | 0.798 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 58/69 | 2/99 | 0.587 | 0.662 | 0.797 | 0.721 | 0.838 | 0.67 | 0.802 | 0.67 | 0.802 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 60/69 | 3/99 | 0.606 | 0.65 | 0.787 | 0.704 | 0.826 | 0.647 | 0.785 | 0.647 | 0.785 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors seed1, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 57/69 | 2/99 | 0.577 | 0.647 | 0.785 | 0.723 | 0.839 | 0.669 | 0.802 | 0.669 | 0.802 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors seed1, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 59/69 | 3/99 | 0.599 | 0.65 | 0.787 | 0.695 | 0.82 | 0.653 | 0.79 | 0.653 | 0.79 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors seed2, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 58/69 | 2/99 | 0.588 | 0.654 | 0.791 | 0.722 | 0.839 | 0.672 | 0.804 | 0.672 | 0.804 |
+| hand-trace preview | Mask R-CNN + zoom + neighbors seed2, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 60/69 | 3/99 | 0.605 | 0.659 | 0.793 | 0.689 | 0.816 | 0.661 | 0.796 | 0.661 | 0.796 |
+| hand-trace preview | Mask R-CNN + zoom + seed1, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 62/69 | 2/99 | 0.617 | 0.68 | 0.81 | 0.684 | 0.812 | 0.652 | 0.789 | 0.652 | 0.789 |
+| hand-trace preview | Mask R-CNN + zoom + seed1, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.619 | 0.678 | 0.808 | 0.703 | 0.825 | 0.655 | 0.792 | 0.655 | 0.792 |
+| hand-trace preview | Mask R-CNN + zoom + seed1, fine-tuned on both labelers' hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.611 | 0.672 | 0.804 | 0.704 | 0.826 | 0.651 | 0.789 | 0.651 | 0.789 |
+| hand-trace preview | Mask R-CNN + zoom + seed2, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.605 | 0.675 | 0.806 | 0.682 | 0.811 | 0.666 | 0.799 | 0.666 | 0.799 |
+| hand-trace preview | Mask R-CNN + zoom + seed2, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.623 | 0.67 | 0.802 | 0.695 | 0.82 | 0.659 | 0.794 | 0.659 | 0.794 |
+| hand-trace preview | Mask R-CNN + zoom + seed2, fine-tuned on both labelers' hand traces (3-fold) | mask | 14 | 62/69 | 2/99 | 0.62 | 0.682 | 0.811 | 0.704 | 0.827 | 0.662 | 0.796 | 0.662 | 0.796 |
+| hand-trace preview | Mask R-CNN + zoom + warp, fine-tuned on labeler 1's hand traces (3-fold) | mask | 14 | 61/69 | 2/99 | 0.612 | 0.666 | 0.8 | 0.694 | 0.82 | 0.672 | 0.804 | 0.672 | 0.804 |
+| hand-trace preview | Mask R-CNN + zoom + warp, fine-tuned on labeler 2's hand traces (3-fold) | mask | 14 | 63/69 | 2/99 | 0.64 | 0.671 | 0.803 | 0.696 | 0.821 | 0.675 | 0.806 | 0.675 | 0.806 |
