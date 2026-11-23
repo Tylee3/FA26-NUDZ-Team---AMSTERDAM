@@ -1,0 +1,9 @@
+{
+  "model": "mask_rcnn",
+  "zoom": true,
+  "neighbors": false,
+  "models": [
+    "rcnn_out_14/zoom_mask_rcnn/model.pt"
+  ],
+  "label": "R-CNN 2D, atlas-trained"
+}

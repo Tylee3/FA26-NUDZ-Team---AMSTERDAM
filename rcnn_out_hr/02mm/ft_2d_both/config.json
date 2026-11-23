@@ -1,0 +1,11 @@
+{
+  "model": "mask_rcnn",
+  "zoom": true,
+  "neighbors": false,
+  "models": [
+    "rcnn_out_14/finetune_cv/both/fold0/model.pt",
+    "rcnn_out_14/finetune_cv/both/fold1/model.pt",
+    "rcnn_out_14/finetune_cv/both/fold2/model.pt"
+  ],
+  "label": "R-CNN 2D, fine-tuned on both experts"
+}

@@ -1,5 +1,7 @@
 # Round 8: end-slice rescue (no retraining)
 
+> **Retired 2026-11-23.** The rule was rejected: it lowered every fair score. The expert-2 and both-experts rows also come from fold models trained on the duplicate rat 4 trace, since retrained (round 9). The runs are kept in `_retired_round8_rescue/` and no longer appear in comparison.md. The conclusion (do not use the rule) stands.
+
 Same fold models with and without the rule (bar 0.2, fixed in advance). Median 3D Dice over the 14 traced rats, each scored by a fold that never saw it. **Bold** = the fair score, against the expert the model did not learn from. Human vs. human is 0.824.
 
 | Seed | Trained on | Slices found | False alarms | Dice vs expert 1 | Dice vs expert 2 | Mean Dice vs expert 1 | Mean Dice vs expert 2 |

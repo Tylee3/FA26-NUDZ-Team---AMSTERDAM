@@ -1,0 +1,32 @@
+[00:26:53] training mask_rcnn: 120 slices, 600 iterations on mps
+[00:27:12]   iter 20/600  loss=0.454 (loss_classifier=0.030 loss_box_reg=0.070 loss_mask=0.352 loss_objectness=0.000 loss_rpn_box_reg=0.002)  0.92s/iter  ~9 min left
+[00:27:31]   iter 40/600  loss=0.406 (loss_classifier=0.013 loss_box_reg=0.034 loss_mask=0.358 loss_objectness=0.000 loss_rpn_box_reg=0.001)  0.94s/iter  ~9 min left
+[00:27:49]   iter 60/600  loss=0.001 (loss_classifier=0.001 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.94s/iter  ~8 min left
+[00:28:08]   iter 80/600  loss=0.001 (loss_classifier=0.001 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.94s/iter  ~8 min left
+[00:28:27]   iter 100/600  loss=0.495 (loss_classifier=0.018 loss_box_reg=0.041 loss_mask=0.435 loss_objectness=0.000 loss_rpn_box_reg=0.001)  0.94s/iter  ~8 min left
+[00:28:46]   iter 120/600  loss=0.592 (loss_classifier=0.073 loss_box_reg=0.074 loss_mask=0.410 loss_objectness=0.031 loss_rpn_box_reg=0.004)  0.94s/iter  ~8 min left
+[00:29:05]   iter 140/600  loss=0.356 (loss_classifier=0.012 loss_box_reg=0.040 loss_mask=0.303 loss_objectness=0.000 loss_rpn_box_reg=0.001)  0.94s/iter  ~7 min left
+[00:29:24]   iter 160/600  loss=0.001 (loss_classifier=0.001 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.94s/iter  ~7 min left
+[00:29:43]   iter 180/600  loss=0.394 (loss_classifier=0.022 loss_box_reg=0.067 loss_mask=0.305 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~7 min left
+[00:30:02]   iter 200/600  loss=0.000 (loss_classifier=0.000 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~6 min left
+[00:30:21]   iter 220/600  loss=0.319 (loss_classifier=0.030 loss_box_reg=0.047 loss_mask=0.241 loss_objectness=0.000 loss_rpn_box_reg=0.001)  0.95s/iter  ~6 min left
+[00:30:40]   iter 240/600  loss=0.011 (loss_classifier=0.009 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.002 loss_rpn_box_reg=0.000)  0.95s/iter  ~6 min left
+[00:30:59]   iter 260/600  loss=0.262 (loss_classifier=0.014 loss_box_reg=0.023 loss_mask=0.224 loss_objectness=0.001 loss_rpn_box_reg=0.000)  0.95s/iter  ~5 min left
+[00:31:19]   iter 280/600  loss=0.000 (loss_classifier=0.000 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~5 min left
+[00:31:38]   iter 300/600  loss=0.000 (loss_classifier=0.000 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~5 min left
+[00:31:57]   iter 320/600  loss=0.002 (loss_classifier=0.002 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~4 min left
+[00:32:16]   iter 340/600  loss=0.317 (loss_classifier=0.011 loss_box_reg=0.038 loss_mask=0.267 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~4 min left
+[00:32:35]   iter 360/600  loss=0.405 (loss_classifier=0.034 loss_box_reg=0.066 loss_mask=0.293 loss_objectness=0.010 loss_rpn_box_reg=0.002)  0.95s/iter  ~4 min left
+[00:32:54]   iter 380/600  loss=0.346 (loss_classifier=0.012 loss_box_reg=0.036 loss_mask=0.298 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~3 min left
+[00:33:13]   iter 400/600  loss=0.388 (loss_classifier=0.020 loss_box_reg=0.054 loss_mask=0.314 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~3 min left
+[00:33:33]   iter 420/600  loss=0.302 (loss_classifier=0.013 loss_box_reg=0.029 loss_mask=0.260 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~3 min left
+[00:33:52]   iter 440/600  loss=0.271 (loss_classifier=0.009 loss_box_reg=0.025 loss_mask=0.237 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~3 min left
+[00:34:11]   iter 460/600  loss=0.426 (loss_classifier=0.027 loss_box_reg=0.069 loss_mask=0.328 loss_objectness=0.002 loss_rpn_box_reg=0.001)  0.95s/iter  ~2 min left
+[00:34:30]   iter 480/600  loss=0.000 (loss_classifier=0.000 loss_box_reg=0.000 loss_mask=0.000 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~2 min left
+[00:34:49]   iter 500/600  loss=0.294 (loss_classifier=0.013 loss_box_reg=0.036 loss_mask=0.245 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~2 min left
+[00:35:08]   iter 520/600  loss=0.312 (loss_classifier=0.010 loss_box_reg=0.037 loss_mask=0.264 loss_objectness=0.000 loss_rpn_box_reg=0.001)  0.95s/iter  ~1 min left
+[00:35:28]   iter 540/600  loss=0.409 (loss_classifier=0.028 loss_box_reg=0.034 loss_mask=0.338 loss_objectness=0.007 loss_rpn_box_reg=0.003)  0.95s/iter  ~1 min left
+[00:35:46]   iter 560/600  loss=0.332 (loss_classifier=0.016 loss_box_reg=0.024 loss_mask=0.288 loss_objectness=0.003 loss_rpn_box_reg=0.000)  0.95s/iter  ~1 min left
+[00:36:06]   iter 580/600  loss=0.325 (loss_classifier=0.013 loss_box_reg=0.039 loss_mask=0.273 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~0 min left
+[00:36:25]   iter 600/600  loss=0.360 (loss_classifier=0.030 loss_box_reg=0.050 loss_mask=0.279 loss_objectness=0.000 loss_rpn_box_reg=0.000)  0.95s/iter  ~0 min left
+[00:36:44] done: fine-tuned on labeler1 traces of rats [1, 3, 4, 5, 6, 7, 15, 25, 35, 100], 9.9 min

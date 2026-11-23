@@ -1,0 +1,6 @@
+{
+  "model": "medsam2",
+  "prompt": "auto",
+  "view": "zoom",
+  "label": "MedSAM2 (no training), the atlas-trained detector's box, zoomed window"
+}

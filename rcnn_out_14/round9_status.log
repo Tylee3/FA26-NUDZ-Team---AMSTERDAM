@@ -1,0 +1,56 @@
+=== round 9 started Sun Nov 22 18:58:47 CET 2026 ===
+[Sun 18:58] start 1 medsam2 14 rats
+[Sun 19:01] end   1 medsam2 14 rats EXIT=0
+[Sun 19:01] start 2a move duplicate folds
+[Sun 19:01] end   2a move duplicate folds EXIT=0
+[Sun 19:01] start 2b retrain expert 2 seed 0
+[Sun 19:21] end   2b retrain expert 2 seed 0 EXIT=0
+[Sun 19:21] start 2c retrain both seed 0
+[Sun 19:41] end   2c retrain both seed 0 EXIT=0
+[Sun 19:41] start 2d retrain expert 2 seed 1
+[Sun 20:01] end   2d retrain expert 2 seed 1 EXIT=0
+[Sun 20:01] start 2e retrain both seed 1
+[Sun 20:21] end   2e retrain both seed 1 EXIT=0
+[Sun 20:21] start 2f retrain expert 2 seed 2
+[Sun 20:40] end   2f retrain expert 2 seed 2 EXIT=0
+[Sun 20:40] start 2g retrain both seed 2
+[Sun 21:00] end   2g retrain both seed 2 EXIT=0
+[Sun 21:00] start 2h retrain warp expert 2
+=== round 9 started Sun Nov 22 21:45:32 CET 2026 ===
+[Sun 21:45] start 1 medsam2 14 rats
+[Sun 21:48] end   1 medsam2 14 rats EXIT=0
+[Sun 21:48] start 2a move duplicate folds
+[Sun 21:48] end   2a move duplicate folds EXIT=0
+[Sun 21:48] start 2b retrain expert 2 seed 0
+[Sun 21:48] end   2b retrain expert 2 seed 0 EXIT=0
+[Sun 21:48] start 2c retrain both seed 0
+[Sun 21:48] end   2c retrain both seed 0 EXIT=0
+[Sun 21:48] start 2d retrain expert 2 seed 1
+[Sun 21:48] end   2d retrain expert 2 seed 1 EXIT=0
+[Sun 21:48] start 2e retrain both seed 1
+[Sun 21:48] end   2e retrain both seed 1 EXIT=0
+[Sun 21:48] start 2f retrain expert 2 seed 2
+[Sun 21:48] end   2f retrain expert 2 seed 2 EXIT=0
+[Sun 21:48] start 2g retrain both seed 2
+[Sun 21:48] end   2g retrain both seed 2 EXIT=0
+[Sun 21:48] start 2h retrain warp expert 2
+[Sun 22:00] end   2h retrain warp expert 2 EXIT=0
+[Sun 22:00] start 2i mirror + average of 3
+[Sun 22:02] end   2i mirror + average of 3 EXIT=0
+[Sun 22:02] start 3a 2.5D atlas-trained
+[Sun 22:49] end   3a 2.5D atlas-trained EXIT=0
+[Sun 22:49] start 3b 2.5D fine-tuned
+[Sun 23:50] end   3b 2.5D fine-tuned EXIT=0
+[Sun 23:50] start 4 R-CNN on high-res
+[Mon 00:00] end   4 R-CNN on high-res EXIT=0
+[Mon 00:00] start 5 medsam2 high-res
+[Mon 00:06] end   5 medsam2 high-res EXIT=0
+[Mon 00:06] start 6 score
+[Mon 00:06] end   6 score EXIT=0
+[Mon 00:06] start 7a 2.5D seed 1
+[Mon 01:06] end   7a 2.5D seed 1 EXIT=0
+[Mon 01:06] start 7b 2.5D seed 2
+[Mon 02:05] end   7b 2.5D seed 2 EXIT=0
+[Mon 02:05] start 7c score again
+[Mon 02:06] end   7c score again EXIT=0
+=== round 9 finished Mon Nov 23 02:06:10 CET 2026 ===

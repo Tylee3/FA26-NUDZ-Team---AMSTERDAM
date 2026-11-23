@@ -69,3 +69,4 @@ rcnn_out_hr/*_smoke/
 rcnn_out_14/_trained_on_duplicate_rat4/
 third_party/
 .venv-medsam2/
+rcnn_out_14/_retired_round8_rescue/

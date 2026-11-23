@@ -1,0 +1,6 @@
+{
+  "model": "mask_rcnn",
+  "prompt": "expert",
+  "view": "full",
+  "label": "MedSAM2 (no training), a box around expert 1's trace, whole slice"
+}

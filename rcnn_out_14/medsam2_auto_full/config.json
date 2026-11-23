@@ -1,0 +1,6 @@
+{
+  "model": "mask_rcnn",
+  "prompt": "auto",
+  "view": "full",
+  "label": "MedSAM2 (no training), the atlas-trained detector's box, whole slice"
+}
